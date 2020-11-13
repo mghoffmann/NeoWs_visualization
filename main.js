@@ -27,6 +27,18 @@ function updateScatter(data) {
         .text(d => d);
 }
 
+function updateLine(data) {
+    let lineChart = d3.select('#svgLine');
+    lineChart.append('path')
+        .attr('d', d3.line()(data))
+        .attr('stroke', 'black');
+    let lineLabels = ['Asteroid Frequency Over Time'];
+    lineChart.append('g').selectAll('text').data(lineLabels).join('text')
+        .attr('x', 765)
+        .attr('y', 12)
+        .text(d => d);
+}
+
 function init() {
     // add boxes for charts
     d3.select('#svgBar').append('rect')
@@ -39,9 +51,16 @@ function init() {
         .attr('y', '20')
         .attr('width', '460')
         .attr('height', '260');
+    d3.select('#svgLine').append('rect')
+        .attr('x', '20')
+        .attr('y', '20')
+        .attr('width', '1510')
+        .attr('height', '260');
     
     let bars = [240, 160, 110];
     let circles = [[84, 144], [320, 180], [420, 104]];
+    let line = [[20, 60], [200, 80], [400, 134], [800, 111], [1160, 67], [1530, 204]];
     updateBar(bars);
     updateScatter(circles);
+    updateLine(line);
 }
