@@ -1,0 +1,71 @@
+body {
+    background-color: ghostwhite;
+    width: 1600px;
+    margin: 10px auto;
+}
+
+h2, h4 {
+    margin: 10px 20px;
+}
+
+main {
+    display: flex;
+    flex-flow: column wrap;
+}
+
+div {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+section {
+    display: flex;
+    flex-flow: column wrap;
+
+}
+
+.svgSection, .infoSection {
+    padding: 10px;
+    border: 1px solid black;
+    margin: 10px;
+    background-color: white;
+}
+
+.infoSection {
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.infoSection div {
+    display: flex;
+    flex-flow: column wrap;
+    flex-grow: 1;
+}
+
+svg {
+    margin: 10px 0 0 0;
+}
+
+rect {
+    stroke: black;
+    fill: ghostwhite;
+}
+
+path {
+    stroke: black;
+    stroke-width: 3px;
+    fill: none;
+}
+
+.bar {
+    fill: pink;
+}
+
+.earth {
+    stroke: black;
+    fill: lightgreen;
+}
+
+text {
+    text-anchor: middle;
+}

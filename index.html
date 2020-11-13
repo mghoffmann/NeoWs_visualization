@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>Final Project</title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<script src="https://d3js.org/d3.v5.js"></script>
+	<link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+	<header class="svgSection">
+		<h2>CS-5820 Final Project</h2>
+		<h4>Cole Buhman - buhmancole@gmail.com - A02228854</h4>
+		<h4>Michael Hoffmann - </h4>
+		<h4>Andrew McMullin - </h4>
+	</header>
+	
+	<main>
+		<div>
+            <section class="svgSection">
+                <svg id="svgTime" width="1010" height="680">
+                    <rect x="20" y="20" width="970" height="640"></rect>
+                    <circle class="earth" cx="485" cy="320" r="40"></circle>
+                </svg>
+            </section>
+		
+            <section>
+                <section class="svgSection">
+                    <select>
+                        <option>Diameter</option>
+                    </select>
+                    <svg id="svgBar" width="500" height="300">
+                        <rect x="20" y="20" width="460" height="260"></rect>
+                        <rect class="bar" x="60" y="40" width="100" height="240"></rect>
+                        <rect class="bar" x="200" y="120" width="100" height="160"></rect>
+                        <rect class="bar" x="340" y="170" width="100" height="110"></rect>
+                        <text x="250" y="12">Maximum Asteroid Diameter</text>
+                        <text x="110" y="298">Asteroid 1</text>
+                        <text x="250" y="298">Asteroid 2</text>
+                        <text x="390" y="298">Asteroid 3</text>
+                    </svg>
+                </section>
+
+                <section class="svgSection">
+                    <select>
+                        <option>Velocity</option>
+                    </select>
+                    <svg id="svgLine" width="500" height="300">
+                        <rect x="20" y="20" width="460" height="260"></rect>
+                        <circle cx="84" cy="144" r="5"></circle>
+                        <circle cx="320" cy="180" r="5"></circle>
+                        <circle cx="420" cy="104" r="5"></circle>
+                        <text x="250" y="12">Asteroid Passing Velocity by Date</text>
+                        <text x="40" y="298">1950</text>
+                        <text x="460" y="298">2020</text>
+                    </svg>
+                </section>
+            </section>
+        </div>
+		
+		<section class="svgSection">
+			<svg id="svgMap" width="1540" height="300">
+                <rect x="20" y="20" width="1510" height="260"></rect>
+                <path d="M 20 60 L 200 80 L 400 134 L 800 111 L 1160 67 L 1530 204"></path>
+                <text x="765" y="12">Asteroid Frequency Over Time</text>
+                <text x="40" y="298">1950</text>
+                <text x="1510" y="298">2020</text>
+            </svg>
+        </section>
+        
+        <section class="infoSection">
+            <div>
+                <h2>Asteroid 1</h2>
+                <h4>ID: X</h4>
+                <h4>Magnitude: X</h4>
+                <h4>Diameter: X</h4>
+                <h4>Passing Velocity: X</h4>
+            </div>
+            <div>
+                <h2>Asteroid 2</h2>
+                <h4>ID: X</h4>
+                <h4>Magnitude: X</h4>
+                <h4>Diameter: X</h4>
+                <h4>Passing Velocity: X</h4>
+            </div>
+            <div>
+                <h2>Asteroid 3</h2>
+                <h4>ID: X</h4>
+                <h4>Magnitude: X</h4>
+                <h4>Diameter: X</h4>
+                <h4>Passing Velocity: X</h4>
+            </div>
+        </section>
+	</main>
+	<script src="main.js"></script>
+	<script onload="init()" src="main.js"></script>
+</body>
+</html>
