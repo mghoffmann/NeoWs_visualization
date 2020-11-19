@@ -1,6 +1,6 @@
 function updateBar(data) {
     let barChart = d3.select('#svgBar');
-    let barScale = d3.scaleBand().domain(data).range([40, 460]);
+    let barScale = d3.scaleBand().domain(data).range([40, chartWidth]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(data).join('rect')
         .attr('x', d => 20 + barScale(d))
         .attr('y', d => 0)
@@ -9,7 +9,7 @@ function updateBar(data) {
         .style('fill', 'pink');
     let barLabels = ['Maximum Asteroid Diameter'];
     barChart.append('g').selectAll('text').data(barLabels).join('text')
-        .attr('x', 250)
+        .attr('x', chartWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
 }
@@ -22,7 +22,7 @@ function updateScatter(data) {
         .attr('r', 5);
     let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
-        .attr('x', 250)
+        .attr('x', chartWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
 }
@@ -60,23 +60,26 @@ let NEOS_GLOBAL = {}
 
 function init() {
     // add boxes for charts
-    let lineWidth = 1400;
-    let lineHeight = 300;
+    margin = 20;
+    chartWidth = 460;
+    chartHeight = 260;
+    lineWidth = 1360;
+    lineHeight = 260;
     d3.select('#svgBar').append('rect')
-        .attr('x', '20')
-        .attr('y', '20')
-        .attr('width', '460')
-        .attr('height', '260');
+        .attr('x', margin)
+        .attr('y', margin)
+        .attr('width', chartWidth)
+        .attr('height', chartHeight);
     d3.select('#svgScatter').append('rect')
-        .attr('x', '20')
-        .attr('y', '20')
-        .attr('width', '460')
-        .attr('height', '260');
+        .attr('x', margin)
+        .attr('y', margin)
+        .attr('width', chartWidth)
+        .attr('height', chartHeight);
     d3.select('#svgLine').append('rect')
-        .attr('x', '20')
-        .attr('y', '20')
-        .attr('width', lineWidth - 40)
-        .attr('height', lineHeight - 40);
+        .attr('x', margin)
+        .attr('y', margin)
+        .attr('width', lineWidth)
+        .attr('height', lineHeight);
 
     let bars = [240, 160, 110];
     let circles = [
