@@ -39,6 +39,25 @@ function updateLine(data) {
         .text(d => d);
 }
 
+// Takes an array of NEO instances and adds rings to the earth chart for them.
+function updateCenter(NEOs) {
+
+}
+
+function loadNEOs(response) {
+    let NEOs = [];
+    for (day in response.near_earth_objects) {
+        for (neoIndex in response.near_earth_objects[day]) {
+            let neoJSON = response.near_earth_objects[day][neoIndex]
+            NEOs.push(new NEO(neoJSON));
+        }
+    }
+
+    return NEOs;
+}
+
+let NEOS_GLOBAL = {}
+
 function init() {
     // add boxes for charts
     d3.select('#svgBar').append('rect')
@@ -56,11 +75,34 @@ function init() {
         .attr('y', '20')
         .attr('width', '1510')
         .attr('height', '260');
-    
+
     let bars = [240, 160, 110];
-    let circles = [[84, 144], [320, 180], [420, 104]];
-    let line = [[20, 60], [200, 80], [400, 134], [800, 111], [1160, 67], [1530, 204]];
+    let circles = [
+        [84, 144],
+        [320, 180],
+        [420, 104]
+    ];
+    let line = [
+        [20, 60],
+        [200, 80],
+        [400, 134],
+        [800, 111],
+        [1160, 67],
+        [1530, 204]
+    ];
     updateBar(bars);
     updateScatter(circles);
     updateLine(line);
+
+    let NEOs = [];
+    for (dayResponse in DATA) {
+        let neosForDay = loadNEOs(DATA[dayResponse]);
+        for (i in neosForDay) {
+            NEOs.push(neosForDay[i]);
+        }
+    }
+
+    NEOS_GLOBAL = NEOs;
+
+    updateCenter(NEOs);
 }

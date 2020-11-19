@@ -18,6 +18,10 @@ div {
     flex-flow: row wrap;
 }
 
+div.row {
+    flex-direction: row;
+}
+
 section {
     display: flex;
     flex-flow: column wrap;
@@ -62,8 +66,9 @@ path {
 }
 
 .earth {
-    stroke: black;
-    fill: lightgreen;
+    stroke: #1e1ebb;
+    stroke-width: 10px;
+    fill: forestgreen;
 }
 
 text {
