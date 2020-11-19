@@ -20,7 +20,7 @@ function updateScatter(data) {
         .attr('cx', d => d[0])
         .attr('cy', d => d[1])
         .attr('r', 5);
-    let scatterLabels = ['Asteroid Passing Velocity by Date'];
+    let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
         .attr('x', 250)
         .attr('y', 12)
