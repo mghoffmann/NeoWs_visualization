@@ -18,14 +18,9 @@ div {
     flex-flow: row wrap;
 }
 
-div.row {
-    flex-direction: row;
-}
-
 section {
     display: flex;
     flex-flow: column wrap;
-
 }
 
 .svgSection, .infoSection {
@@ -50,9 +45,18 @@ svg {
     margin: 10px 0 0 0;
 }
 
-rect {
+:not(.brush) > rect {
     stroke: black;
     fill: ghostwhite;
+}
+
+.brush rect.selection {
+    fill: black;
+}
+
+.brush rect.handle {
+    stroke: black;
+    fill: black;
 }
 
 path {

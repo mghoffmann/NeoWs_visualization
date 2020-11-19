@@ -60,6 +60,8 @@ let NEOS_GLOBAL = {}
 
 function init() {
     // add boxes for charts
+    let lineWidth = 1400;
+    let lineHeight = 300;
     d3.select('#svgBar').append('rect')
         .attr('x', '20')
         .attr('y', '20')
@@ -73,8 +75,8 @@ function init() {
     d3.select('#svgLine').append('rect')
         .attr('x', '20')
         .attr('y', '20')
-        .attr('width', '1510')
-        .attr('height', '260');
+        .attr('width', lineWidth - 40)
+        .attr('height', lineHeight - 40);
 
     let bars = [240, 160, 110];
     let circles = [
@@ -88,11 +90,24 @@ function init() {
         [400, 134],
         [800, 111],
         [1160, 67],
-        [1530, 204]
+        [1380, 204]
     ];
     updateBar(bars);
     updateScatter(circles);
     updateLine(line);
+
+    let brush1 = d3.brushY()
+        .extent([[13, 10], [37, 290]])
+        .on('end', () => {
+            // update
+        });
+    d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
+    let brush2 = d3.brushY()
+        .extent([[13, 8], [37, 292]])
+        .on('end', () => {
+            // update
+        });
+    d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
 
     let NEOs = [];
     for (dayResponse in DATA) {
