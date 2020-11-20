@@ -6,7 +6,13 @@ function updateBar(data) {
         .attr('y', d => 0)
         .attr('width', d => 100)
         .attr('height', d => d)
-        .style('fill', 'pink');
+        .style('fill', 'pink')
+        .on('mouseover', function() {
+            d3.select(this).style('fill', 'cyan');
+        })
+        .on('mouseout', function() {
+            d3.select(this).style('fill', 'pink');
+        });
     let barLabels = ['Maximum Asteroid Diameter'];
     barChart.append('g').selectAll('text').data(barLabels).join('text')
         .attr('x', chartWidth / 2 + margin)
@@ -19,7 +25,18 @@ function updateScatter(data) {
     scatterChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('circle').data(data).join('circle')
         .attr('cx', d => d[0])
         .attr('cy', d => d[1])
-        .attr('r', 5);
+        .attr('r', 6)
+        .style('stroke', 'black')
+        .on('mouseover', function() {
+            d3.select(this)
+                .attr('r', 8)
+                .style('fill', 'cyan');
+        })
+        .on('mouseout', function() {
+            d3.select(this)
+                .attr('r', 6)
+                .style('fill', 'black');
+        });
     let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
         .attr('x', chartWidth / 2 + margin)
