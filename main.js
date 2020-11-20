@@ -116,6 +116,13 @@ function init() {
     updateScatter(circles);
     updateLine(line);
 
+    let brushH = d3.brushX()
+        .extent([[20, 20], [1380, 280]])
+        .on('end', () => {
+
+        });
+    d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
+
     let brush1 = d3.brushY()
         .extent([[13, 10], [37, 290]])
         .on('end', () => {
