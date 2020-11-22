@@ -1,24 +1,15 @@
-function mapProperties(source, target, ...propertyNames) {
-
-    propertyNames.forEach(property => {
-        target[property] = source[property]
-    });
-
-    return target;
-}
-
 class NEO {
 
     // A dictionary containing each instance of this class, keyed by ID.
-    static INTERN = {
-        0: null
-    };
+    static INTERN = {};
 
     // Each response from the neo API has a near_earth_objects property,
     // which is a dictionary keyed by date and valued by arrays of objects.
     // This constructor expects a single one of those objects.
     // i.e. neoResponse.near_earth_objects["1900-01-01"][0]    
     constructor(json) {
+        // If this response part describes a NEO that has already been constructed then
+        // don't make another request to the NeoWs api for it.
         if (NEO.INTERN[json.id])
             return NEO.INTERN[json.id];
 
@@ -41,11 +32,17 @@ class NEO {
                 return response.json();
             })
             .then(function (neowsJSON) {
-                NEO.INTERN[json.id].neowsJSON = neowsJSON;
-                console.log(NEO.INTERN[json.id]);
+                NEO.INTERN[json.id].approaches = [];                
+                neowsJSON.close_approach_data.forEach(a => {
+                    NEO.INTERN[json.id].approaches.push(new Approach(json.id, a));
+                });                    
             })
             .catch(function (error) {
                 console.error(error);
             })
+    }
+
+    toString() {
+        return this.name;
     }
 }

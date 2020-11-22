@@ -13,8 +13,18 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <script src="https://d3js.org/d3.v5.js"></script>
+
+    <!-- This contains the API responses for 10 dates. We need an API key which is limited to 1000 requests per hour,
+    so the UI needs to limit the user to the same number. For now this is a representative sample. -->
     <script src="sample_data.js"></script>
+
+    <!-- Some helper functions required by other script files -->
+    <script src="util.js"></script>
+    <!-- Defines the Approach class. Each NEO has a collection of approaches. -->
+    <script src="approach.js"></script>
+    <!-- Defines the NEO class. -->
     <script src="NEO.js"></script>
+
     <link rel="stylesheet" href="style.css">
 </head>
 

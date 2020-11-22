@@ -7,10 +7,10 @@ function updateBar(data) {
         .attr('width', d => 100)
         .attr('height', d => d)
         .style('fill', 'pink')
-        .on('mouseover', function() {
+        .on('mouseover', function () {
             d3.select(this).style('fill', 'cyan');
         })
-        .on('mouseout', function() {
+        .on('mouseout', function () {
             d3.select(this).style('fill', 'pink');
         });
     let barLabels = ['Maximum Asteroid Diameter'];
@@ -27,12 +27,12 @@ function updateScatter(data) {
         .attr('cy', d => d[1])
         .attr('r', 6)
         .style('stroke', 'black')
-        .on('mouseover', function() {
+        .on('mouseover', function () {
             d3.select(this)
                 .attr('r', 8)
                 .style('fill', 'cyan');
         })
-        .on('mouseout', function() {
+        .on('mouseout', function () {
             d3.select(this)
                 .attr('r', 6)
                 .style('fill', 'black');
@@ -59,18 +59,6 @@ function updateLine(data) {
 // Takes an array of NEO instances and adds rings to the earth chart for them.
 function updateCenter(NEOs) {
 
-}
-
-function loadNEOs(response) {
-    let NEOs = [];
-    for (day in response.near_earth_objects) {
-        for (neoIndex in response.near_earth_objects[day]) {
-            let neoJSON = response.near_earth_objects[day][neoIndex]
-            NEOs.push(new NEO(neoJSON));
-        }
-    }
-
-    return NEOs;
 }
 
 let NEOS_GLOBAL = {}
@@ -117,20 +105,29 @@ function init() {
     updateLine(line);
 
     let brushH = d3.brushX()
-        .extent([[20, 20], [1380, 280]])
+        .extent([
+            [20, 20],
+            [1380, 280]
+        ])
         .on('end', () => {
 
         });
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
     let brush1 = d3.brushY()
-        .extent([[13, 10], [37, 290]])
+        .extent([
+            [13, 10],
+            [37, 290]
+        ])
         .on('end', () => {
             // update
         });
     d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
     let brush2 = d3.brushY()
-        .extent([[13, 8], [37, 292]])
+        .extent([
+            [13, 8],
+            [37, 292]
+        ])
         .on('end', () => {
             // update
         });
@@ -138,7 +135,7 @@ function init() {
 
     let NEOs = [];
     for (dayResponse in DATA) {
-        let neosForDay = loadNEOs(DATA[dayResponse]);
+        let neosForDay = constructNEOs(DATA[dayResponse]);
         for (i in neosForDay) {
             NEOs.push(neosForDay[i]);
         }
@@ -146,5 +143,16 @@ function init() {
 
     NEOS_GLOBAL = NEOs;
 
-    updateCenter(NEOs);
+    // // This requests the NEOs from Jan. 1 2000 to Jan. 7 2000, inclusive.
+    // // TODO: Use a request similar to this to feed data to the charts instead of the for loop above.
+    // // This will require a loading screen or just empty charts to be shown, then updated in the callback.
+    // requestNEOs(new Date(2000, 1, 1), new Date(2000, 1, 7),
+    //     function (NEOs) {
+    //         for (let n = 0; n < NEOs.length; n++) {
+    //             console.log(NEOs[n])
+    //         }
+    //         NEOS_GLOBAL = NEOs;
+    //     })
+
+    // updateCenter(NEOs);
 }
