@@ -65,6 +65,11 @@ let neoIntern_end = null;
 const API_URL = "https://api.nasa.gov/neo/rest/v1/feed";
 var numberOfRequests = 0;
 
+// Requests NEO data from the NASA API.
+// startDate: A Date representing the start of the desired range. The time part of this Date is ignored by the API.
+// endDate: A Date representing the end of the desired range. The time part of this Date is ignored by the API.
+// onload: A callback that is passed an array of NEO instances when the response is received. See NEO.js.
+//      This callback is not called if the request results in an error.
 function requestNEOs(startDate, endDate, onload) {
     let queryData = {
         "start_date": getISODateString(startDate),
@@ -85,6 +90,7 @@ function requestNEOs(startDate, endDate, onload) {
             onload.call(null, constructNEOs(json));
         })
         .catch(function (error) {
+            // TODO: Show the user the error messages somehow.
             console.error(error);
         })
 }
