@@ -55,6 +55,7 @@ function constructNEOs(response) {
 // https://api.nasa.gov/neo/rest/v1/feed?start_date=2000-02-01&end_date=2000-02-10&api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2
 
 let API_KEY = "iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2";
+// let API_KEY = "DEMO_KEY";
 
 // NEO instances are interned here by date
 let neoIntern = {};
@@ -62,6 +63,7 @@ let neoIntern = {};
 let neoIntern_start = null;
 let neoIntern_end = null;
 const API_URL = "https://api.nasa.gov/neo/rest/v1/feed";
+var numberOfRequests = 0;
 
 function requestNEOs(startDate, endDate, onload) {
     let queryData = {
@@ -72,8 +74,11 @@ function requestNEOs(startDate, endDate, onload) {
     let requestURL = API_URL + '?' + encodeQueryData(queryData);
 
     // This gets a response from the NeoWS API and set it to this.neowsJSON
+    // console.log(requestURL)
+    // console.log(startDate.toLocaleDateString(), endDate.toLocaleDateString())
     fetch(requestURL)
         .then(function (response) {
+            // console.log(numberOfRequests++);
             return response.json();
         })
         .then(function (json) {
