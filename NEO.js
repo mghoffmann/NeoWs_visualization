@@ -19,11 +19,15 @@ class NEO {
     // A dictionary containing each instance of this class, keyed by ID.
     static INTERN = {};
 
+    approaches = [];
+
     // Returns the NEO instance with the given id, or undefined if no
     // NEO has been constructed with that ID yet. See constructor.
     static getByID(id) {
         return INTERN[id];
     }
+
+    static WAITING = 0;
 
     // Each response from the Neo API has a near_earth_objects property,
     // which is a dictionary keyed by date and valued by arrays of objects.
@@ -48,20 +52,23 @@ class NEO {
 
         NEO.INTERN[json.id] = this;
 
+        NEO.WAITING++;
         // This gets a response from the NeoWS API and set it to this.neowsJSON
         fetch(this.neowsappLink)
             .then(function (response) {
                 return response.json();
             })
             .then(function (neowsJSON) {
+                NEO.WAITING--;
                 // Construct the approaches using the NeoWS data
                 NEO.INTERN[json.id].approaches = [];
 
                 neowsJSON.close_approach_data.forEach(a => {
                     NEO.INTERN[json.id].approaches.push(new Approach(json.id, a));
-                });
+                });                
             })
             .catch(function (error) {
+                NEO.WAITING--;
                 // TODO: Show the user a message if we hit the rate limit. Or just avoid
                 // hitting the rate limit...
                 console.error(error);

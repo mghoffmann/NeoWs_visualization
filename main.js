@@ -18,6 +18,11 @@ function updateBar(data) {
         .attr('x', chartWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
+
+    for (key in NEO.INTERN) {
+        let neo = NEO.INTERN[key]        
+        console.log(neo.approaches)
+    }
 }
 
 function updateScatter(data) {
@@ -63,7 +68,27 @@ function updateCenter(NEOs) {
 
 let NEOS_GLOBAL = {}
 
-function init() {
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+async function init() {
+
+    let NEOs = [];
+    for (dayResponse in DATA) {
+        let neosForDay = constructNEOs(DATA[dayResponse]);
+        for (i in neosForDay) {
+            NEOs.push(neosForDay[i]);
+        }
+    }
+
+    while (NEO.WAITING > 0) {
+        console.log(`Waiting for ${NEO.WAITING} requests.`)
+        await sleep(100);
+    }
+
+    NEOS_GLOBAL = NEOs;
+
     // add boxes for charts
     margin = 20;
     chartWidth = 460;
@@ -132,16 +157,6 @@ function init() {
             // update
         });
     d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
-
-    let NEOs = [];
-    for (dayResponse in DATA) {
-        let neosForDay = constructNEOs(DATA[dayResponse]);
-        for (i in neosForDay) {
-            NEOs.push(neosForDay[i]);
-        }
-    }
-
-    NEOS_GLOBAL = NEOs;
 
     // // This requests the NEOs from Jan. 1 2000 to Jan. 7 2000, inclusive.
     // // TODO: Use a request similar to this to feed data to the charts instead of the for loop above.
