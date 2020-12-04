@@ -21,6 +21,20 @@ class NEO {
 
     approaches = [];
 
+    // approaches is sorted after assignment so these are linear time
+    minDate() {        
+        return this.approaches[0].date;
+    }
+    maxDate() {
+        return this.approaches[this.approaches.length - 1].date;
+    }
+    minYear() {        
+        return this.minDate().getUTCFullYear();
+    }
+    maxYear() {
+        return this.maxDate().getUTCFullYear();
+    }
+
     // Returns the NEO instance with the given id, or undefined if no
     // NEO has been constructed with that ID yet. See constructor.
     static getByID(id) {
@@ -28,11 +42,12 @@ class NEO {
     }
 
     static WAITING = 0;
+    static ASYNC_ERRORS = [];
 
     // Each response from the Neo API has a near_earth_objects property,
     // which is a dictionary keyed by date and valued by arrays of objects.
     // This constructor expects a single one of those objects.
-    // i.e. neoResponse.near_earth_objects["1900-01-01"][0]    
+    // i.e. neoResponse.near_earth_objects["1900-01-01"][0]
     constructor(json) {
         // If this response part describes a NEO that has already been constructed then
         // don't make another request to the NeoWs api for it.
@@ -65,13 +80,20 @@ class NEO {
 
                 neowsJSON.close_approach_data.forEach(a => {
                     NEO.INTERN[json.id].approaches.push(new Approach(json.id, a));
-                });                
+                });
+
+                NEO.ASYNC_ERRORS.push("This is just a test error.")
+
+                // Sort the approaches for easy date comparison
+                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a,b)=>a.date - b.date);
             })
             .catch(function (error) {
-                NEO.WAITING--;
+                NEO.ASYNC_ERRORS.push(error)
+                NEO.WAITING--
                 // TODO: Show the user a message if we hit the rate limit. Or just avoid
                 // hitting the rate limit...
-                console.error(error);
+                // Sort the approaches for easy date comparison
+                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a,b)=>a.date - b.date);
             })
     }
 
