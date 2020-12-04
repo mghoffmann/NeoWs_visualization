@@ -4,6 +4,7 @@ function updateBar() {
     let barScale = d3.scaleBand().domain(heights).range([40, chartWidth]);
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([20, 280]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
+        .attr('class', (d, i) => 'ast' + i)
         .attr('x', d => 5 + barScale(d))
         .attr('y', d => 0)
         .attr('width', d => 10)
@@ -40,6 +41,7 @@ function updateScatter() {
     let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => a[1])) * 1.04, 0]).range([20, 280]);
     let scatterChart = d3.select('#svgScatter');
     scatterChart.append('g').selectAll('circle').data(coords).join('circle')
+        .attr('class', (d, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
         .attr('cy', d => yScale(d[1]))
         .attr('r', 6)
@@ -82,8 +84,51 @@ function updateLine(data) {
 }
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
-function updateCenter(NEOs) {
+function updateCenter() {
+    let centerChart = d3.select('#svgCenter');
+    let dists = NEOS_GLOBAL.map(a => parseInt(a.approaches[0].miss_distance));
+    let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([110, 960]);
+    centerChart.append('g').selectAll('circle').data(dists).join('circle')
+        .attr('cx', -2000)
+        .attr('cy', 340)
+        .attr('r', d => 2000 + xScale(d))
+        .style('stroke', 'black')
+        .style('fill', 'none');
+    centerChart.append('g').selectAll('circle').data(dists).join('circle')
+        .attr('class', (d, i) => 'ast' + i)
+        .attr('cx', d => xScale(d))
+        .attr('cy', 340)
+        .attr('r', 6)
+        .style('stroke', 'black')
+        .style('fill', 'gray')
+        .on('mouseover', function () {
+            d3.select(this)
+                .attr('r', 8)
+                .style('fill', 'cyan');
+            d3.select('#svgScatter').selectAll('circle.' + d3.select(this).attr('class'))
+                .style('fill', 'cyan');
+            d3.select('#svgBar').selectAll('rect.' + d3.select(this).attr('class'))
+                .style('fill', 'cyan');
+        })
+        .on('mouseout', function () {
+            d3.select(this)
+                .attr('r', 6)
+                .style('fill', 'gray');
+            d3.select('#svgScatter').selectAll('circle.' + d3.select(this).attr('class'))
+                .style('fill', 'black');
+            d3.select('#svgBar').selectAll('rect.' + d3.select(this).attr('class'))
+                .style('fill', 'pink');
+        })
+        .append('title')
+        .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
+}
 
+function updateInfo() {
+    //let infoSection = d3.select('#infoSection');
+    //let neos = NEOS_GLOBAL.slice(0, 3);
+    //console.log(neos);
+    //infoSection.selectAll('div').data(neos).join('div')
+    //    .html(function(d, i) { return '<h2>Asteroid ' + (i + 1) + '</h2><h4>Magnitude: ' + d.absolute_magnitude_h + '</h4><h4>Diameter: ' + d.estimated_diameter_max + '</h4>'; });
 }
 
 let NEOS_GLOBAL = {}
@@ -142,6 +187,8 @@ async function init() {
     updateBar();
     updateScatter();
     updateLine(line);
+    updateCenter();
+    updateInfo();
 
     let brushH = d3.brushX()
         .extent([
