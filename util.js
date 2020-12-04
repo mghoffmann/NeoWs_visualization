@@ -51,6 +51,15 @@ function constructNEOs(response) {
     return NEOs;
 }
 
+// Copied from https://dev.to/ycmjason/how-to-create-range-in-javascript-539i
+function range(start, end) {
+    return Array.from({
+            length: end - start + 1
+        },
+        (_, i) => i)
+}
+
+
 // https://api.nasa.gov/neo/rest/v1/feed?start_date=2015-09-07&end_date=2015-09-08&api_key=DEMO_KEY
 // https://api.nasa.gov/neo/rest/v1/feed?start_date=2000-02-01&end_date=2000-02-10&api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2
 
