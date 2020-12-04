@@ -4,17 +4,18 @@ function updateBar() {
     let barScale = d3.scaleBand().domain(heights).range([40, chartWidth]);
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([20, 280]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
-        .attr('class', (d, i) => 'ast' + i)
+        .attr('class', (_, i) => 'ast' + i)
+        .attr('data-highlight-class', (_, i) => 'ast' + i)
         .attr('x', d => 5 + barScale(d))
         .attr('y', d => 0)
         .attr('width', d => 10)
         .attr('height', d => 280 - heightScale(d))
         .style('fill', 'pink')
         .on('mouseover', function () {
-            d3.select(this).style('fill', 'cyan');
+            doHighlighting(d3.select(this).attr('data-highlight-class'), true)
         })
         .on('mouseout', function () {
-            d3.select(this).style('fill', 'pink');
+            doHighlighting(d3.select(this).attr('data-highlight-class'), false)
         })
         .append('title')
         .text(d => d);
@@ -26,11 +27,6 @@ function updateBar() {
         .attr('x', chartWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
-
-    for (key in NEO.INTERN) {
-        let neo = NEO.INTERN[key]        
-        console.log(neo.approaches)
-    }
 }
 
 function updateScatter() {
@@ -41,20 +37,20 @@ function updateScatter() {
     let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => a[1])) * 1.04, 0]).range([20, 280]);
     let scatterChart = d3.select('#svgScatter');
     scatterChart.append('g').selectAll('circle').data(coords).join('circle')
-        .attr('class', (d, i) => 'ast' + i)
+        .attr('class', (d, i) => 'ast' + i)        
+        .attr('data-highlight-class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
         .attr('cy', d => yScale(d[1]))
         .attr('r', 6)
         .style('stroke', 'black')
         .on('mouseover', function () {
-            d3.select(this)
-                .attr('r', 8)
-                .style('fill', 'cyan');
+            // Don't just use the class attribute because it could
+            // be a space-separated list of multiple classes.
+            doHighlighting(d3.select(this).attr('data-highlight-class'), true)
         })
         .on('mouseout', function () {
-            d3.select(this)
-                .attr('r', 6)
-                .style('fill', 'black');
+            console.log(d3.select(this).attr('data-highlight-class'))
+            doHighlighting(d3.select(this).attr('data-highlight-class'), false)
         })
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
@@ -71,7 +67,11 @@ function updateScatter() {
         .text(d => d);
 }
 
-function updateLine(data) {
+function updateLine(NEOS) {
+    let neos = NEOS == null ? NEOS_GLOBAL : NEOS
+
+    let data = []
+
     let lineChart = d3.select('#svgLine');
     lineChart.append('path')
         .attr('d', d3.line()(data))
@@ -95,32 +95,49 @@ function updateCenter() {
         .style('stroke', 'black')
         .style('fill', 'none');
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
-        .attr('class', (d, i) => 'ast' + i)
+        .attr('class', (_, i) => 'ast' + i)
+        .attr('data-highlight-class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
         .attr('cy', 340)
         .attr('r', 6)
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
-            d3.select(this)
-                .attr('r', 8)
-                .style('fill', 'cyan');
-            d3.select('#svgScatter').selectAll('circle.' + d3.select(this).attr('class'))
-                .style('fill', 'cyan');
-            d3.select('#svgBar').selectAll('rect.' + d3.select(this).attr('class'))
-                .style('fill', 'cyan');
+            doHighlighting(d3.select(this).attr('data-highlight-class'), true)
         })
-        .on('mouseout', function () {
-            d3.select(this)
-                .attr('r', 6)
-                .style('fill', 'gray');
-            d3.select('#svgScatter').selectAll('circle.' + d3.select(this).attr('class'))
-                .style('fill', 'black');
-            d3.select('#svgBar').selectAll('rect.' + d3.select(this).attr('class'))
-                .style('fill', 'pink');
+        .on('mouseout', function () {            
+            doHighlighting(d3.select(this).attr('data-highlight-class'), false)
         })
         .append('title')
         .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
+}
+
+// Handles highlighting for objects of the class name in each of the displays
+//  className: The name of the class all of the markers share.
+//  highlighted: Whether to highlight the markers or return them to normal.
+function doHighlighting(className, highlight) {
+    if (highlight) {
+        d3.select('#svgCenter').selectAll('circle.' + className)
+            .attr('r', 8)
+            .style('fill', 'cyan');
+
+        d3.select('#svgScatter').selectAll('circle.' + className)
+            .style('fill', 'cyan');
+
+        d3.select("#svgBar").selectAll('rect.' + className)
+            .style('fill', 'cyan');
+
+    } else {
+        d3.select('#svgCenter').selectAll('circle.' + className)
+            .attr('r', 6)
+            .style('fill', 'gray');
+
+        d3.select('#svgScatter').selectAll('circle.' + className)
+            .style('fill', 'black');
+
+        d3.select('#svgBar').selectAll('rect.' + className)
+            .style('fill', 'pink');
+    }
 }
 
 function updateInfo() {
@@ -135,7 +152,7 @@ let NEOS_GLOBAL = {}
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
-  }
+}
 
 async function init() {
 
@@ -148,8 +165,16 @@ async function init() {
     }
 
     while (NEO.WAITING > 0) {
-        console.log(`Waiting for ${NEO.WAITING} requests.`)
+        // console.log(`Waiting for ${NEO.WAITING} requests.`)
         await sleep(100);
+    }
+
+    if (NEO.ASYNC_ERRORS.length > 0) {
+        errorMsg = "Error(s) occurred while requesting data from NeoWS API.\n"
+        errorMsg += NEO.ASYNC_ERRORS.join("\n")
+        alert(errorMsg)
+
+        // TODO: Handle the errors
     }
 
     NEOS_GLOBAL = NEOs;
@@ -176,17 +201,9 @@ async function init() {
         .attr('width', lineWidth)
         .attr('height', lineHeight);
 
-    let line = [
-        [20, 60],
-        [200, 80],
-        [400, 134],
-        [800, 111],
-        [1160, 67],
-        [1380, 204]
-    ];
     updateBar();
     updateScatter();
-    updateLine(line);
+    updateLine();
     updateCenter();
     updateInfo();
 
