@@ -59,7 +59,7 @@ svg {
     fill: black;
 }
 
-path {
+:not(.axis) > path {
     stroke: black;
     stroke-width: 3px;
     fill: none;
@@ -75,6 +75,6 @@ path {
     fill: forestgreen;
 }
 
-text {
+:not(.tick) > text {
     text-anchor: middle;
 }

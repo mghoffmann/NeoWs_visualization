@@ -1,18 +1,25 @@
-function updateBar(data) {
+function updateBar() {
+    let heights = NEOS_GLOBAL.map(a => a.estimated_diameter_max);
     let barChart = d3.select('#svgBar');
-    let barScale = d3.scaleBand().domain(data).range([40, chartWidth]);
-    barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(data).join('rect')
-        .attr('x', d => 20 + barScale(d))
+    let barScale = d3.scaleBand().domain(heights).range([40, chartWidth]);
+    let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([20, 280]);
+    barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
+        .attr('x', d => 5 + barScale(d))
         .attr('y', d => 0)
-        .attr('width', d => 100)
-        .attr('height', d => d)
+        .attr('width', d => 10)
+        .attr('height', d => 280 - heightScale(d))
         .style('fill', 'pink')
         .on('mouseover', function () {
             d3.select(this).style('fill', 'cyan');
         })
         .on('mouseout', function () {
             d3.select(this).style('fill', 'pink');
-        });
+        })
+        .append('title')
+        .text(d => d);
+    barChart.append('g').attr('transform', 'translate(29.5, 0)')
+        .attr('class', 'axis')
+        .call(d3.axisLeft().scale(heightScale));
     let barLabels = ['Maximum Asteroid Diameter'];
     barChart.append('g').selectAll('text').data(barLabels).join('text')
         .attr('x', chartWidth / 2 + margin)
@@ -25,11 +32,16 @@ function updateBar(data) {
     }
 }
 
-function updateScatter(data) {
+function updateScatter() {
+    let coords = NEOS_GLOBAL.map(a => [parseInt(a.approaches[0].miss_distance), parseInt(a.approaches[0].relative_velocity)]);
+    console.log(coords);
+    console.log(coords.map(a => a[0]));
+    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => a[0])) * 1.04]).range([30, 480]);
+    let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => a[1])) * 1.04, 0]).range([20, 280]);
     let scatterChart = d3.select('#svgScatter');
-    scatterChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('circle').data(data).join('circle')
-        .attr('cx', d => d[0])
-        .attr('cy', d => d[1])
+    scatterChart.append('g').selectAll('circle').data(coords).join('circle')
+        .attr('cx', d => xScale(d[0]))
+        .attr('cy', d => yScale(d[1]))
         .attr('r', 6)
         .style('stroke', 'black')
         .on('mouseover', function () {
@@ -41,7 +53,15 @@ function updateScatter(data) {
             d3.select(this)
                 .attr('r', 6)
                 .style('fill', 'black');
-        });
+        })
+        .append('title')
+        .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
+    scatterChart.append('g').attr('transform', 'translate(0, 279.5)')
+        .attr('class', 'axis')
+        .call(d3.axisBottom().scale(xScale));
+    scatterChart.append('g').attr('transform', 'translate(29.5, 0)')
+        .attr('class', 'axis')
+        .call(d3.axisLeft().scale(yScale));
     let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
         .attr('x', chartWidth / 2 + margin)
@@ -96,14 +116,14 @@ async function init() {
     lineWidth = 1360;
     lineHeight = 260;
     d3.select('#svgBar').append('rect')
-        .attr('x', margin)
+        .attr('x', margin + 10)
         .attr('y', margin)
-        .attr('width', chartWidth)
+        .attr('width', chartWidth - 10)
         .attr('height', chartHeight);
     d3.select('#svgScatter').append('rect')
-        .attr('x', margin)
+        .attr('x', margin + 10)
         .attr('y', margin)
-        .attr('width', chartWidth)
+        .attr('width', chartWidth - 10)
         .attr('height', chartHeight);
     d3.select('#svgLine').append('rect')
         .attr('x', margin)
@@ -111,12 +131,6 @@ async function init() {
         .attr('width', lineWidth)
         .attr('height', lineHeight);
 
-    let bars = [240, 160, 110];
-    let circles = [
-        [84, 144],
-        [320, 180],
-        [420, 104]
-    ];
     let line = [
         [20, 60],
         [200, 80],
@@ -125,8 +139,8 @@ async function init() {
         [1160, 67],
         [1380, 204]
     ];
-    updateBar(bars);
-    updateScatter(circles);
+    updateBar();
+    updateScatter();
     updateLine(line);
 
     let brushH = d3.brushX()
