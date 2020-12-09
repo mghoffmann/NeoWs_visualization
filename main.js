@@ -33,15 +33,14 @@ function doHighlighting(className, highlight) {
 
 function updateBar() {
     let heights = NEOS_GLOBAL.map(a => a.estimated_diameter_max);
-    let barChart = d3.select('#svgBar');
-    let barScale = d3.scaleBand().domain(heights).range([40, chartWidth]);
-    let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([20, 280]);
+    let barScale = d3.scaleBand().domain(heights).range([margin*2, barWidth]).paddingInner(.2);
+    let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
-        .attr('x', d => 5 + barScale(d))
-        .attr('y', d => 0)
-        .attr('width', d => 10)
-        .attr('height', d => 280 - heightScale(d))
+        .attr('x', d => margin/2 + barScale(d))
+        .attr('y', margin)
+        .attr('width', barScale.bandwidth())
+        .attr('height', d => barHeight + margin - heightScale(d))
         .style('fill', 'pink')
         .on('mouseover', function () {
             doHighlighting(d3.select(this).attr('class'), true)
@@ -51,12 +50,12 @@ function updateBar() {
         })
         .append('title')
         .text(d => d);
-    barChart.append('g').attr('transform', 'translate(29.5, 0)')
+    barChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(heightScale));
     let barLabels = ['Maximum Asteroid Diameter'];
     barChart.append('g').selectAll('text').data(barLabels).join('text')
-        .attr('x', chartWidth / 2 + margin)
+        .attr('x', barWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
 }
@@ -65,8 +64,8 @@ function updateScatter() {
     let coords = NEOS_GLOBAL.map(a => [parseInt(a.approaches[0].miss_distance), parseInt(a.approaches[0].relative_velocity)]);
     console.log(coords);
     console.log(coords.map(a => a[0]));
-    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => a[0])) * 1.04]).range([30, 480]);
-    let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => a[1])) * 1.04, 0]).range([20, 280]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => a[0])) * 1.04]).range([margin*2, scatterWidth + margin*2]);
+    let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => a[1])) * 1.04, 0]).range([margin, scatterHeight + margin]);
     let scatterChart = d3.select('#svgScatter');
     scatterChart.append('g').selectAll('circle').data(coords).join('circle')
         .attr('class', (d, i) => 'ast' + i)        
@@ -82,15 +81,15 @@ function updateScatter() {
         })
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
-    scatterChart.append('g').attr('transform', 'translate(0, 279.5)')
+    scatterChart.append('g').attr('transform', 'translate(0, ' + (scatterHeight + margin) + ')')
         .attr('class', 'axis')
         .call(d3.axisBottom().scale(xScale));
-    scatterChart.append('g').attr('transform', 'translate(29.5, 0)')
+    scatterChart.append('g').attr('transform', 'translate(' + margin*2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
     let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
-        .attr('x', chartWidth / 2 + margin)
+        .attr('x', scatterWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
 }
@@ -113,19 +112,18 @@ function updateLine(NEOS) {
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
 function updateCenter() {
-    let centerChart = d3.select('#svgCenter');
     let dists = NEOS_GLOBAL.map(a => parseInt(a.approaches[0].miss_distance));
-    let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([110, 960]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([110, centerWidth - 50]);
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
-        .attr('cy', 340)
+        .attr('cy', centerHeight/2)
         .attr('r', d => 2000 + xScale(d))
         .style('stroke', 'black')
         .style('fill', 'none');
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
-        .attr('cy', 340)
+        .attr('cy', centerHeight/2)
         .attr('r', 6)
         .style('stroke', 'black')
         .style('fill', 'gray')
@@ -180,25 +178,46 @@ async function init() {
 
     // add boxes for charts
     margin = 20;
-    chartWidth = 460;
-    chartHeight = 260;
-    lineWidth = 1360;
-    lineHeight = 260;
-    d3.select('#svgBar').append('rect')
-        .attr('x', margin + 10)
+    barChart = d3.select('#svgBar');
+    barWidth = barChart.node().getBoundingClientRect().width - margin*3;
+    barHeight = barChart.node().getBoundingClientRect().height - margin*3;
+    barChart.append('rect')
+        .attr('x', margin*2)
         .attr('y', margin)
-        .attr('width', chartWidth - 10)
-        .attr('height', chartHeight);
-    d3.select('#svgScatter').append('rect')
-        .attr('x', margin + 10)
+        .attr('width', barWidth)
+        .attr('height', barHeight);
+    
+    scatterChart = d3.select('#svgScatter');
+    scatterWidth = scatterChart.node().getBoundingClientRect().width - margin*3;
+    scatterHeight = scatterChart.node().getBoundingClientRect().height - margin*3;
+    scatterChart.append('rect')
+        .attr('x', margin*2)
         .attr('y', margin)
-        .attr('width', chartWidth - 10)
-        .attr('height', chartHeight);
-    d3.select('#svgLine').append('rect')
-        .attr('x', margin)
+        .attr('width', scatterWidth)
+        .attr('height', scatterHeight);
+    
+    lineChart = d3.select('#svgLine');
+    lineWidth = lineChart.node().getBoundingClientRect().width - margin*3;
+    lineHeight = lineChart.node().getBoundingClientRect().height - margin*3;
+    lineChart.append('rect')
+        .attr('x', margin*2)
         .attr('y', margin)
         .attr('width', lineWidth)
         .attr('height', lineHeight);
+    
+    centerChart = d3.select('#svgCenter');
+    centerWidth = centerChart.node().getBoundingClientRect().width;
+    centerHeight = centerChart.node().getBoundingClientRect().height;
+    centerChart.append('rect')
+        .attr('x', 1)
+        .attr('y', 1)
+        .attr('width', centerWidth - 2)
+        .attr('height', centerHeight - 2);
+    centerChart.append('circle')
+        .attr('class', 'earth')
+        .attr('cx', 70)
+        .attr('cy', centerHeight/2)
+        .attr('r', 40);
 
     updateBar();
     updateScatter();
