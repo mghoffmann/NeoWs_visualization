@@ -227,8 +227,8 @@ async function init() {
 
     let brushH = d3.brushX()
         .extent([
-            [20, 20],
-            [1380, 280]
+            [margin*2, margin],
+            [lineWidth + margin*2, lineHeight + margin + 1]
         ])
         .on('end', () => {
 
