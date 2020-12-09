@@ -85,11 +85,6 @@ function unique(array, comparator = null) {
 let NEOS_BY_DATE = {};
 let NEO_DATA = {};
 
-// A dictionary keyed by month numbers and valued by true.
-// If the NEOs for a month have not been loaded yet then the month's
-// number will not be a key here.
-let LOADED_MONTHS = {};
-
 // This is the earliest date in the NeoWS database.
 const NASA_EPOCH = new Date(1900, 0, 1);
 
@@ -108,40 +103,17 @@ const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 // onload: A callback that is passed an array of NEO instances when the data is loaded. See NEO.js.
 //      This callback is not called if the data fetch results in an error.
 // onerror: A callback that is passed an error if the data fetch fails.
-function getNEOs(startDate, endDate, onload) {
+function getNEOs(startDate, endDate, onLoad, onError) {
 
     // Recurse if needed to make sure start is before or equal to end
     if (startDate > endDate) {
-        return getNEOs(endDate, startDate, onload);
+        return getNEOs(endDate, startDate, onLoad, onError);
     }
 
-    // Remove the time parts of the dates, if they exist.
-    // We want to truncate them to just their day.
-    cleanedStart = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0, 0)
-    cleanedEnd = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 0, 0, 0, 0)
-
-    let months = []
-    let dates = []
-
-    // Get all the days in the range
-    let dayCount = Math.ceil((cleanedEnd - cleanedStart) / MILLISECONDS_PER_DAY)
-    for (var i = 0; i < dayCount; i++) {
-        let day = new Date(cleanedStart.getTime() + MILLISECONDS_PER_DAY * i)
-        dates.push(day)
-        if (i == 0 || day.getDate() == 1) {
-            months.push(getMonthNumber(day))
-        }
-    }
-
-    if (dates.length == 0) {
-        // The only month is the month of the start and end, which are the same day.
-        dates.push(cleanedStart);
-        months.push(getMonthNumber(cleanedStart))
-        console.log('samesies')
-    }
+    
 
     for (month of months) {
-        
+        // If a month is loaded then 
     }
 }
 
