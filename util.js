@@ -78,7 +78,7 @@ function unique(array, comparator = null) {
 }
 
 
-// A dictionary keyed by dates in ISO-8601 format and valued with
+// A dictionary keyed by date times (Date.getTime() results) and valued by
 // arrays of NEO class instances.
 // This is populated as needed in the requestNEOs function,
 // using data from the .month files in the data folder.
@@ -92,6 +92,18 @@ const NASA_EPOCH = new Date(1900, 0, 1);
 // Usable as an key to LOADED_MONTHS.
 function getMonthNumber(date) {
     return (date.getFullYear() - NASA_EPOCH.getFullYear()) * 12 + (date.getMonth() - NASA_EPOCH.getMonth())
+}
+
+// Copied from Stackoverflow user Peter Bailey:
+// https://stackoverflow.com/a/1267338/539997
+function zeroFill(number, width = 2)
+{
+  width -= number.toString().length;
+  if ( width > 0 )
+  {
+    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+  }
+  return number + ""; // always return a string
 }
 
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -110,11 +122,7 @@ function getNEOs(startDate, endDate, onLoad, onError) {
         return getNEOs(endDate, startDate, onLoad, onError);
     }
 
-    
-
-    for (month of months) {
-        // If a month is loaded then 
-    }
+    let builder = new DataBuilder(startDate, endDate, onLoad, onError);
 }
 
 // Requests NEO data from the NASA API.
