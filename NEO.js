@@ -82,8 +82,6 @@ class NEO {
                     NEO.INTERN[json.id].approaches.push(new Approach(json.id, a));
                 });
 
-                NEO.ASYNC_ERRORS.push("This is just a test error.")
-
                 // Sort the approaches for easy date comparison
                 NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a,b)=>a.date - b.date);
             })
