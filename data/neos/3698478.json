@@ -1,0 +1,79 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3698478?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3698478",
+    "neo_reference_id": "3698478",
+    "name": "(2014 HM196)",
+    "designation": "2014 HM196",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3698478",
+    "absolute_magnitude_h": 25.9,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0175612318,
+            "estimated_diameter_max": 0.0392681082
+        },
+        "meters": {
+            "estimated_diameter_min": 17.561231848,
+            "estimated_diameter_max": 39.2681081809
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0109120402,
+            "estimated_diameter_max": 0.0244000636
+        },
+        "feet": {
+            "estimated_diameter_min": 57.6155918963,
+            "estimated_diameter_max": 128.8323800441
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2014-04-16",
+            "close_approach_date_full": "2014-Apr-16 01:01",
+            "epoch_date_close_approach": 1397610060000,
+            "relative_velocity": {
+                "kilometers_per_second": "12.2350872051",
+                "kilometers_per_hour": "44046.313938193",
+                "miles_per_hour": "27368.6665689844"
+            },
+            "miss_distance": {
+                "astronomical": "0.1909481322",
+                "lunar": "74.2788234258",
+                "kilometers": "28565433.857598414",
+                "miles": "17749737.5328455532"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "6",
+        "orbit_determination_date": "2019-12-18 11:21:06",
+        "first_observation_date": "2014-04-23",
+        "last_observation_date": "2014-04-25",
+        "data_arc_in_days": 2,
+        "observations_used": 14,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".119191",
+        "jupiter_tisserand_invariant": "6.894",
+        "epoch_osculation": "2456771.5",
+        "eccentricity": ".4743801410667949",
+        "semi_major_axis": ".836718802736923",
+        "inclination": "16.92783654050925",
+        "ascending_node_longitude": "210.7340871012221",
+        "orbital_period": "279.555293164841",
+        "perihelion_distance": ".4397960190613417",
+        "perihelion_argument": "195.0788517148407",
+        "aphelion_distance": "1.233641586412504",
+        "perihelion_time": "2456655.910521497741",
+        "mean_anomaly": "148.8514554302373",
+        "mean_motion": "1.287759555272396",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "ATE",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 2062 Aten",
+            "orbit_class_range": "a (semi-major axis) < 1.0 AU; q (perihelion) > 0.983 AU"
+        }
+    },
+    "is_sentry_object": false
+}

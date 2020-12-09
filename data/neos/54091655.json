@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/54091655?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "54091655",
+    "neo_reference_id": "54091655",
+    "name": "(2020 WF2)",
+    "designation": "2020 WF2",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54091655",
+    "absolute_magnitude_h": 22.032,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.1042689443,
+            "estimated_diameter_max": 0.2331524475
+        },
+        "meters": {
+            "estimated_diameter_min": 104.268944343,
+            "estimated_diameter_max": 233.1524474931
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0647896982,
+            "estimated_diameter_max": 0.1448741695
+        },
+        "feet": {
+            "estimated_diameter_min": 342.0897233583,
+            "estimated_diameter_max": 764.9358758333
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2018-09-01",
+            "close_approach_date_full": "2018-Sep-01 20:17",
+            "epoch_date_close_approach": 1535833020000,
+            "relative_velocity": {
+                "kilometers_per_second": "5.5641467052",
+                "kilometers_per_hour": "20030.9281386427",
+                "miles_per_hour": "12446.4397648139"
+            },
+            "miss_distance": {
+                "astronomical": "1.2314570184",
+                "lunar": "479.0367801576",
+                "kilometers": "184223346.949190808",
+                "miles": "114471079.6997288304"
+            },
+            "orbiting_body": "Juptr"
+        },
+        {
+            "close_approach_date": "2020-11-24",
+            "close_approach_date_full": "2020-Nov-24 08:13",
+            "epoch_date_close_approach": 1606205580000,
+            "relative_velocity": {
+                "kilometers_per_second": "14.9392543056",
+                "kilometers_per_hour": "53781.3155000005",
+                "miles_per_hour": "33417.6179560975"
+            },
+            "miss_distance": {
+                "astronomical": "0.2225671095",
+                "lunar": "86.5786055955",
+                "kilometers": "33295565.513256765",
+                "miles": "20688905.052662757"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "11",
+        "orbit_determination_date": "2020-12-06 05:25:18",
+        "first_observation_date": "2020-11-19",
+        "last_observation_date": "2020-12-06",
+        "data_arc_in_days": 17,
+        "observations_used": 73,
+        "orbit_uncertainty": "7",
+        "minimum_orbit_intersection": ".161584",
+        "jupiter_tisserand_invariant": "2.997",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".5751899671359628",
+        "semi_major_axis": "2.698665332165915",
+        "inclination": "24.82695000061567",
+        "ascending_node_longitude": "55.85636128610165",
+        "orbital_period": "1619.280074669955",
+        "perihelion_distance": "1.14642010844644",
+        "perihelion_argument": "7.699464067818604",
+        "aphelion_distance": "4.25091055588539",
+        "perihelion_time": "2459187.305163559767",
+        "mean_anomaly": "318.4692852499755",
+        "mean_motion": ".222321021317684",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}

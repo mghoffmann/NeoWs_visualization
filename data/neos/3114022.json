@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3114022?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3114022",
+    "neo_reference_id": "3114022",
+    "name": "(2002 CV11)",
+    "designation": "2002 CV11",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3114022",
+    "absolute_magnitude_h": 23.8,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.046190746,
+            "estimated_diameter_max": 0.1032856481
+        },
+        "meters": {
+            "estimated_diameter_min": 46.1907460282,
+            "estimated_diameter_max": 103.2856480504
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0287015901,
+            "estimated_diameter_max": 0.0641787064
+        },
+        "feet": {
+            "estimated_diameter_min": 151.544447199,
+            "estimated_diameter_max": 338.8636855496
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2001-10-05",
+            "close_approach_date_full": "2001-Oct-05 01:47",
+            "epoch_date_close_approach": 1002246420000,
+            "relative_velocity": {
+                "kilometers_per_second": "7.0585955533",
+                "kilometers_per_hour": "25410.9439918032",
+                "miles_per_hour": "15789.3723931291"
+            },
+            "miss_distance": {
+                "astronomical": "0.4284931119",
+                "lunar": "166.6838205291",
+                "kilometers": "64101656.849911653",
+                "miles": "39830922.5821126914"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2002-02-04",
+            "close_approach_date_full": "2002-Feb-04 08:45",
+            "epoch_date_close_approach": 1012812300000,
+            "relative_velocity": {
+                "kilometers_per_second": "12.5846371808",
+                "kilometers_per_hour": "45304.6938508883",
+                "miles_per_hour": "28150.5749097367"
+            },
+            "miss_distance": {
+                "astronomical": "0.0481260145",
+                "lunar": "18.7210196405",
+                "kilometers": "7199549.260789115",
+                "miles": "4473592.467415187"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "11",
+        "orbit_determination_date": "2017-04-06 09:15:28",
+        "first_observation_date": "2002-02-07",
+        "last_observation_date": "2002-02-14",
+        "data_arc_in_days": 7,
+        "observations_used": 22,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".0345487",
+        "jupiter_tisserand_invariant": "4.320",
+        "epoch_osculation": "2452315.5",
+        "eccentricity": ".3924685958635735",
+        "semi_major_axis": "1.548124259933597",
+        "inclination": "17.02773821661109",
+        "ascending_node_longitude": "136.6721925415164",
+        "orbital_period": "703.5697381172364",
+        "perihelion_distance": ".9405341054151243",
+        "perihelion_argument": "314.154688803539",
+        "aphelion_distance": "2.15571441445207",
+        "perihelion_time": "2452274.800153749248",
+        "mean_anomaly": "20.8251490313946",
+        "mean_motion": ".511676356296059",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

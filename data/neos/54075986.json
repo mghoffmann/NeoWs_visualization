@@ -1,0 +1,113 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/54075986?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "54075986",
+    "neo_reference_id": "54075986",
+    "name": "(2020 UO3)",
+    "designation": "2020 UO3",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54075986",
+    "absolute_magnitude_h": 28.182,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0061398106,
+            "estimated_diameter_max": 0.0137290339
+        },
+        "meters": {
+            "estimated_diameter_min": 6.1398106327,
+            "estimated_diameter_max": 13.7290339437
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0038151003,
+            "estimated_diameter_max": 0.0085308236
+        },
+        "feet": {
+            "estimated_diameter_min": 20.1437363162,
+            "estimated_diameter_max": 45.0427637238
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "1947-01-18",
+            "close_approach_date_full": "1947-Jan-18 19:58",
+            "epoch_date_close_approach": -724305720000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.8124256227",
+                "kilometers_per_hour": "49724.7322416242",
+                "miles_per_hour": "30897.0148753581"
+            },
+            "miss_distance": {
+                "astronomical": "0.2928333345",
+                "lunar": "113.9121671205",
+                "kilometers": "43807243.106197515",
+                "miles": "27220558.632115107"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2020-10-22",
+            "close_approach_date_full": "2020-Oct-22 15:53",
+            "epoch_date_close_approach": 1603381980000,
+            "relative_velocity": {
+                "kilometers_per_second": "16.7565730296",
+                "kilometers_per_hour": "60323.6629064905",
+                "miles_per_hour": "37482.7782098691"
+            },
+            "miss_distance": {
+                "astronomical": "0.0023427089",
+                "lunar": "0.9113137621",
+                "kilometers": "350464.261470043",
+                "miles": "217768.3940228734"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2020-10-22",
+            "close_approach_date_full": "2020-Oct-22 16:26",
+            "epoch_date_close_approach": 1603383960000,
+            "relative_velocity": {
+                "kilometers_per_second": "17.6963568467",
+                "kilometers_per_hour": "63706.8846479515",
+                "miles_per_hour": "39584.9806302785"
+            },
+            "miss_distance": {
+                "astronomical": "0.0013022879",
+                "lunar": "0.5065899931",
+                "kilometers": "194819.495966773",
+                "miles": "121055.2213885474"
+            },
+            "orbiting_body": "Moon"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "2",
+        "orbit_determination_date": "2020-10-23 08:23:15",
+        "first_observation_date": "2020-10-21",
+        "last_observation_date": "2020-10-22",
+        "data_arc_in_days": 1,
+        "observations_used": 33,
+        "orbit_uncertainty": "8",
+        "minimum_orbit_intersection": ".0011457",
+        "jupiter_tisserand_invariant": "3.779",
+        "epoch_osculation": "2459143.5",
+        "eccentricity": ".6067374496707182",
+        "semi_major_axis": "1.82541566111028",
+        "inclination": "9.74830222980885",
+        "ascending_node_longitude": "208.9099053816227",
+        "orbital_period": "900.8263583122331",
+        "perihelion_distance": ".7178676182992407",
+        "perihelion_argument": "255.2134275573125",
+        "aphelion_distance": "2.932963703921319",
+        "perihelion_time": "2459191.292170056974",
+        "mean_anomaly": "340.9006685231259",
+        "mean_motion": ".3996330665484605",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

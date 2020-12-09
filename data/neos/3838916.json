@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3838916?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3838916",
+    "neo_reference_id": "3838916",
+    "name": "(2019 EP1)",
+    "designation": "2019 EP1",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3838916",
+    "absolute_magnitude_h": 25.6,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0201629919,
+            "estimated_diameter_max": 0.0450858206
+        },
+        "meters": {
+            "estimated_diameter_min": 20.1629919443,
+            "estimated_diameter_max": 45.0858206172
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0125286985,
+            "estimated_diameter_max": 0.0280150214
+        },
+        "feet": {
+            "estimated_diameter_min": 66.1515504905,
+            "estimated_diameter_max": 147.9193637137
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2019-03-16",
+            "close_approach_date_full": "2019-Mar-16 10:37",
+            "epoch_date_close_approach": 1552732620000,
+            "relative_velocity": {
+                "kilometers_per_second": "4.2931905841",
+                "kilometers_per_hour": "15455.4861028907",
+                "miles_per_hour": "9603.4380176545"
+            },
+            "miss_distance": {
+                "astronomical": "0.0805112555",
+                "lunar": "31.3188783895",
+                "kilometers": "12044312.333825785",
+                "miles": "7483988.647074433"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2118-03-16",
+            "close_approach_date_full": "2118-Mar-16 10:51",
+            "epoch_date_close_approach": 4676871060000,
+            "relative_velocity": {
+                "kilometers_per_second": "4.2664801257",
+                "kilometers_per_hour": "15359.3284523807",
+                "miles_per_hour": "9543.6893930918"
+            },
+            "miss_distance": {
+                "astronomical": "0.0808673595",
+                "lunar": "31.4574028455",
+                "kilometers": "12097584.733724265",
+                "miles": "7517090.581414257"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "6",
+        "orbit_determination_date": "2019-04-07 07:40:03",
+        "first_observation_date": "2019-03-05",
+        "last_observation_date": "2019-04-06",
+        "data_arc_in_days": 32,
+        "observations_used": 43,
+        "orbit_uncertainty": "7",
+        "minimum_orbit_intersection": ".0796447",
+        "jupiter_tisserand_invariant": "4.052",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".3860747038523945",
+        "semi_major_axis": "1.742666609504565",
+        "inclination": "3.303933731262461",
+        "ascending_node_longitude": "16.69435129483803",
+        "orbital_period": "840.2719996075735",
+        "perihelion_distance": "1.069867114326634",
+        "perihelion_argument": "152.5247465351961",
+        "aphelion_distance": "2.415466104682496",
+        "perihelion_time": "2459393.588009000317",
+        "mean_anomaly": "191.5882436803756",
+        "mean_motion": ".4284326981835981",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}

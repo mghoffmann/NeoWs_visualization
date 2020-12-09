@@ -1,0 +1,79 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3402638?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3402638",
+    "neo_reference_id": "3402638",
+    "name": "(2008 CY118)",
+    "designation": "2008 CY118",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3402638",
+    "absolute_magnitude_h": 25.0,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.02658,
+            "estimated_diameter_max": 0.0594346868
+        },
+        "meters": {
+            "estimated_diameter_min": 26.58,
+            "estimated_diameter_max": 59.4346868419
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0165160412,
+            "estimated_diameter_max": 0.0369309908
+        },
+        "feet": {
+            "estimated_diameter_min": 87.2047272,
+            "estimated_diameter_max": 194.9956979785
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2008-02-02",
+            "close_approach_date_full": "2008-Feb-02 08:22",
+            "epoch_date_close_approach": 1201940520000,
+            "relative_velocity": {
+                "kilometers_per_second": "14.3632738861",
+                "kilometers_per_hour": "51707.7859899449",
+                "miles_per_hour": "32129.2073558077"
+            },
+            "miss_distance": {
+                "astronomical": "0.0839066798",
+                "lunar": "32.6396984422",
+                "kilometers": "12552260.576852026",
+                "miles": "7799613.0495929188"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "6",
+        "orbit_determination_date": "2017-04-06 09:04:20",
+        "first_observation_date": "2008-02-12",
+        "last_observation_date": "2008-02-14",
+        "data_arc_in_days": 2,
+        "observations_used": 16,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".0754427",
+        "jupiter_tisserand_invariant": "4.854",
+        "epoch_osculation": "2454509.5",
+        "eccentricity": ".3734872277287979",
+        "semi_major_axis": "1.303976904239887",
+        "inclination": "21.63322185699381",
+        "ascending_node_longitude": "321.2797848378835",
+        "orbital_period": "543.8802341761993",
+        "perihelion_distance": ".8169581852529515",
+        "perihelion_argument": "94.14794779089165",
+        "aphelion_distance": "1.790995623226823",
+        "perihelion_time": "2454438.579346087483",
+        "mean_anomaly": "46.94312056987673",
+        "mean_motion": ".6619104306029474",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

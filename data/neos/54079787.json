@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/54079787?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "54079787",
+    "neo_reference_id": "54079787",
+    "name": "(2020 UK6)",
+    "designation": "2020 UK6",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=54079787",
+    "absolute_magnitude_h": 24.155,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0392242797,
+            "estimated_diameter_max": 0.0877081557
+        },
+        "meters": {
+            "estimated_diameter_min": 39.2242796545,
+            "estimated_diameter_max": 87.7081556759
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0243728299,
+            "estimated_diameter_max": 0.0544993044
+        },
+        "feet": {
+            "estimated_diameter_min": 128.6885856616,
+            "estimated_diameter_max": 287.7564254676
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2020-10-28",
+            "close_approach_date_full": "2020-Oct-28 22:51",
+            "epoch_date_close_approach": 1603925460000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.6886015777",
+                "kilometers_per_hour": "49278.965679634",
+                "miles_per_hour": "30620.0328691037"
+            },
+            "miss_distance": {
+                "astronomical": "0.1217030153",
+                "lunar": "47.3424729517",
+                "kilometers": "18206511.861457411",
+                "miles": "11313001.8798418318"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2021-10-27",
+            "close_approach_date_full": "2021-Oct-27 21:50",
+            "epoch_date_close_approach": 1635371400000,
+            "relative_velocity": {
+                "kilometers_per_second": "19.3244842548",
+                "kilometers_per_hour": "69568.1433171385",
+                "miles_per_hour": "43226.9388294742"
+            },
+            "miss_distance": {
+                "astronomical": "0.2235270162",
+                "lunar": "86.9520093018",
+                "kilometers": "33439165.510975494",
+                "miles": "20778133.9536460572"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "1",
+        "orbit_determination_date": "2020-10-27 07:42:05",
+        "first_observation_date": "2020-10-24",
+        "last_observation_date": "2020-10-27",
+        "data_arc_in_days": 3,
+        "observations_used": 11,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".0926727",
+        "jupiter_tisserand_invariant": "6.125",
+        "epoch_osculation": "2459148.5",
+        "eccentricity": ".3463597640034912",
+        "semi_major_axis": ".966329897134253",
+        "inclination": "23.64662012346279",
+        "ascending_node_longitude": "29.01050900053769",
+        "orbital_period": "346.9657059910692",
+        "perihelion_distance": ".6316321020133152",
+        "perihelion_argument": "133.742781186559",
+        "aphelion_distance": "1.301027692255191",
+        "perihelion_time": "2459242.305191839712",
+        "mean_anomaly": "262.6708735785965",
+        "mean_motion": "1.037566519641184",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "ATE",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 2062 Aten",
+            "orbit_class_range": "a (semi-major axis) < 1.0 AU; q (perihelion) > 0.983 AU"
+        }
+    },
+    "is_sentry_object": false
+}

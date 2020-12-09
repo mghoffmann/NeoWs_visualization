@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3989080?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3989080",
+    "neo_reference_id": "3989080",
+    "name": "(2020 BP4)",
+    "designation": "2020 BP4",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3989080",
+    "absolute_magnitude_h": 23.567,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0514227119,
+            "estimated_diameter_max": 0.1149846794
+        },
+        "meters": {
+            "estimated_diameter_min": 51.422711916,
+            "estimated_diameter_max": 114.9846794316
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0319525819,
+            "estimated_diameter_max": 0.0714481452
+        },
+        "feet": {
+            "estimated_diameter_min": 168.7096901625,
+            "estimated_diameter_max": 377.2463356663
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2019-09-11",
+            "close_approach_date_full": "2019-Sep-11 05:17",
+            "epoch_date_close_approach": 1568179020000,
+            "relative_velocity": {
+                "kilometers_per_second": "9.4852013758",
+                "kilometers_per_hour": "34146.7249527755",
+                "miles_per_hour": "21217.4469574621"
+            },
+            "miss_distance": {
+                "astronomical": "0.4323362211",
+                "lunar": "168.1787900079",
+                "kilometers": "64676577.800409057",
+                "miles": "40188161.8953447066"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2020-01-13",
+            "close_approach_date_full": "2020-Jan-13 08:48",
+            "epoch_date_close_approach": 1578905280000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.4013303596",
+                "kilometers_per_hour": "48244.7892944567",
+                "miles_per_hour": "29977.435881325"
+            },
+            "miss_distance": {
+                "astronomical": "0.056315412",
+                "lunar": "21.906695268",
+                "kilometers": "8424665.68337244",
+                "miles": "5234844.512682072"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "6",
+        "orbit_determination_date": "2020-01-30 07:25:37",
+        "first_observation_date": "2020-01-22",
+        "last_observation_date": "2020-01-30",
+        "data_arc_in_days": 8,
+        "observations_used": 94,
+        "orbit_uncertainty": "8",
+        "minimum_orbit_intersection": ".0551683",
+        "jupiter_tisserand_invariant": "4.470",
+        "epoch_osculation": "2458872.5",
+        "eccentricity": ".3376869489839826",
+        "semi_major_axis": "1.468696656622614",
+        "inclination": "22.07819194357489",
+        "ascending_node_longitude": "116.1083003522817",
+        "orbital_period": "650.1245800068416",
+        "perihelion_distance": ".9727369636647472",
+        "perihelion_argument": "316.553412177373",
+        "aphelion_distance": "1.96465634958048",
+        "perihelion_time": "2458826.729920729416",
+        "mean_anomaly": "25.34472475604113",
+        "mean_motion": ".5537400231755759",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

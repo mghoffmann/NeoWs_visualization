@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3673680?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3673680",
+    "neo_reference_id": "3673680",
+    "name": "(2014 LY21)",
+    "designation": "2014 LY21",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3673680",
+    "absolute_magnitude_h": 29.1,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0040230458,
+            "estimated_diameter_max": 0.0089958039
+        },
+        "meters": {
+            "estimated_diameter_min": 4.0230457983,
+            "estimated_diameter_max": 8.9958038817
+        },
+        "miles": {
+            "estimated_diameter_min": 0.002499804,
+            "estimated_diameter_max": 0.0055897317
+        },
+        "feet": {
+            "estimated_diameter_min": 13.198969577,
+            "estimated_diameter_max": 29.5137932072
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2014-06-03",
+            "close_approach_date_full": "2014-Jun-03 17:38",
+            "epoch_date_close_approach": 1401817080000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.3097915393",
+                "kilometers_per_hour": "47915.2495413025",
+                "miles_per_hour": "29772.6726941499"
+            },
+            "miss_distance": {
+                "astronomical": "0.0001339761",
+                "lunar": "0.0521167029",
+                "kilometers": "20042.539190907",
+                "miles": "12453.8563602366"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2014-06-04",
+            "close_approach_date_full": "2014-Jun-04 02:34",
+            "epoch_date_close_approach": 1401849240000,
+            "relative_velocity": {
+                "kilometers_per_second": "12.0382103305",
+                "kilometers_per_hour": "43337.5571898169",
+                "miles_per_hour": "26928.272688306"
+            },
+            "miss_distance": {
+                "astronomical": "0.0005862479",
+                "lunar": "0.2280504331",
+                "kilometers": "87701.437131973",
+                "miles": "54495.1460603074"
+            },
+            "orbiting_body": "Moon"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "10",
+        "orbit_determination_date": "2017-04-06 14:45:22",
+        "first_observation_date": "2014-06-02",
+        "last_observation_date": "2014-06-02",
+        "data_arc_in_days": null,
+        "observations_used": 11,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".000142798",
+        "jupiter_tisserand_invariant": "8.618",
+        "epoch_osculation": "2456810.5",
+        "eccentricity": ".605940612613582",
+        "semi_major_axis": ".645758614384855",
+        "inclination": "1.242700526983787",
+        "ascending_node_longitude": "73.34799073062628",
+        "orbital_period": "189.5412495544012",
+        "perihelion_distance": ".2544672439839981",
+        "perihelion_argument": "349.7529053534363",
+        "aphelion_distance": "1.037049984785712",
+        "perihelion_time": "2456890.571652629541",
+        "mean_anomaly": "207.9180916322844",
+        "mean_motion": "1.899322711263833",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "ATE",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 2062 Aten",
+            "orbit_class_range": "a (semi-major axis) < 1.0 AU; q (perihelion) > 0.983 AU"
+        }
+    },
+    "is_sentry_object": false
+}
