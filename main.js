@@ -1,3 +1,36 @@
+// Handles highlighting for objects of the class name in each of the displays
+//  className: The name of the class all of the markers share.
+//  highlighted: Whether to highlight the markers or return them to normal.
+function doHighlighting(className, highlight) {
+    for (x of className.split(' ')) {
+        if (x.includes('ast')) {
+            className = x;
+        }
+    }
+    if (highlight) {
+        d3.select('#svgCenter').selectAll('circle.' + className)
+            .attr('r', 8)
+            .style('fill', 'cyan');
+
+        d3.select('#svgScatter').selectAll('circle.' + className)
+            .style('fill', 'cyan');
+
+        d3.select("#svgBar").selectAll('rect.' + className)
+            .style('fill', 'cyan');
+    }
+    else {
+        d3.select('#svgCenter').selectAll('circle.' + className)
+            .attr('r', 6)
+            .style('fill', 'gray');
+
+        d3.select('#svgScatter').selectAll('circle.' + className)
+            .style('fill', 'black');
+
+        d3.select('#svgBar').selectAll('rect.' + className)
+            .style('fill', 'pink');
+    }
+}
+
 function updateBar() {
     let heights = NEOS_GLOBAL.map(a => a.estimated_diameter_max);
     let barChart = d3.select('#svgBar');
@@ -5,17 +38,16 @@ function updateBar() {
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([20, 280]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
-        .attr('data-highlight-class', (_, i) => 'ast' + i)
         .attr('x', d => 5 + barScale(d))
         .attr('y', d => 0)
         .attr('width', d => 10)
         .attr('height', d => 280 - heightScale(d))
         .style('fill', 'pink')
         .on('mouseover', function () {
-            doHighlighting(d3.select(this).attr('data-highlight-class'), true)
+            doHighlighting(d3.select(this).attr('class'), true)
         })
         .on('mouseout', function () {
-            doHighlighting(d3.select(this).attr('data-highlight-class'), false)
+            doHighlighting(d3.select(this).attr('class'), false)
         })
         .append('title')
         .text(d => d);
@@ -38,19 +70,15 @@ function updateScatter() {
     let scatterChart = d3.select('#svgScatter');
     scatterChart.append('g').selectAll('circle').data(coords).join('circle')
         .attr('class', (d, i) => 'ast' + i)        
-        .attr('data-highlight-class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
         .attr('cy', d => yScale(d[1]))
         .attr('r', 6)
         .style('stroke', 'black')
         .on('mouseover', function () {
-            // Don't just use the class attribute because it could
-            // be a space-separated list of multiple classes.
-            doHighlighting(d3.select(this).attr('data-highlight-class'), true)
+            doHighlighting(d3.select(this).attr('class'), true)
         })
         .on('mouseout', function () {
-            console.log(d3.select(this).attr('data-highlight-class'))
-            doHighlighting(d3.select(this).attr('data-highlight-class'), false)
+            doHighlighting(d3.select(this).attr('class'), false)
         })
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
@@ -96,48 +124,19 @@ function updateCenter() {
         .style('fill', 'none');
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('class', (_, i) => 'ast' + i)
-        .attr('data-highlight-class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
         .attr('cy', 340)
         .attr('r', 6)
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
-            doHighlighting(d3.select(this).attr('data-highlight-class'), true)
+            doHighlighting(d3.select(this).attr('class'), true)
         })
         .on('mouseout', function () {            
-            doHighlighting(d3.select(this).attr('data-highlight-class'), false)
+            doHighlighting(d3.select(this).attr('class'), false)
         })
         .append('title')
         .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
-}
-
-// Handles highlighting for objects of the class name in each of the displays
-//  className: The name of the class all of the markers share.
-//  highlighted: Whether to highlight the markers or return them to normal.
-function doHighlighting(className, highlight) {
-    if (highlight) {
-        d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 8)
-            .style('fill', 'cyan');
-
-        d3.select('#svgScatter').selectAll('circle.' + className)
-            .style('fill', 'cyan');
-
-        d3.select("#svgBar").selectAll('rect.' + className)
-            .style('fill', 'cyan');
-
-    } else {
-        d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 6)
-            .style('fill', 'gray');
-
-        d3.select('#svgScatter').selectAll('circle.' + className)
-            .style('fill', 'black');
-
-        d3.select('#svgBar').selectAll('rect.' + className)
-            .style('fill', 'pink');
-    }
 }
 
 function updateInfo() {
