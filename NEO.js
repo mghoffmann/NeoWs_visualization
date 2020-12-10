@@ -18,9 +18,8 @@ class NEO {
 
     // A dictionary containing each instance of this class, keyed by ID.
     static INTERN = {};
+    // An array containing each instance of this class.
     static ALL = [];
-
-    approaches = [];
 
     // approaches is sorted after assignment so these are linear time
     minDate() {
@@ -36,10 +35,16 @@ class NEO {
         return this.maxDate().getUTCFullYear();
     }
 
+    // Returns an array containing all the Approach instances
+    // associated with this NEO.
+    getApproaches() {
+        return Approach.BY_NEO[this.id]
+    }
+
     // Returns the NEO instance with the given id, or undefined if no
     // NEO has been constructed with that ID yet. See constructor.
     static getByID(id) {
-        return INTERN[id];
+        return NEO.INTERN[id];
     }
 
     constructor(csvRow) {

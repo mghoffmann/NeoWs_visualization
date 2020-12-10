@@ -97,7 +97,7 @@ MMM_REPLACEMENTS = [
     ['Jul', '07'],
     ['Aug', '08'],
     ['Sep', '09'],
-    ['Oct', '11'],
+    ['Oct', '10'],
     ['Nov', '11'],
     ['Dec', '12'],
 ]
@@ -154,9 +154,14 @@ for fname in files:
         for approach in approaches:
             approachesFile.write('\n')
             writeAppr(id)
-            date = str(approach['close_approach_date_full'])
+            date = approach['close_approach_date_full']            
             day = date.split(' ')[0]
             day = subAll(day, MMM_REPLACEMENTS)
+            if (day.split('-')[1] == '11' and day.split('-')[2] == '31'):
+                print(date)
+                print(fname)
+                print(day)
+                quit()
             time = date.split(' ')[1]
             hour = time.split(':')[0]
             minute = time.split(':')[1]
