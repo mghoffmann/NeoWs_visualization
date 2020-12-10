@@ -10,7 +10,11 @@ root = './data/neos'
 neos_filename = f"/neos-{start}-{end}.csv"
 approach_filename = f'/approaches-{start}-{end}.csv'
 
-files = os.listdir('./data/neos/')
+unfiltered = os.listdir('./data/neos/')
+files = []
+for uf in unfiltered:
+    if (splitext(uf)[1] == '.json'):
+        files.append(uf)
 
 # I ignore all .csv files later in the loop
 if ('neos.csv' in files):
@@ -164,22 +168,18 @@ for fname in files:
                   ['orbit_class_range'], True)
 
         approaches = data['close_approach_data']
-        for approach in approaches:
-            approachesFile.write('\n')
-            writeAppr(id)
+        for approach in approaches:            
             date = approach['close_approach_date_full']    
 
             year = int(date[:4])
             if not start < year and year < end:
                 continue
 
+            approachesFile.write('\n')
+            writeAppr(id)
+
             day = date.split(' ')[0]
             day = subAll(day, MMM_REPLACEMENTS)
-            if (day.split('-')[1] == '11' and day.split('-')[2] == '31'):
-                print(date)
-                print(fname)
-                print(day)
-                quit()
             time = date.split(' ')[1]
             hour = time.split(':')[0]
             minute = time.split(':')[1]
