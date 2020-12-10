@@ -43,6 +43,12 @@ function getISODateString(date, includeDay = true) {
     return r;
 }
 
+// Copied from Stackoverflow user Borgar:
+// https://stackoverflow.com/a/1353711/539997
+function isValidDate(d) {
+    return d instanceof Date && !isNaN(d);
+}
+
 // Constructs an array of NEO instances from the JSON of a response from the NASA API
 function constructNEOs(response) {
     let NEOs = [];
@@ -97,26 +103,21 @@ function getMonthNumber(date) {
 // Returns just the file part of a URL string or UNIX file path.
 // Copied from stackoverflow user Nivas:
 // https://stackoverflow.com/a/3820412/539997
-function baseName(path)
-{
-   var base = new String(path).substring(path.lastIndexOf('/') + 1); 
-    if(base.lastIndexOf(".") != -1)       
+function baseName(path) {
+    var base = new String(path).substring(path.lastIndexOf('/') + 1);
+    if (base.lastIndexOf(".") != -1)
         base = base.substring(0, base.lastIndexOf("."));
-   return base;
+    return base;
 }
-
-let API_KEY = "iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2";
 
 // Copied from Stackoverflow user Peter Bailey:
 // https://stackoverflow.com/a/1267338/539997
-function zeroFill(number, width = 2)
-{
-  width -= number.toString().length;
-  if ( width > 0 )
-  {
-    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
-  }
-  return number + ""; // always return a string
+function zeroFill(number, width = 2) {
+    width -= number.toString().length;
+    if (width > 0) {
+        return new Array(width + (/\./.test(number) ? 2 : 1)).join('0') + number;
+    }
+    return number + ""; // always return a string
 }
 
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;

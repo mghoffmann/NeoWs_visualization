@@ -18,6 +18,7 @@ class NEO {
 
     // A dictionary containing each instance of this class, keyed by ID.
     static INTERN = {};
+    static ALL = [];
 
     approaches = [];
 
@@ -41,70 +42,40 @@ class NEO {
         return INTERN[id];
     }
 
-    static WAITING = 0;
-    static ASYNC_ERRORS = [];
-
-    // Each response from the Neo API has a near_earth_objects property,
-    // which is a dictionary keyed by date and valued by arrays of objects.
-    // This constructor expects a single one of those objects.
-    // i.e. neoResponse.near_earth_objects["1900-01-01"][0]
-    constructor(json) {
-        // If this response part describes a NEO that has already been constructed then
-        // don't make another request to the NeoWs api for it.
-        if (NEO.INTERN[json.id])
-            return NEO.INTERN[json.id];
-
-        // this.neowsappLink = json.links.self;
-        this.neowsappLink = `/data/neos/${json.id}.json`
-
-        mapProperties(json, this,
+    constructor(csvRow) {
+        mapProperties(csvRow, this,
             "id",
             "name",
-            "nasa_jpl_url",
             "absolute_magnitude_h",
-            "is_potentially_hazardous_asteroid");
+            "estimated_diameter_min_km",
+            "estimated_diameter_max_km",
+            "is_potentially_hazardous_asteroid",
+            "orbit_id",
+            "orbit_determination_date",
+            "first_observation_date",
+            "last_observation_date",
+            "orbit_uncertainty",
+            "minimum_orbit_intersection",
+            "jupiter_tisserand_invariant",
+            "epoch_osculation",
+            "eccentricity",
+            "semi_major_axis",
+            "inclination",
+            "ascending_node_longitude",
+            "orbital_period",
+            "perihelion_distance",
+            "perihelion_argument",
+            "aphelion_distance",
+            "perihelion_time",
+            "mean_anomaly",
+            "mean_motion",
+            "equinox",
+            "orbit_class_type",
+            "orbit_class_description",
+            "orbit_class_range");
 
-        if (json.estimated_diameter) {
-            this.estimated_diameter_min = json.estimated_diameter.kilometers.estimated_diameter_min;
-            this.estimated_diameter_max = json.estimated_diameter.kilometers.estimated_diameter_max;
-        } else {
-            console.log(`NEO #${json.id} has no estimated_diameter!`)
-            this.estimated_diameter_min = this.estimated_diameter_max = 0;
-        }
-
-        NEO.INTERN[json.id] = this;
-
-        NEO.WAITING++;
-        // Gets data from the id'th file in the neos folder and assigns values to this.approaches
-        fetch(this.neowsappLink, {
-                credentials: 'same-origin'
-            })
-            .then(function (response) {
-                return response.json();
-            })
-            .then(function (neowsJSON) {
-                NEO.WAITING--;
-                // Construct the approaches using the NeoWS data
-                NEO.INTERN[json.id].approaches = [];
-
-                neowsJSON.close_approach_data.forEach(a => {
-                    NEO.INTERN[json.id].approaches.push(new Approach(json.id, a));
-                });
-
-                // test error
-                // NEO.ASYNC_ERRORS.push("This is just a test error.")
-
-                // Sort the approaches for easy date comparison
-                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a, b) => a.date - b.date);
-            })
-            .catch(function (error) {
-                NEO.ASYNC_ERRORS.push(error)
-                NEO.WAITING--
-                // TODO: Show the user a message if we hit the rate limit. Or just avoid
-                // hitting the rate limit...
-                // Sort the approaches for easy date comparison
-                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a, b) => a.date - b.date);
-            })
+        NEO.INTERN[csvRow.id] = this;
+        NEO.ALL.push(this)
     }
 
     toString() {
