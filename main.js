@@ -53,7 +53,7 @@ function updateBar(neos, attribute) {
     barChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(heightScale));
-    let barLabels = ['Maximum Asteroid Diameter'];
+    let barLabels = [attribute == 'Diameter' ? 'Asteroid Diameter' : 'Asteroid Magnitude'];
     barChart.append('g').selectAll('text').data(barLabels).join('text')
         .attr('x', barWidth / 2 + margin)
         .attr('y', 12)
@@ -113,7 +113,7 @@ function updateLine() {
         .attr('stroke', 'black');
     let lineLabels = ['Asteroid Frequency Over Time'];
     lineChart.append('g').selectAll('text').data(lineLabels).join('text')
-        .attr('x', 40 + lineWidth/2)
+        .attr('x', lineWidth/2 + margin*2)
         .attr('y', 12)
         .text(d => d);
 }
