@@ -30,12 +30,10 @@ function doHighlighting(className, highlight) {
     }
 }
 
-let margin = 5;
-
 function updateBar() {
     let heights = NEO.ALL.map(a => a.estimated_diameter_max_km);
 
-    let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth]).paddingInner(.2);
+    let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
@@ -63,7 +61,8 @@ function updateBar() {
 }
 
 function updateScatter() {
-    let coords = NEO.ALL.map(a => [parseInt(a.getApproaches()[0].miss_distance_km), parseInt(a.getApproaches()[0].relative_velocity_kph)]);
+    let closest = NEO.ALL.map(n => n.getApproaches()).map(a => a == undefined ? null : a.reduce((a, b) => (a.id < b.id) ? a : b)).filter(a => a != null);
+    let coords = closest.map(a => [a.miss_distance_km, a.relative_velocity_kph]);
 
     console.log(coords);
     console.log(coords.map(a => a[0]));
@@ -86,10 +85,10 @@ function updateScatter() {
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
     scatterChart.append('g').attr('transform', 'translate(0, ' + (scatterHeight + margin) + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom().scale(xScale));
+        .call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.1s')));
     scatterChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
         .attr('class', 'axis')
-        .call(d3.axisLeft().scale(yScale));
+        .call(d3.axisLeft().scale(yScale).tickFormat(d3.format('.1s')));
     let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
         .attr('x', scatterWidth / 2 + margin)
@@ -122,9 +121,9 @@ function updateLine() {
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
 function updateCenter() {
-    let dists = NEO.ALL.map(a => parseInt(a.getApproaches()[0].miss_distance_km));
+    let dists = NEO.ALL.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
 
-    let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([110, centerWidth - 50]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([111, centerWidth - 50]);
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
         .attr('cy', centerHeight / 2)
@@ -167,10 +166,10 @@ function loadCSVs() {
     // Constructing Approach and NEO instances interns them in static
     // members of their classes so no storage here is needed. See
     // Approach.js and NEO.js for how to access them.
-    d3.csv("data/neos/approaches.csv", function (data) {
+    d3.csv("data/neos/approaches-2019-2022.csv", function (data) {
         return new Approach(data);
     }).then(approaches => {
-        d3.csv("data/neos/neos.csv", function (data) {
+        d3.csv("data/neos/neos-2019-2022.csv", function (data) {
                 return new NEO(data);
             })
             .then(() => CSVS_LOADED = true)
@@ -188,6 +187,7 @@ async function init() {
 
 
     // add boxes for charts
+    margin = 20;
     barChart = d3.select('#svgBar');
     barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
     barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
