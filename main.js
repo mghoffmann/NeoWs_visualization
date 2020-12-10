@@ -234,11 +234,11 @@ async function init() {
 
     d3.select('.loading').remove();
 
-    updateCenter(NEOS.ALL);
-    updateBar(NEOS.ALL);
-    updateScatter(NEOS.ALL);
-    updateLine(NEOS.ALL);
-    updateInfo(NEOS.ALL);
+    updateCenter(NEO.ALL);
+    updateBar(NEO.ALL);
+    updateScatter(NEO.ALL);
+    updateLine(NEO.ALL);
+    updateInfo(NEO.ALL);
 
     let brushH = d3.brushX()
         .extent([
