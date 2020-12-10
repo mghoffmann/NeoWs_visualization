@@ -4,8 +4,21 @@ from os.path import splitext
 import json
 
 
-start = 2019
-end   = 2022
+select = "1 year"
+
+years = {
+    "1 year":  { "start": 2019, "end": 2022 },
+    "2 year":  { "start": 2018, "end": 2023 },
+    "3 year":  { "start": 2017, "end": 2024 },
+    "5 year":  { "start": 2015, "end": 2026 },
+    "10 year": { "start": 2010, "end": 2031 },
+    "20 year": { "start": 2000, "end": 2040 },
+}
+selectedGap = years[select]
+
+start = selectedGap["start"]
+end   = selectedGap["end"]
+
 root = './data/neos'
 neos_filename = f"/neos-{start}-{end}.csv"
 approach_filename = f'/approaches-{start}-{end}.csv'
@@ -16,14 +29,8 @@ for uf in unfiltered:
     if (splitext(uf)[1] == '.json'):
         files.append(uf)
 
-# I ignore all .csv files later in the loop
-if ('neos.csv' in files):
-    files.remove("neos.csv")
-
-if ('approaches.csv' in files):
-    files.remove("approaches.csv")
-
 print('{0} file(s)'.format(len(files)))
+print(f"filtering between: {selectedGap}")
 
 neo_headers = ['id',
                'name',
@@ -117,10 +124,6 @@ MMM_REPLACEMENTS = [
 
 for fname in files:
     neosFile.write('\n')
-
-    if fname.endswith(".csv"):
-        continue
-
     with open(root + '/' + fname) as f:
         id = splitext(fname)[0]
         data = json.load(f)
@@ -167,8 +170,10 @@ for fname in files:
         writeNEOS(data['orbital_data']['orbit_class']
                   ['orbit_class_range'], True)
 
+
         approaches = data['close_approach_data']
-        for approach in approaches:            
+
+        for approach in approaches:         
             date = approach['close_approach_date_full']    
 
             year = int(date[:4])
