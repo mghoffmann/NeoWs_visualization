@@ -172,7 +172,7 @@ for fname in files:
             date = approach['close_approach_date_full']    
 
             year = int(date[:4])
-            if not start < year and year < end:
+            if not (start < year and year < end):
                 continue
 
             approachesFile.write('\n')
