@@ -11,47 +11,37 @@ class DataBuilder {
     // A dictionary keyed by a Date for each day in this builder's range,
     // valued by an array of NEO instances for that date.
     days = {}
-    // An array of the month file names that have been loaded.
-    // Once each string in months exists in here, onLoad
-    // is called with days as a parameter.
-    months_loaded = []
-    // The file names that this builder needs to load async to populate days.
-    months = []
-    // A dictionary that is keyed by the months in months and valued by
-    // the days in the keys of days which belong in those months.
-    // Used to make assignment to days faster when async requests complete.
-    days_by_month = {}
 
-    // A dictionary keyed by month numbers and valued by true.
-    // If the NEOs for a month have not been loaded yet then the month's
-    // number will not be a key here.
-    // If the NEOs for a month have been loaded they will be in NEOS_BY_DATE
-    // declared in utils.js, which is keyed by each Date's total milliseconds.
-    static LOADED_MONTHS = {};
+    WAITING = 0;
 
     constructor(startDate, endDate, onLoad, onError) {
+        this.onLoad = onLoad;
+        this.onError = onError;
+
         // Remove the time parts of the dates, if they exist.
         // We want to truncate them to just their day.
         let cleanedStart = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate(), 0, 0, 0, 0)
         let cleanedEnd = new Date(endDate.getFullYear(), endDate.getMonth(), endDate.getDate(), 0, 0, 0, 0)
 
+            // The file names that this builder needs to load async to populate days.
+        let monthFiles = []
+
         // Get all the days in the range
         let dayCount = Math.ceil((cleanedEnd - cleanedStart) / MILLISECONDS_PER_DAY)
+        console.log(`Fetching data for ${dayCount} day${dayCount == 1 ? "" : "s"}`)
+
         for (var i = 0; i < dayCount; i++) {
-            let day = new Date(cleanedStart.getTime() + MILLISECONDS_PER_DAY * i)
+            let dayDate = new Date(cleanedStart.getTime() + MILLISECONDS_PER_DAY * i)
 
             // If this day's month file has been loaded then it will be in NEOS_BY_DATE
-            let data = NEOS_BY_DATE[day.getTime()]
-            this.days[day] = data; // This is sometimes undefined intentionally
-            if (this.days_by_month[getMonthNumber(day)])
-                this.days_by_month[getMonthNumber(day)].push(day)
-            else
-                this.days_by_month[getMonthNumber(day)] = [day]
+            let data = NEOS_BY_DATE[getISODateString(dayDate)]
+            this.days[getISODateString(dayDate)] = data; // This is sometimes undefined intentionally
 
             // Otherwise add its month to months, but only if it's the first day of its month in this range.
-            if (!data && (i == 0 || day.getDate() == 1)) {
+            if (!data && (i == 0 || dayDate.getDate() == 1)) {
                 // Months are zero based but years and dates are one based because JavaScript is weird
-                this.months.push(day)
+                monthFiles.push(dayDate)
+                // console.log(`Queueing ${`${dayDate.getFullYear()}-${zeroFill(dayDate.getMonth() + 1)}.json`} because ${[!data ? "data is undefined" : null, i == 0 ? "i == 0" : null, dayDate.getDate() == 1 ? "first of month" : null].filter(i=>i!= null).join(", ")}`)
             }
         }
 
@@ -59,25 +49,38 @@ class DataBuilder {
             // The only month is the month of the start and end, which are the same day.
             // In this case dayCount is 0 so add cleanedStart to the requests/data as needed.
             let data = NEOS_BY_DATE[cleanedStart]
-            this.days[cleanedStart] = data
+            this.days[getISODateString(cleanedStart)] = data
             if (!data)
-                this.months.push(cleanedStart)
+                monthFiles.push(cleanedStart)
         }
 
-        // Every date in months needs its month file loaded
-        for (var day of this.months) {
-            let monthFile = `${day.getFullYear()}-${zeroFill(day.getMonth() + 1)}.json`
-            fetch(`data/ids/${monthFile}`, {
-                    credentials: 'same-origin'
-                })
-                .then(response => response.json())
-                .then(data => {
+        if (!monthFiles.length) {
+            console.log("All needed dates were already loaded.")
+            onLoad(this.days);
+        } else {
+            console.log(`Loading files for ${monthFiles.length} month(s)`)
+            this.WAITING = monthFiles.length
+            // Every date in months needs its month file loaded
+            for (var day of monthFiles) {
+                let monthFile = `/data/ids/${day.getFullYear()}-${zeroFill(day.getMonth() + 1)}.json`
+                QueueFetch(new Fetch(monthFile, data => {
                     for (var dateString of Object.keys(data)) {
                         let date = new Date(dateString)
                         let neos_for_date = data[dateString]
-                        
-                    }                    
-                })
+        
+                        let constructions = []
+                        for (var json of neos_for_date) {
+                            constructions.push(new NEO(json))
+                        }
+                        NEOS_BY_DATE[getISODateString(date)] = constructions
+                        this.days[getISODateString(date)] = constructions
+                    }
+                    this.WAITING--
+                    if (this.WAITING == 0) {
+                        this.onLoad(this.days)
+                    }
+                }))
+            }
         }
     }
 }

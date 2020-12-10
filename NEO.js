@@ -22,13 +22,13 @@ class NEO {
     approaches = [];
 
     // approaches is sorted after assignment so these are linear time
-    minDate() {        
+    minDate() {
         return this.approaches[0].date;
     }
     maxDate() {
         return this.approaches[this.approaches.length - 1].date;
     }
-    minYear() {        
+    minYear() {
         return this.minDate().getUTCFullYear();
     }
     maxYear() {
@@ -54,7 +54,9 @@ class NEO {
         if (NEO.INTERN[json.id])
             return NEO.INTERN[json.id];
 
-        this.neowsappLink = json.links.self;
+        // this.neowsappLink = json.links.self;
+        this.neowsappLink = `/data/neos/${json.id}.json`
+
         mapProperties(json, this,
             "id",
             "name",
@@ -62,14 +64,21 @@ class NEO {
             "absolute_magnitude_h",
             "is_potentially_hazardous_asteroid");
 
-        this.estimated_diameter_min = json.estimated_diameter.kilometers.estimated_diameter_min;
-        this.estimated_diameter_max = json.estimated_diameter.kilometers.estimated_diameter_max;
+        if (json.estimated_diameter) {
+            this.estimated_diameter_min = json.estimated_diameter.kilometers.estimated_diameter_min;
+            this.estimated_diameter_max = json.estimated_diameter.kilometers.estimated_diameter_max;
+        } else {
+            console.log(`NEO #${json.id} has no estimated_diameter!`)
+            this.estimated_diameter_min = this.estimated_diameter_max = 0;
+        }
 
         NEO.INTERN[json.id] = this;
 
         NEO.WAITING++;
-        // This gets a response from the NeoWS API and set it to this.neowsJSON
-        fetch(this.neowsappLink)
+        // Gets data from the id'th file in the neos folder and assigns values to this.approaches
+        fetch(this.neowsappLink, {
+                credentials: 'same-origin'
+            })
             .then(function (response) {
                 return response.json();
             })
@@ -86,7 +95,7 @@ class NEO {
                 // NEO.ASYNC_ERRORS.push("This is just a test error.")
 
                 // Sort the approaches for easy date comparison
-                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a,b)=>a.date - b.date);
+                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a, b) => a.date - b.date);
             })
             .catch(function (error) {
                 NEO.ASYNC_ERRORS.push(error)
@@ -94,7 +103,7 @@ class NEO {
                 // TODO: Show the user a message if we hit the rate limit. Or just avoid
                 // hitting the rate limit...
                 // Sort the approaches for easy date comparison
-                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a,b)=>a.date - b.date);
+                NEO.INTERN[json.id].approaches = NEO.INTERN[json.id].approaches.sort((a, b) => a.date - b.date);
             })
     }
 
