@@ -125,11 +125,9 @@ const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 // files as needed.
 // startDate: A Date representing the start of the desired range. The time part of this Date is ignored.
 // endDate: A Date representing the end of the desired range. The time part of this Date is ignored.
-// onload: A callback that is passed an array of NEO instances when the data is loaded. See NEO.js.
-//      This callback is not called if the data fetch results in an error.
-// onerror: A callback that is passed an error if the data fetch fails.
+// onload: A callback that is passed a dictionary when the data is loaded. It is keyed by date and valued by arrays of NEO instances for that date. See NEO.js.
+// onerror: A callback that is passed an error if a data fetch fails.
 function getNEOs(startDate, endDate, onLoad, onError) {
-
     // Recurse if needed to make sure start is before or equal to end
     if (startDate > endDate) {
         return getNEOs(endDate, startDate, onLoad, onError);
