@@ -1,0 +1,113 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3837520?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3837520",
+    "neo_reference_id": "3837520",
+    "name": "(2018 YG2)",
+    "designation": "2018 YG2",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3837520",
+    "absolute_magnitude_h": 25.986,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0168793212,
+            "estimated_diameter_max": 0.0377433095
+        },
+        "meters": {
+            "estimated_diameter_min": 16.8793211638,
+            "estimated_diameter_max": 37.7433095364
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0104883207,
+            "estimated_diameter_max": 0.023452598
+        },
+        "feet": {
+            "estimated_diameter_min": 55.3783520472,
+            "estimated_diameter_max": 123.8297596594
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2018-12-17",
+            "close_approach_date_full": "2018-Dec-17 13:06",
+            "epoch_date_close_approach": 1545051960000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.0217362256",
+                "kilometers_per_hour": "46878.2504121139",
+                "miles_per_hour": "29128.321763016"
+            },
+            "miss_distance": {
+                "astronomical": "0.0055548027",
+                "lunar": "2.1608182503",
+                "kilometers": "830986.652190249",
+                "miles": "516351.1621494762"
+            },
+            "orbiting_body": "Moon"
+        },
+        {
+            "close_approach_date": "2018-12-17",
+            "close_approach_date_full": "2018-Dec-17 14:50",
+            "epoch_date_close_approach": 1545058200000,
+            "relative_velocity": {
+                "kilometers_per_second": "12.616875001",
+                "kilometers_per_hour": "45420.7500036382",
+                "miles_per_hour": "28222.6876897606"
+            },
+            "miss_distance": {
+                "astronomical": "0.0069809351",
+                "lunar": "2.7155837539",
+                "kilometers": "1044333.021568237",
+                "miles": "648918.4488541906"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2019-06-09",
+            "close_approach_date_full": "2019-Jun-09 12:44",
+            "epoch_date_close_approach": 1560084240000,
+            "relative_velocity": {
+                "kilometers_per_second": "11.0858613348",
+                "kilometers_per_hour": "39909.1008052156",
+                "miles_per_hour": "24797.9632197741"
+            },
+            "miss_distance": {
+                "astronomical": "0.2899078214",
+                "lunar": "112.7741425246",
+                "kilometers": "43369592.577780418",
+                "miles": "26948615.2039410484"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "1",
+        "orbit_determination_date": "2018-12-29 06:54:32",
+        "first_observation_date": "2018-12-16",
+        "last_observation_date": "2018-12-16",
+        "data_arc_in_days": null,
+        "observations_used": 12,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".00281153",
+        "jupiter_tisserand_invariant": "5.282",
+        "epoch_osculation": "2458468.5",
+        "eccentricity": ".2365629789667842",
+        "semi_major_axis": "1.17755462095867",
+        "inclination": "21.0318401358926",
+        "ascending_node_longitude": "265.1712828891848",
+        "orbital_period": "466.7346228043028",
+        "perihelion_distance": ".8989887919285843",
+        "perihelion_argument": "235.7206782203466",
+        "aphelion_distance": "1.456120449988755",
+        "perihelion_time": "2458516.342574441622",
+        "mean_anomaly": "323.0982447895118",
+        "mean_motion": ".7713162521284487",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

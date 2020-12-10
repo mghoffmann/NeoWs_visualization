@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3774369?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3774369",
+    "neo_reference_id": "3774369",
+    "name": "(2017 HK49)",
+    "designation": "2017 HK49",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3774369",
+    "absolute_magnitude_h": 23.1,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.063760979,
+            "estimated_diameter_max": 0.1425738833
+        },
+        "meters": {
+            "estimated_diameter_min": 63.7609789875,
+            "estimated_diameter_max": 142.5738833281
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0396192233,
+            "estimated_diameter_max": 0.0885912765
+        },
+        "feet": {
+            "estimated_diameter_min": 209.1895703015,
+            "estimated_diameter_max": 467.7620993781
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "1997-02-10",
+            "close_approach_date_full": "1997-Feb-10 01:35",
+            "epoch_date_close_approach": 855538500000,
+            "relative_velocity": {
+                "kilometers_per_second": "8.1740821156",
+                "kilometers_per_hour": "29426.6956163251",
+                "miles_per_hour": "18284.6042844882"
+            },
+            "miss_distance": {
+                "astronomical": "0.0691621794",
+                "lunar": "26.9040877866",
+                "kilometers": "10346514.722797878",
+                "miles": "6429026.1308435964"
+            },
+            "orbiting_body": "Mars"
+        },
+        {
+            "close_approach_date": "2017-05-26",
+            "close_approach_date_full": "2017-May-26 01:54",
+            "epoch_date_close_approach": 1495763640000,
+            "relative_velocity": {
+                "kilometers_per_second": "2.0562042827",
+                "kilometers_per_hour": "7402.3354178283",
+                "miles_per_hour": "4599.5233600389"
+            },
+            "miss_distance": {
+                "astronomical": "0.2310796266",
+                "lunar": "89.8899747474",
+                "kilometers": "34569019.939755342",
+                "miles": "21480192.9407820396"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "9",
+        "orbit_determination_date": "2017-07-02 06:21:38",
+        "first_observation_date": "2017-04-27",
+        "last_observation_date": "2017-07-02",
+        "data_arc_in_days": 66,
+        "observations_used": 53,
+        "orbit_uncertainty": "5",
+        "minimum_orbit_intersection": ".230413",
+        "jupiter_tisserand_invariant": "3.735",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".3834731526059839",
+        "semi_major_axis": "2.010800113787638",
+        "inclination": "2.137931374079733",
+        "ascending_node_longitude": "158.8151628674176",
+        "orbital_period": "1041.482024361282",
+        "perihelion_distance": "1.239712254893021",
+        "perihelion_argument": "85.27807837232473",
+        "aphelion_distance": "2.781887972682255",
+        "perihelion_time": "2458941.379494905156",
+        "mean_anomaly": "20.43566891823844",
+        "mean_motion": ".3456612707461562",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}

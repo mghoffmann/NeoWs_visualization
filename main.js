@@ -260,10 +260,33 @@ async function init() {
     // requestNEOs(new Date(2000, 1, 1), new Date(2000, 1, 7),
     //     function (NEOs) {
     //         for (let n = 0; n < NEOs.length; n++) {
-    //             console.log(NEOs[n])
+    //             // console.log(NEOs[n])
     //         }
     //         NEOS_GLOBAL = NEOs;
     //     })
 
     // updateCenter(NEOs);
+
+    // var start = new Date(2000, 0, 1);
+    // var end   = new Date(2000, 0, 21);
+    
+    // let last = new Date(start.getTime())
+    // var d = new Date(last.getTime())
+    // d.setDate(d.getDate() + 10)
+    // for (d; d <= end; d.setDate(d.getDate() + 10)) {
+    //     // I'm planning on making the average calculation based on a boolean
+    //     //  so what I mean is the bool will only be true when I want 
+    //     //  to save that average and start over on the next value
+    //     //  Ex:  
+    //     //    Year:  d.getMonth() === 0
+    //     //    Lunar: getMoonPhase(d) === 0
+    //     //    Month: d.getDate() === 0
+    //     //    Week:  d.getDay() === 0
+
+    //     requestNEOs(last, d, (NEOs) => console.log(NEOs) )
+
+    //     last = new Date(d.getTime());
+    // }
+    // console.log(NEOS_GLOBAL)
+
 }

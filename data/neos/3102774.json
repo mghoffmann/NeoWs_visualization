@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3102774?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3102774",
+    "neo_reference_id": "3102774",
+    "name": "(2002 AJ69)",
+    "designation": "2002 AJ69",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3102774",
+    "absolute_magnitude_h": 20.951,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.1715358807,
+            "estimated_diameter_max": 0.3835658898
+        },
+        "meters": {
+            "estimated_diameter_min": 171.5358806929,
+            "estimated_diameter_max": 383.5658898097
+        },
+        "miles": {
+            "estimated_diameter_min": 0.1065874217,
+            "estimated_diameter_max": 0.2383367205
+        },
+        "feet": {
+            "estimated_diameter_min": 562.7817788126,
+            "estimated_diameter_max": 1258.4183139233
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2001-10-02",
+            "close_approach_date_full": "2001-Oct-02 06:24",
+            "epoch_date_close_approach": 1002003840000,
+            "relative_velocity": {
+                "kilometers_per_second": "14.2465634907",
+                "kilometers_per_hour": "51287.6285666111",
+                "miles_per_hour": "31868.1378724034"
+            },
+            "miss_distance": {
+                "astronomical": "0.4576881955",
+                "lunar": "178.0407080495",
+                "kilometers": "68469179.170943585",
+                "miles": "42544775.109388073"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2001-12-31",
+            "close_approach_date_full": "2001-Dec-31 21:56",
+            "epoch_date_close_approach": 1009835760000,
+            "relative_velocity": {
+                "kilometers_per_second": "14.6125633325",
+                "kilometers_per_hour": "52605.2279968823",
+                "miles_per_hour": "32686.8429183961"
+            },
+            "miss_distance": {
+                "astronomical": "0.3398116165",
+                "lunar": "132.1867188185",
+                "kilometers": "50835094.029656855",
+                "miles": "31587462.699920399"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "12",
+        "orbit_determination_date": "2017-04-06 09:15:32",
+        "first_observation_date": "2002-01-14",
+        "last_observation_date": "2002-01-18",
+        "data_arc_in_days": 4,
+        "observations_used": 16,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": ".217482",
+        "jupiter_tisserand_invariant": "5.196",
+        "epoch_osculation": "2452290.5",
+        "eccentricity": ".4046713468541918",
+        "semi_major_axis": "1.179326155701614",
+        "inclination": "25.80388995681122",
+        "ascending_node_longitude": "116.1306391481786",
+        "orbital_period": "467.7882650104647",
+        "perihelion_distance": ".7020866518934655",
+        "perihelion_argument": "226.4663760021246",
+        "aphelion_distance": "1.656565659509762",
+        "perihelion_time": "2452172.320483061126",
+        "mean_anomaly": "90.94846810029082",
+        "mean_motion": ".7695789461327051",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

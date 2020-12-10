@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3449119?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3449119",
+    "neo_reference_id": "3449119",
+    "name": "(2009 EU)",
+    "designation": "2009 EU",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3449119",
+    "absolute_magnitude_h": 26.6,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0127219879,
+            "estimated_diameter_max": 0.0284472297
+        },
+        "meters": {
+            "estimated_diameter_min": 12.7219878539,
+            "estimated_diameter_max": 28.4472296503
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0079050743,
+            "estimated_diameter_max": 0.0176762835
+        },
+        "feet": {
+            "estimated_diameter_min": 41.7388066307,
+            "estimated_diameter_max": 93.330808926
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2009-03-11",
+            "close_approach_date_full": "2009-Mar-11 01:09",
+            "epoch_date_close_approach": 1236733740000,
+            "relative_velocity": {
+                "kilometers_per_second": "10.4067792028",
+                "kilometers_per_hour": "37464.4051302038",
+                "miles_per_hour": "23278.9243988203"
+            },
+            "miss_distance": {
+                "astronomical": "0.0077974787",
+                "lunar": "3.0332192143",
+                "kilometers": "1166486.204890369",
+                "miles": "724820.9173263322"
+            },
+            "orbiting_body": "Moon"
+        },
+        {
+            "close_approach_date": "2009-03-11",
+            "close_approach_date_full": "2009-Mar-11 06:30",
+            "epoch_date_close_approach": 1236753000000,
+            "relative_velocity": {
+                "kilometers_per_second": "10.8294008848",
+                "kilometers_per_hour": "38985.84318519",
+                "miles_per_hour": "24224.2868391532"
+            },
+            "miss_distance": {
+                "astronomical": "0.0090281995",
+                "lunar": "3.5119696055",
+                "kilometers": "1350599.415135065",
+                "miles": "839223.561251297"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "8",
+        "orbit_determination_date": "2017-04-06 09:01:08",
+        "first_observation_date": "2009-03-02",
+        "last_observation_date": "2009-03-09",
+        "data_arc_in_days": 7,
+        "observations_used": 19,
+        "orbit_uncertainty": "8",
+        "minimum_orbit_intersection": ".00281744",
+        "jupiter_tisserand_invariant": "3.757",
+        "epoch_osculation": "2454893.5",
+        "eccentricity": ".5190781104099463",
+        "semi_major_axis": "1.910134179980305",
+        "inclination": "4.387113059348421",
+        "ascending_node_longitude": "349.9746595010008",
+        "orbital_period": "964.2601982384002",
+        "perihelion_distance": ".9186253392066761",
+        "perihelion_argument": "221.0821393453857",
+        "aphelion_distance": "2.901643020753935",
+        "perihelion_time": "2454932.393156451617",
+        "mean_anomaly": "345.4795040299688",
+        "mean_motion": ".3733432124002228",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

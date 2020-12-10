@@ -1,0 +1,79 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3080993?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3080993",
+    "neo_reference_id": "3080993",
+    "name": "(2001 QP142)",
+    "designation": "2001 QP142",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3080993",
+    "absolute_magnitude_h": 24.1,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.040230458,
+            "estimated_diameter_max": 0.0899580388
+        },
+        "meters": {
+            "estimated_diameter_min": 40.2304579834,
+            "estimated_diameter_max": 89.9580388169
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0249980399,
+            "estimated_diameter_max": 0.0558973165
+        },
+        "feet": {
+            "estimated_diameter_min": 131.9896957704,
+            "estimated_diameter_max": 295.1379320721
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2001-08-25",
+            "close_approach_date_full": "2001-Aug-25 22:25",
+            "epoch_date_close_approach": 998778300000,
+            "relative_velocity": {
+                "kilometers_per_second": "9.5369695148",
+                "kilometers_per_hour": "34333.09025328",
+                "miles_per_hour": "21333.2471076561"
+            },
+            "miss_distance": {
+                "astronomical": "0.0518089537",
+                "lunar": "20.1536829893",
+                "kilometers": "7750509.120448619",
+                "miles": "4815943.0492001822"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "12",
+        "orbit_determination_date": "2017-04-06 09:16:11",
+        "first_observation_date": "2001-08-25",
+        "last_observation_date": "2001-09-20",
+        "data_arc_in_days": 26,
+        "observations_used": 24,
+        "orbit_uncertainty": "8",
+        "minimum_orbit_intersection": ".0445017",
+        "jupiter_tisserand_invariant": "3.270",
+        "epoch_osculation": "2452155.5",
+        "eccentricity": ".5673182259827194",
+        "semi_major_axis": "2.400887503554061",
+        "inclination": "9.776609130172172",
+        "ascending_node_longitude": "331.2849992412548",
+        "orbital_period": "1358.801894129637",
+        "perihelion_distance": "1.038820264253691",
+        "perihelion_argument": "19.99853147925133",
+        "aphelion_distance": "3.76295474285443",
+        "perihelion_time": "2452162.327984574205",
+        "mean_anomaly": "358.1909986604131",
+        "mean_motion": ".2649392833166408",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}

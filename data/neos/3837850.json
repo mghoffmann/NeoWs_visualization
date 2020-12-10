@@ -1,0 +1,130 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3837850?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3837850",
+    "neo_reference_id": "3837850",
+    "name": "(2019 AG11)",
+    "designation": "2019 AG11",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3837850",
+    "absolute_magnitude_h": 26.1,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0160160338,
+            "estimated_diameter_max": 0.0358129403
+        },
+        "meters": {
+            "estimated_diameter_min": 16.0160337979,
+            "estimated_diameter_max": 35.8129403019
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0099518989,
+            "estimated_diameter_max": 0.0222531225
+        },
+        "feet": {
+            "estimated_diameter_min": 52.5460443254,
+            "estimated_diameter_max": 117.4965270602
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "1903-02-01",
+            "close_approach_date_full": "1903-Feb-01 19:22",
+            "epoch_date_close_approach": -2111632680000,
+            "relative_velocity": {
+                "kilometers_per_second": "2.1412385425",
+                "kilometers_per_hour": "7708.4587530682",
+                "miles_per_hour": "4789.7364957606"
+            },
+            "miss_distance": {
+                "astronomical": "1.8566956587",
+                "lunar": "722.2546112343",
+                "kilometers": "277757715.779766969",
+                "miles": "172590641.4511594122"
+            },
+            "orbiting_body": "Juptr"
+        },
+        {
+            "close_approach_date": "1915-03-02",
+            "close_approach_date_full": "1915-Mar-02 20:31",
+            "epoch_date_close_approach": -1730431740000,
+            "relative_velocity": {
+                "kilometers_per_second": "2.0847339355",
+                "kilometers_per_hour": "7505.0421679162",
+                "miles_per_hour": "4663.3413403921"
+            },
+            "miss_distance": {
+                "astronomical": "1.9305672773",
+                "lunar": "750.9906708697",
+                "kilometers": "288808752.575779351",
+                "miles": "179457437.2986470038"
+            },
+            "orbiting_body": "Juptr"
+        },
+        {
+            "close_approach_date": "1979-07-26",
+            "close_approach_date_full": "1979-Jul-26 09:48",
+            "epoch_date_close_approach": 301830480000,
+            "relative_velocity": {
+                "kilometers_per_second": "14.4280404086",
+                "kilometers_per_hour": "51940.9454710248",
+                "miles_per_hour": "32274.0835900376"
+            },
+            "miss_distance": {
+                "astronomical": "0.042007453",
+                "lunar": "16.340899217",
+                "kilometers": "6284225.49292511",
+                "miles": "3904836.651622118"
+            },
+            "orbiting_body": "Mars"
+        },
+        {
+            "close_approach_date": "2019-01-25",
+            "close_approach_date_full": "2019-Jan-25 12:00",
+            "epoch_date_close_approach": 1548417600000,
+            "relative_velocity": {
+                "kilometers_per_second": "7.4974501779",
+                "kilometers_per_hour": "26990.8206403798",
+                "miles_per_hour": "16771.0463029071"
+            },
+            "miss_distance": {
+                "astronomical": "0.022077646",
+                "lunar": "8.588204294",
+                "kilometers": "3302768.81621402",
+                "miles": "2052245.378512676"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "3",
+        "orbit_determination_date": "2019-01-18 07:20:22",
+        "first_observation_date": "2019-01-11",
+        "last_observation_date": "2019-01-17",
+        "data_arc_in_days": 6,
+        "observations_used": 20,
+        "orbit_uncertainty": "7",
+        "minimum_orbit_intersection": ".00981804",
+        "jupiter_tisserand_invariant": "3.578",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".5271603679115329",
+        "semi_major_axis": "2.078258833128028",
+        "inclination": "1.037942860471924",
+        "ascending_node_longitude": "186.6028315405989",
+        "orbital_period": "1094.328927277545",
+        "perihelion_distance": ".9826831420408639",
+        "perihelion_argument": "314.5076844853742",
+        "aphelion_distance": "3.173834524215193",
+        "perihelion_time": "2458522.049087864590",
+        "mean_anomaly": "157.3953900654434",
+        "mean_motion": ".3289687323678838",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

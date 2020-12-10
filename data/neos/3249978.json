@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3249978?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3249978",
+    "neo_reference_id": "3249978",
+    "name": "(2004 FU162)",
+    "designation": "2004 FU162",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3249978",
+    "absolute_magnitude_h": 28.7,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0048367649,
+            "estimated_diameter_max": 0.0108153351
+        },
+        "meters": {
+            "estimated_diameter_min": 4.8367648822,
+            "estimated_diameter_max": 10.8153350678
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0030054254,
+            "estimated_diameter_max": 0.0067203356
+        },
+        "feet": {
+            "estimated_diameter_min": 15.8686516961,
+            "estimated_diameter_max": 35.4833839037
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2004-03-31",
+            "close_approach_date_full": "2004-Mar-31 12:42",
+            "epoch_date_close_approach": 1080736920000,
+            "relative_velocity": {
+                "kilometers_per_second": "12.0702121075",
+                "kilometers_per_hour": "43452.7635870227",
+                "miles_per_hour": "26999.8574632808"
+            },
+            "miss_distance": {
+                "astronomical": "0.0025656529",
+                "lunar": "0.9980389781",
+                "kilometers": "383816.208999323",
+                "miles": "238492.3332357374"
+            },
+            "orbiting_body": "Moon"
+        },
+        {
+            "close_approach_date": "2004-03-31",
+            "close_approach_date_full": "2004-Mar-31 15:35",
+            "epoch_date_close_approach": 1080747300000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.3906295085",
+                "kilometers_per_hour": "48206.266230483",
+                "miles_per_hour": "29953.499147491"
+            },
+            "miss_distance": {
+                "astronomical": "0.0000863187",
+                "lunar": "0.0335779743",
+                "kilometers": "12913.093661169",
+                "miles": "8023.8243313722"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "10",
+        "orbit_determination_date": "2017-04-06 09:12:58",
+        "first_observation_date": "2004-03-31",
+        "last_observation_date": "2004-03-31",
+        "data_arc_in_days": null,
+        "observations_used": 4,
+        "orbit_uncertainty": "9",
+        "minimum_orbit_intersection": "7.22621E-5",
+        "jupiter_tisserand_invariant": "7.024",
+        "epoch_osculation": "2453100.5",
+        "eccentricity": ".3921712395216529",
+        "semi_major_axis": ".8268612736523362",
+        "inclination": "4.164680034919877",
+        "ascending_node_longitude": "191.2486004165659",
+        "orbital_period": "274.6296383334512",
+        "perihelion_distance": ".5025900630516469",
+        "perihelion_argument": "139.7843002537736",
+        "aphelion_distance": "1.151132484253026",
+        "perihelion_time": "2453174.751673713520",
+        "mean_anomaly": "262.6667234495233",
+        "mean_motion": "1.310856330673579",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "ATE",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 2062 Aten",
+            "orbit_class_range": "a (semi-major axis) < 1.0 AU; q (perihelion) > 0.983 AU"
+        }
+    },
+    "is_sentry_object": false
+}

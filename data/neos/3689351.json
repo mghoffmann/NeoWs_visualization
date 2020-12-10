@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3689351?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3689351",
+    "neo_reference_id": "3689351",
+    "name": "(2014 SM142)",
+    "designation": "2014 SM142",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3689351",
+    "absolute_magnitude_h": 22.4,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0880146521,
+            "estimated_diameter_max": 0.1968067451
+        },
+        "meters": {
+            "estimated_diameter_min": 88.0146520901,
+            "estimated_diameter_max": 196.8067450894
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0546897524,
+            "estimated_diameter_max": 0.122290004
+        },
+        "feet": {
+            "estimated_diameter_min": 288.7619911632,
+            "estimated_diameter_max": 645.6914415591
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2014-10-08",
+            "close_approach_date_full": "2014-Oct-08 19:15",
+            "epoch_date_close_approach": 1412795700000,
+            "relative_velocity": {
+                "kilometers_per_second": "17.5064682502",
+                "kilometers_per_hour": "63023.2857005897",
+                "miles_per_hour": "39160.2188287914"
+            },
+            "miss_distance": {
+                "astronomical": "0.1211460569",
+                "lunar": "47.1258161341",
+                "kilometers": "18123192.071138803",
+                "miles": "11261229.3628613614"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2135-10-27",
+            "close_approach_date_full": "2135-Oct-27 06:30",
+            "epoch_date_close_approach": 5232753000000,
+            "relative_velocity": {
+                "kilometers_per_second": "5.8938811151",
+                "kilometers_per_hour": "21217.9720143498",
+                "miles_per_hour": "13184.0226663608"
+            },
+            "miss_distance": {
+                "astronomical": "1.9325983271",
+                "lunar": "751.7807492419",
+                "kilometers": "289112593.299723277",
+                "miles": "179646235.1698321426"
+            },
+            "orbiting_body": "Juptr"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "12",
+        "orbit_determination_date": "2017-04-06 08:38:36",
+        "first_observation_date": "2014-09-19",
+        "last_observation_date": "2014-10-22",
+        "data_arc_in_days": 33,
+        "observations_used": 35,
+        "orbit_uncertainty": "7",
+        "minimum_orbit_intersection": ".058625",
+        "jupiter_tisserand_invariant": "3.038",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".5944114103943047",
+        "semi_major_axis": "2.564434464914785",
+        "inclination": "26.68011542818146",
+        "ascending_node_longitude": "19.52336284166652",
+        "orbital_period": "1499.981263838918",
+        "perihelion_distance": "1.040105357761024",
+        "perihelion_argument": "16.87614100585257",
+        "aphelion_distance": "4.088763572068546",
+        "perihelion_time": "2458456.243422370116",
+        "mean_anomaly": "130.6232102161772",
+        "mean_motion": ".2400029978232182",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}

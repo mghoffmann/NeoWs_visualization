@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3486328?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3486328",
+    "neo_reference_id": "3486328",
+    "name": "(2010 BG2)",
+    "designation": "2010 BG2",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3486328",
+    "absolute_magnitude_h": 19.9,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.2783267681,
+            "estimated_diameter_max": 0.6223575734
+        },
+        "meters": {
+            "estimated_diameter_min": 278.3267680719,
+            "estimated_diameter_max": 622.3575733667
+        },
+        "miles": {
+            "estimated_diameter_min": 0.1729441822,
+            "estimated_diameter_max": 0.3867149477
+        },
+        "feet": {
+            "estimated_diameter_min": 913.1455937611,
+            "estimated_diameter_max": 2041.8556210042
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2010-01-16",
+            "close_approach_date_full": "2010-Jan-16 19:19",
+            "epoch_date_close_approach": 1263669540000,
+            "relative_velocity": {
+                "kilometers_per_second": "31.8681733403",
+                "kilometers_per_hour": "114725.4240252334",
+                "miles_per_hour": "71285.9169450124"
+            },
+            "miss_distance": {
+                "astronomical": "0.2192223543",
+                "lunar": "85.2774958227",
+                "kilometers": "32795197.259665341",
+                "miles": "20377990.6371740658"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2022-06-11",
+            "close_approach_date_full": "2022-Jun-11 14:11",
+            "epoch_date_close_approach": 1654956660000,
+            "relative_velocity": {
+                "kilometers_per_second": "49.448185918",
+                "kilometers_per_hour": "178013.4693048464",
+                "miles_per_hour": "110610.6470800031"
+            },
+            "miss_distance": {
+                "astronomical": "0.0991431203",
+                "lunar": "38.5666737967",
+                "kilometers": "14831599.622033761",
+                "miles": "9215928.6568414618"
+            },
+            "orbiting_body": "Merc"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "18",
+        "orbit_determination_date": "2017-04-06 08:58:33",
+        "first_observation_date": "2010-01-18",
+        "last_observation_date": "2010-03-18",
+        "data_arc_in_days": 59,
+        "observations_used": 69,
+        "orbit_uncertainty": "6",
+        "minimum_orbit_intersection": ".0611228",
+        "jupiter_tisserand_invariant": "2.027",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".9074315176069204",
+        "semi_major_axis": "3.402144854553296",
+        "inclination": "42.88813772715514",
+        "ascending_node_longitude": "128.2278838304878",
+        "orbital_period": "2292.068686900078",
+        "perihelion_distance": ".314931386067423",
+        "perihelion_argument": "238.782072363003",
+        "aphelion_distance": "6.489358323039169",
+        "perihelion_time": "2459750.471848822968",
+        "mean_anomaly": "242.2069045664518",
+        "mean_motion": ".1570633559358486",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "APO",
+            "orbit_class_description": "Near-Earth asteroid orbits which cross the Earth’s orbit similar to that of 1862 Apollo",
+            "orbit_class_range": "a (semi-major axis) > 1.0 AU; q (perihelion) < 1.017 AU"
+        }
+    },
+    "is_sentry_object": false
+}

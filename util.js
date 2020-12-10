@@ -105,6 +105,8 @@ function baseName(path)
    return base;
 }
 
+let API_KEY = "iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2";
+
 // Copied from Stackoverflow user Peter Bailey:
 // https://stackoverflow.com/a/1267338/539997
 function zeroFill(number, width = 2)
@@ -138,6 +140,7 @@ function getNEOs(startDate, endDate, onLoad, onError) {
 
 let API_KEY = "iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2";
 const API_URL = "https://api.nasa.gov/neo/rest/v1/feed";
+var numberOfRequests = 0;
 
 // Requests NEO data from the NASA API.
 // startDate: A Date representing the start of the desired range. The time part of this Date is ignored by the API.
@@ -153,10 +156,11 @@ function requestNEOs(startDate, endDate, onload) {
     let requestURL = API_URL + '?' + encodeQueryData(queryData);
 
 
-    // This gets a response from the NeoWS API and calls onload with NEOs
+    // This gets a response from the NeoWS API and calls onload with NEO
     // instances constructed from the results.
     fetch(requestURL)
         .then(function (response) {
+            // console.log(numberOfRequests++);
             return response.json();
         })
         .then(function (json) {

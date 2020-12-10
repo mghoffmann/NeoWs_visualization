@@ -1,0 +1,79 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3893859?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3893859",
+    "neo_reference_id": "3893859",
+    "name": "(2019 WM6)",
+    "designation": "2019 WM6",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3893859",
+    "absolute_magnitude_h": 23.1,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.063760979,
+            "estimated_diameter_max": 0.1425738833
+        },
+        "meters": {
+            "estimated_diameter_min": 63.7609789875,
+            "estimated_diameter_max": 142.5738833281
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0396192233,
+            "estimated_diameter_max": 0.0885912765
+        },
+        "feet": {
+            "estimated_diameter_min": 209.1895703015,
+            "estimated_diameter_max": 467.7620993781
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2019-12-02",
+            "close_approach_date_full": "2019-Dec-02 14:50",
+            "epoch_date_close_approach": 1575298200000,
+            "relative_velocity": {
+                "kilometers_per_second": "6.2843167142",
+                "kilometers_per_hour": "22623.5401711457",
+                "miles_per_hour": "14057.38805801"
+            },
+            "miss_distance": {
+                "astronomical": "0.2128340549",
+                "lunar": "82.7924473561",
+                "kilometers": "31839521.276503063",
+                "miles": "19784161.1174777494"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "8",
+        "orbit_determination_date": "2020-05-12 06:40:57",
+        "first_observation_date": "2019-11-30",
+        "last_observation_date": "2020-01-02",
+        "data_arc_in_days": 33,
+        "observations_used": 36,
+        "orbit_uncertainty": "7",
+        "minimum_orbit_intersection": ".1404",
+        "jupiter_tisserand_invariant": "3.949",
+        "epoch_osculation": "2459000.5",
+        "eccentricity": ".3895283654059681",
+        "semi_major_axis": "1.816126045351781",
+        "inclination": "4.916374681356925",
+        "ascending_node_longitude": "293.8036535513487",
+        "orbital_period": "893.9586005989154",
+        "perihelion_distance": "1.108693435534697",
+        "perihelion_argument": "127.4288130917",
+        "aphelion_distance": "2.523558655168865",
+        "perihelion_time": "2458820.306597194591",
+        "mean_anomaly": "72.56446211993178",
+        "mean_motion": ".4027032121608482",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}

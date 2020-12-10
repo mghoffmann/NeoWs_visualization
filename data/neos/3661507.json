@@ -1,0 +1,96 @@
+{
+    "links": {
+        "self": "http://www.neowsapp.com/rest/v1/neo/3661507?api_key=iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2"
+    },
+    "id": "3661507",
+    "neo_reference_id": "3661507",
+    "name": "(2014 CT13)",
+    "designation": "2014 CT13",
+    "nasa_jpl_url": "http://ssd.jpl.nasa.gov/sbdb.cgi?sstr=3661507",
+    "absolute_magnitude_h": 24.4,
+    "estimated_diameter": {
+        "kilometers": {
+            "estimated_diameter_min": 0.0350392641,
+            "estimated_diameter_max": 0.0783501764
+        },
+        "meters": {
+            "estimated_diameter_min": 35.0392641108,
+            "estimated_diameter_max": 78.3501764334
+        },
+        "miles": {
+            "estimated_diameter_min": 0.0217723826,
+            "estimated_diameter_max": 0.0486845275
+        },
+        "feet": {
+            "estimated_diameter_min": 114.9582192654,
+            "estimated_diameter_max": 257.0543928497
+        }
+    },
+    "is_potentially_hazardous_asteroid": false,
+    "close_approach_data": [
+        {
+            "close_approach_date": "2014-02-09",
+            "close_approach_date_full": "2014-Feb-09 21:34",
+            "epoch_date_close_approach": 1391981640000,
+            "relative_velocity": {
+                "kilometers_per_second": "11.2475453904",
+                "kilometers_per_hour": "40491.1634053694",
+                "miles_per_hour": "25159.6342837419"
+            },
+            "miss_distance": {
+                "astronomical": "0.0665882398",
+                "lunar": "25.9028252822",
+                "kilometers": "9961458.841129226",
+                "miles": "6189763.5007302788"
+            },
+            "orbiting_body": "Earth"
+        },
+        {
+            "close_approach_date": "2115-01-16",
+            "close_approach_date_full": "2115-Jan-16 16:27",
+            "epoch_date_close_approach": 4577099220000,
+            "relative_velocity": {
+                "kilometers_per_second": "13.3279264161",
+                "kilometers_per_hour": "47980.5350977944",
+                "miles_per_hour": "29813.2386000712"
+            },
+            "miss_distance": {
+                "astronomical": "0.2640830842",
+                "lunar": "102.7283197538",
+                "kilometers": "39506266.899350654",
+                "miles": "24548055.9427768652"
+            },
+            "orbiting_body": "Earth"
+        }
+    ],
+    "orbital_data": {
+        "orbit_id": "8",
+        "orbit_determination_date": "2017-04-06 08:42:29",
+        "first_observation_date": "2014-02-11",
+        "last_observation_date": "2014-02-20",
+        "data_arc_in_days": 9,
+        "observations_used": 39,
+        "orbit_uncertainty": "8",
+        "minimum_orbit_intersection": ".0611304",
+        "jupiter_tisserand_invariant": "3.179",
+        "epoch_osculation": "2456701.5",
+        "eccentricity": ".5821396728282966",
+        "semi_major_axis": "2.478227375646779",
+        "inclination": "15.86035662143698",
+        "ascending_node_longitude": "326.874913620735",
+        "orbital_period": "1424.984538013282",
+        "perihelion_distance": "1.035552901993635",
+        "perihelion_argument": "163.1811338412399",
+        "aphelion_distance": "3.920901849299923",
+        "perihelion_time": "2456688.119513045347",
+        "mean_anomaly": "3.38037022520323",
+        "mean_motion": ".2526343201603528",
+        "equinox": "J2000",
+        "orbit_class": {
+            "orbit_class_type": "AMO",
+            "orbit_class_description": "Near-Earth asteroid orbits similar to that of 1221 Amor",
+            "orbit_class_range": "1.017 AU < q (perihelion) < 1.3 AU"
+        }
+    },
+    "is_sentry_object": false
+}
