@@ -167,10 +167,10 @@ function loadCSVs() {
     // Constructing Approach and NEO instances interns them in static
     // members of their classes so no storage here is needed. See
     // Approach.js and NEO.js for how to access them.
-    d3.csv("data/neos/approaches.csv", function (data) {
+    d3.csv("data/neos/approaches-2019-2022.csv", function (data) {
         return new Approach(data);
     }).then(approaches => {
-        d3.csv("data/neos/neos.csv", function (data) {
+        d3.csv("data/neos/neos-2019-2022.csv", function (data) {
                 return new NEO(data);
             })
             .then(() => CSVS_LOADED = true)
