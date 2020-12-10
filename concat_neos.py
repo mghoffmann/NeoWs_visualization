@@ -3,8 +3,16 @@ import os
 from os.path import splitext
 import json
 
+
+start = 2019
+end   = 2022
 root = './data/neos'
+neos_filename = f"/neos-{start}-{end}.csv"
+approach_filename = f'/approaches-{start}-{end}.csv'
+
 files = os.listdir('./data/neos/')
+
+# I ignore all .csv files later in the loop
 if ('neos.csv' in files):
     files.remove("neos.csv")
 
@@ -52,8 +60,8 @@ approach_headers = ["neo_id",
                     "miss_distance_km",
                     "orbiting_body"]
 
-neosFile = open(root + "/neos.csv", 'w')
-approachesFile = open(root + '/approaches.csv', 'w')
+neosFile = open(root + neos_filename, 'w')
+approachesFile = open(root + approach_filename, 'w')
 
 
 def writeNEOS(value, endOfLine=False):
@@ -63,6 +71,7 @@ def writeNEOS(value, endOfLine=False):
         neosFile.write(str(value))
     else:
         neosFile.write(str(value) + ",")
+    pass
 
 
 def writeAppr(value, endOfLine=False):
@@ -72,7 +81,7 @@ def writeAppr(value, endOfLine=False):
         approachesFile.write(str(value))
     else:
         approachesFile.write(str(value) + ",")
-
+    pass
 
 for h in neo_headers:
     writeNEOS(h, h == neo_headers[-1:][0])
@@ -104,6 +113,10 @@ MMM_REPLACEMENTS = [
 
 for fname in files:
     neosFile.write('\n')
+
+    if fname.endswith(".csv"):
+        continue
+
     with open(root + '/' + fname) as f:
         id = splitext(fname)[0]
         data = json.load(f)
@@ -154,7 +167,12 @@ for fname in files:
         for approach in approaches:
             approachesFile.write('\n')
             writeAppr(id)
-            date = approach['close_approach_date_full']            
+            date = approach['close_approach_date_full']    
+
+            year = int(date[:4])
+            if not start < year and year < end:
+                continue
+
             day = date.split(' ')[0]
             day = subAll(day, MMM_REPLACEMENTS)
             if (day.split('-')[1] == '11' and day.split('-')[2] == '31'):
