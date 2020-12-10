@@ -9,7 +9,7 @@ function doHighlighting(className, highlight) {
     }
     if (highlight) {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 8)
+            .attr('r', 3)
             .style('fill', 'cyan');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -19,7 +19,7 @@ function doHighlighting(className, highlight) {
             .style('fill', 'cyan');
     } else {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 6)
+            .attr('r', 2)
             .style('fill', 'gray');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -30,8 +30,11 @@ function doHighlighting(className, highlight) {
     }
 }
 
+let margin = 5;
+
 function updateBar() {
-    let heights = NEO.ALL.map(a => a.estimated_diameter_max);
+    let heights = NEO.ALL.map(a => a.estimated_diameter_max_km);
+
     let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth]).paddingInner(.2);
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
@@ -60,7 +63,8 @@ function updateBar() {
 }
 
 function updateScatter() {
-    let coords = NEO.ALL.map(a => [parseInt(a.approaches[0].miss_distance), parseInt(a.approaches[0].relative_velocity)]);
+    let coords = NEO.ALL.map(a => [parseInt(a.getApproaches()[0].miss_distance_km), parseInt(a.getApproaches()[0].relative_velocity_kph)]);
+
     console.log(coords);
     console.log(coords.map(a => a[0]));
     let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => a[0])) * 1.04]).range([margin * 2, scatterWidth + margin * 2]);
@@ -70,7 +74,7 @@ function updateScatter() {
         .attr('class', (d, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
         .attr('cy', d => yScale(d[1]))
-        .attr('r', 6)
+        .attr('r', 2)
         .style('stroke', 'black')
         .on('mouseover', function () {
             doHighlighting(d3.select(this).attr('class'), true)
@@ -93,8 +97,15 @@ function updateScatter() {
         .text(d => d);
 }
 
-function updateLine(NEOS) {
-    let neos = NEOS == null ? NEO.ALL : NEOS
+function updateLine() {
+
+    let sortedDates = Approach.ALL.map(a => a.date).sort((a, b) => a.getTime() - b.getTime())
+    let minDate = sortedDates[0]
+    let maxDate = sortedDates[sortedDates.length - 1]
+
+    console.log(sortedDates.length)
+    console.log(minDate)
+    console.log(maxDate)
 
     let data = []
 
@@ -111,7 +122,8 @@ function updateLine(NEOS) {
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
 function updateCenter() {
-    let dists = NEO.ALL.map(a => parseInt(a.approaches[0].miss_distance));
+    let dists = NEO.ALL.map(a => parseInt(a.getApproaches()[0].miss_distance_km));
+
     let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([110, centerWidth - 50]);
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
@@ -148,7 +160,10 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+let CSVS_LOADED = false
+
 function loadCSVs() {
+    CSVS_LOADED = false
     // Constructing Approach and NEO instances interns them in static
     // members of their classes so no storage here is needed. See
     // Approach.js and NEO.js for how to access them.
@@ -156,17 +171,23 @@ function loadCSVs() {
         return new Approach(data);
     }).then(approaches => {
         d3.csv("data/neos/neos.csv", function (data) {
-            return new NEO(data);
-        })
+                return new NEO(data);
+            })
+            .then(() => CSVS_LOADED = true)
     })
 }
 
-function init() {
+async function init() {
 
     loadCSVs();
 
+    while (!CSVS_LOADED) {
+        console.log("Waiting for CSV load.")
+        await sleep(1000);
+    }
+
+
     // add boxes for charts
-    margin = 20;
     barChart = d3.select('#svgBar');
     barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
     barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
