@@ -30,8 +30,8 @@ function doHighlighting(className, highlight) {
     }
 }
 
-function updateBar(neos) {
-    let heights = neos.map(a => a.estimated_diameter_max_km);
+function updateBar(neos, attribute) {
+    let heights = neos.map(a => attribute == 'Diameter' ? a.estimated_diameter_max_km : a.absolute_magnitude_h);
 
     let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
@@ -113,7 +113,7 @@ function updateLine() {
         .attr('stroke', 'black');
     let lineLabels = ['Asteroid Frequency Over Time'];
     lineChart.append('g').selectAll('text').data(lineLabels).join('text')
-        .attr('x', 765)
+        .attr('x', 40 + lineWidth/2)
         .attr('y', 12)
         .text(d => d);
 }
@@ -233,12 +233,16 @@ async function init() {
     }
 
     d3.select('.loading').remove();
+    
+    currNeos = NEO.ALL;
+    let barSelect = document.getElementById('barSelect')
+    barSelect.onchange = updateBar(currNeos, barSelect.value);
 
-    updateCenter(NEO.ALL);
-    updateBar(NEO.ALL);
-    updateScatter(NEO.ALL);
-    updateLine(NEO.ALL);
-    updateInfo(NEO.ALL);
+    updateLine();
+    updateCenter(currNeos);
+    updateBar(currNeos, barSelect.value);
+    updateScatter(currNeos);
+    updateInfo(currNeos);
 
     let brushH = d3.brushX()
         .extent([
@@ -248,22 +252,28 @@ async function init() {
         .on('end', () => {
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
-            let asteroids = [];
+            let currNeos = [];
             for (x of NEO.ALL) {
                 let diff = new Date() - approachDate();
                 let day = Math.floor(diff / (1000*60*60*24));
                 if (day > x0 && day < x1) {
-                    asteroids.push(x);
+                    currNeos.push(x);
                 }
             }
 
-            updateCenter(asteroids);
-            updateBar(asteroids);
-            updateScatter(asteroids);
-            updateInfo(asteroids);
+            updateCenter(currNeos);
+            updateBar(currNeos);
+            updateScatter(currNeos);
+            updateInfo(currNeos);
         });
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
+    let box1 = d3.select("#svgBrush1");
+    box1.append('text').attr('transform', 'rotate(-90)')
+        .attr('x', -150)
+        .attr('y', 30)
+        .attr('font-size', 18)
+        .text('Diameter');
     let brush1 = d3.brushY()
         .extent([
             [13, 10],
@@ -273,18 +283,26 @@ async function init() {
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
             let asteroids = [];
-            for (x of NEO.ALL) {
+            for (x of currNeos) {
                 if (x.val > x0 && x.val < x1) {
                     asteroids.push(x);
                 }
             }
 
-            updateCenter(asteroids);
-            updateBar(asteroids);
-            updateScatter(asteroids);
-            updateInfo(asteroids);
+            currNeos = asteroids;
+            updateCenter(currNeos);
+            updateBar(currNeos);
+            updateScatter(currNeos);
+            updateInfo(currNeos);
         });
-    d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
+    box1.append("g").attr("class", "brush").call(brush1);
+
+    let box2 = d3.select("#svgBrush2");
+    box2.append('text').attr('transform', 'rotate(-90)')
+        .attr('x', -150)
+        .attr('y', 30)
+        .attr('font-size', 18)
+        .text('Velocity');
     let brush2 = d3.brushY()
         .extent([
             [13, 8],
@@ -294,16 +312,17 @@ async function init() {
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
             let asteroids = [];
-            for (x of NEO.ALL) {
+            for (x of currNeos) {
                 if (x.val > x0 && x.val < x1) {
                     asteroids.push(x);
                 }
             }
 
-            updateCenter(asteroids);
-            updateBar(asteroids);
-            updateScatter(asteroids);
-            updateInfo(asteroids);
+            currNeos = asteroids;
+            updateCenter(currNeos);
+            updateBar(currNeos);
+            updateScatter(currNeos);
+            updateInfo(currNeos);
         });
-    d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
+    box2.append("g").attr("class", "brush").call(brush2);
 }
