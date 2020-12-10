@@ -30,8 +30,8 @@ function doHighlighting(className, highlight) {
     }
 }
 
-function updateBar() {
-    let heights = NEO.ALL.map(a => a.estimated_diameter_max_km);
+function updateBar(neos) {
+    let heights = neos.map(a => a.estimated_diameter_max_km);
 
     let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
     let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
@@ -60,8 +60,8 @@ function updateBar() {
         .text(d => d);
 }
 
-function updateScatter() {
-    let closest = NEO.ALL.map(n => n.getApproaches()).map(a => a == undefined ? null : a.reduce((a, b) => (a.id < b.id) ? a : b)).filter(a => a != null);
+function updateScatter(neos) {
+    let closest = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : a.reduce((a, b) => (a.id < b.id) ? a : b)).filter(a => a != null);
     let coords = closest.map(a => [a.miss_distance_km, a.relative_velocity_kph]);
 
     console.log(coords);
@@ -97,7 +97,6 @@ function updateScatter() {
 }
 
 function updateLine() {
-
     let sortedDates = Approach.ALL.map(a => a.date).sort((a, b) => a.getTime() - b.getTime())
     let minDate = sortedDates[0]
     let maxDate = sortedDates[sortedDates.length - 1]
@@ -120,8 +119,8 @@ function updateLine() {
 }
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
-function updateCenter() {
-    let dists = NEO.ALL.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
+function updateCenter(neos) {
+    let dists = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
 
     let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([111, centerWidth - 50]);
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
@@ -134,7 +133,7 @@ function updateCenter() {
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
         .attr('cy', centerHeight / 2)
-        .attr('r', 6)
+        .attr('r', 3)
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
@@ -147,7 +146,7 @@ function updateCenter() {
         .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
 }
 
-function updateInfo() {
+function updateInfo(neos) {
     //let infoSection = d3.select('#infoSection');
     //let neos = NEO.ALL.slice(0, 3);
     //console.log(neos);
@@ -177,15 +176,6 @@ function loadCSVs() {
 }
 
 async function init() {
-
-    loadCSVs();
-
-    while (!CSVS_LOADED) {
-        console.log("Waiting for CSV load.")
-        await sleep(1000);
-    }
-
-
     // add boxes for charts
     margin = 20;
     barChart = d3.select('#svgBar');
@@ -228,12 +218,27 @@ async function init() {
         .attr('cx', 70)
         .attr('cy', centerHeight / 2)
         .attr('r', 40);
+    centerChart.append('text')
+        .attr('class', 'loading')
+        .attr('x', centerWidth/2)
+        .attr('y', centerHeight/2)
+        .attr('font-size', 20)
+        .text('Loading...');
 
-    updateBar();
-    updateScatter();
-    updateLine();
-    updateCenter();
-    updateInfo();
+    loadCSVs();
+
+    while (!CSVS_LOADED) {
+        console.log("Waiting for CSV load.")
+        await sleep(1000);
+    }
+
+    d3.select('.loading').remove();
+
+    updateCenter(NEOS.ALL);
+    updateBar(NEOS.ALL);
+    updateScatter(NEOS.ALL);
+    updateLine(NEOS.ALL);
+    updateInfo(NEOS.ALL);
 
     let brushH = d3.brushX()
         .extent([
@@ -241,7 +246,21 @@ async function init() {
             [lineWidth + margin * 2, lineHeight + margin + 1]
         ])
         .on('end', () => {
+            let x0 = d3.event.selection[0];
+            let x1 = d3.event.selection[1];
+            let asteroids = [];
+            for (x of NEO.ALL) {
+                let diff = new Date() - approachDate();
+                let day = Math.floor(diff / (1000*60*60*24));
+                if (day > x0 && day < x1) {
+                    asteroids.push(x);
+                }
+            }
 
+            updateCenter(asteroids);
+            updateBar(asteroids);
+            updateScatter(asteroids);
+            updateInfo(asteroids);
         });
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
@@ -251,7 +270,19 @@ async function init() {
             [37, 290]
         ])
         .on('end', () => {
-            // update
+            let x0 = d3.event.selection[0];
+            let x1 = d3.event.selection[1];
+            let asteroids = [];
+            for (x of NEO.ALL) {
+                if (x.val > x0 && x.val < x1) {
+                    asteroids.push(x);
+                }
+            }
+
+            updateCenter(asteroids);
+            updateBar(asteroids);
+            updateScatter(asteroids);
+            updateInfo(asteroids);
         });
     d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
     let brush2 = d3.brushY()
@@ -260,7 +291,19 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
-            // update
+            let x0 = d3.event.selection[0];
+            let x1 = d3.event.selection[1];
+            let asteroids = [];
+            for (x of NEO.ALL) {
+                if (x.val > x0 && x.val < x1) {
+                    asteroids.push(x);
+                }
+            }
+
+            updateCenter(asteroids);
+            updateBar(asteroids);
+            updateScatter(asteroids);
+            updateInfo(asteroids);
         });
     d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
 }
