@@ -94,6 +94,17 @@ function getMonthNumber(date) {
     return (date.getFullYear() - NASA_EPOCH.getFullYear()) * 12 + (date.getMonth() - NASA_EPOCH.getMonth())
 }
 
+// Returns just the file part of a URL string or UNIX file path.
+// Copied from stackoverflow user Nivas:
+// https://stackoverflow.com/a/3820412/539997
+function baseName(path)
+{
+   var base = new String(path).substring(path.lastIndexOf('/') + 1); 
+    if(base.lastIndexOf(".") != -1)       
+        base = base.substring(0, base.lastIndexOf("."));
+   return base;
+}
+
 // Copied from Stackoverflow user Peter Bailey:
 // https://stackoverflow.com/a/1267338/539997
 function zeroFill(number, width = 2)
@@ -125,6 +136,9 @@ function getNEOs(startDate, endDate, onLoad, onError) {
     let builder = new DataBuilder(startDate, endDate, onLoad, onError);
 }
 
+let API_KEY = "iIulBulltgU6a56xZRHN4H3l9WmuAYTsLGpBGhQ2";
+const API_URL = "https://api.nasa.gov/neo/rest/v1/feed";
+
 // Requests NEO data from the NASA API.
 // startDate: A Date representing the start of the desired range. The time part of this Date is ignored by the API.
 // endDate: A Date representing the end of the desired range. The time part of this Date is ignored by the API.
@@ -139,12 +153,14 @@ function requestNEOs(startDate, endDate, onload) {
     let requestURL = API_URL + '?' + encodeQueryData(queryData);
 
 
-    // This gets a response from the NeoWS API and set it to this.neowsJSON
+    // This gets a response from the NeoWS API and calls onload with NEOs
+    // instances constructed from the results.
     fetch(requestURL)
         .then(function (response) {
             return response.json();
         })
         .then(function (json) {
+            console.log(json)
             onload.call(null, constructNEOs(json));
         })
         .catch(function (error) {

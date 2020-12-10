@@ -43,11 +43,15 @@ class DataBuilder {
             // If this day's month file has been loaded then it will be in NEOS_BY_DATE
             let data = NEOS_BY_DATE[day.getTime()]
             this.days[day] = data; // This is sometimes undefined intentionally
+            if (this.days_by_month[getMonthNumber(day)])
+                this.days_by_month[getMonthNumber(day)].push(day)
+            else
+                this.days_by_month[getMonthNumber(day)] = [day]
 
             // Otherwise add its month to months, but only if it's the first day of its month in this range.
             if (!data && (i == 0 || day.getDate() == 1)) {
                 // Months are zero based but years and dates are one based because JavaScript is weird
-                this.months.push(`${day.getFullYear()}-${zeroFill(day.getMonth() + 1)}.month`)
+                this.months.push(day)
             }
         }
 
@@ -57,16 +61,23 @@ class DataBuilder {
             let data = NEOS_BY_DATE[cleanedStart]
             this.days[cleanedStart] = data
             if (!data)
-                this.months.push(`${cleanedStart.getFullYear()}-${zeroFill(cleanedStart.getMonth() + 1)}.month`)
+                this.months.push(cleanedStart)
         }
 
-        // Every file in months needs to be loaded
-        for (var monthFile of this.months) {
+        // Every date in months needs its month file loaded
+        for (var day of this.months) {
+            let monthFile = `${day.getFullYear()}-${zeroFill(day.getMonth() + 1)}.json`
             fetch(`data/ids/${monthFile}`, {
                     credentials: 'same-origin'
                 })
-                .then(response => response.text())
-                .then(data => console.log(data))
+                .then(response => response.json())
+                .then(data => {
+                    for (var dateString of Object.keys(data)) {
+                        let date = new Date(dateString)
+                        let neos_for_date = data[dateString]
+                        
+                    }                    
+                })
         }
     }
 }
