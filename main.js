@@ -90,8 +90,10 @@ function updateScatter(neos) {
         })
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
-    // update axis
-    scatterChart.select('axis').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.1s')));
+    // update x axis
+    scatterChart.select('.axis1').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.2s')));
+    // update y axis
+    scatterChart.select('.axis2').call(d3.axisLeft().scale(yScale).tickFormat(d3.format('.2s')));
 }
 
 // update line chart
@@ -207,7 +209,9 @@ async function init() {
         .attr('y', 12)
         .text(d => d);
     scatterChart.append('g').attr('transform', 'translate(0, ' + (scatterHeight + margin) + ')')
-        .attr('class', 'axis');
+        .attr('class', 'axis axis1');
+    scatterChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
+        .attr('class', 'axis axis2');
 
     lineChart = d3.select('#svgLine');
     lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
