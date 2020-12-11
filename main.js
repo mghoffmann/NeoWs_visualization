@@ -113,12 +113,11 @@ function updateLine() {
     
     let xScale = d3.scaleLinear().domain([0, 365]).range([margin*2, lineWidth + margin]);
     let yScale = d3.scaleLinear().domain([d3.max(data) * 1.04, 0]).range([margin, lineHeight + margin]);
+    data = data.map((d, i) => [yScale(d), xScale(i)])
 
     // update line on chart
     lineChart.append('path')
-        .attr('d', d3.line()
-            .x((_, i) => xScale(i))
-            .y(d => yScale(d)))
+        .attr('d', d3.line()(data))
         .attr('stroke', 'black');
 }
 
