@@ -342,15 +342,18 @@ async function init() {
         .text('Diameter');
     let brush1 = d3.brushY()
         .extent([
-            [13, 10],
-            [37, 290]
+            [13, 8],
+            [37, 292]
         ])
         .on('end', () => {
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
+
+            let yScale = d3.scaleLinear().domain([290, 10]).range([0, d3.max(currNeos.map(a => a.estimated_diameter_max_km))]);
             let asteroids = [];
             for (x of currNeos) {
-                if (x.val > x0 && x.val < x1) {
+                let temp = yScale(x.estimated_diameter_max_km);
+                if (temp > x0 && temp < x1) {
                     asteroids.push(x);
                 }
             }
@@ -378,9 +381,12 @@ async function init() {
         .on('end', () => {
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
+            
+            let yScale = d3.scaleLinear().domain([290, 10]).range([0, d3.max(currNeos.map(a => a.relative_velocity_kph))]);
             let asteroids = [];
             for (x of currNeos) {
-                if (x.val > x0 && x.val < x1) {
+                let temp = yScale(x.relative_velocity_kph);
+                if (temp > x0 && temp < x1) {
                     asteroids.push(x);
                 }
             }
