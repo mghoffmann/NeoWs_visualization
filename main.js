@@ -197,83 +197,83 @@ async function init() {
     }
 
 
-    // // add boxes for charts
-    // barChart = d3.select('#svgBar');
-    // barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
-    // barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
-    // barChart.append('rect')
-    //     .attr('x', margin * 2)
-    //     .attr('y', margin)
-    //     .attr('width', barWidth)
-    //     .attr('height', barHeight);
+    // add boxes for charts
+    barChart = d3.select('#svgBar');
+    barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
+    barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
+    barChart.append('rect')
+        .attr('x', margin * 2)
+        .attr('y', margin)
+        .attr('width', barWidth)
+        .attr('height', barHeight);
 
-    // scatterChart = d3.select('#svgScatter');
-    // scatterWidth = scatterChart.node().getBoundingClientRect().width - margin * 3;
-    // scatterHeight = scatterChart.node().getBoundingClientRect().height - margin * 3;
-    // scatterChart.append('rect')
-    //     .attr('x', margin * 2)
-    //     .attr('y', margin)
-    //     .attr('width', scatterWidth)
-    //     .attr('height', scatterHeight);
+    scatterChart = d3.select('#svgScatter');
+    scatterWidth = scatterChart.node().getBoundingClientRect().width - margin * 3;
+    scatterHeight = scatterChart.node().getBoundingClientRect().height - margin * 3;
+    scatterChart.append('rect')
+        .attr('x', margin * 2)
+        .attr('y', margin)
+        .attr('width', scatterWidth)
+        .attr('height', scatterHeight);
 
-    // lineChart = d3.select('#svgLine');
-    // lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
-    // lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
-    // lineChart.append('rect')
-    //     .attr('x', margin * 2)
-    //     .attr('y', margin)
-    //     .attr('width', lineWidth)
-    //     .attr('height', lineHeight);
+    lineChart = d3.select('#svgLine');
+    lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
+    lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
+    lineChart.append('rect')
+        .attr('x', margin * 2)
+        .attr('y', margin)
+        .attr('width', lineWidth)
+        .attr('height', lineHeight);
 
-    // centerChart = d3.select('#svgCenter');
-    // centerWidth = centerChart.node().getBoundingClientRect().width;
-    // centerHeight = centerChart.node().getBoundingClientRect().height;
-    // centerChart.append('rect')
-    //     .attr('x', 1)
-    //     .attr('y', 1)
-    //     .attr('width', centerWidth - 2)
-    //     .attr('height', centerHeight - 2);
-    // centerChart.append('circle')
-    //     .attr('class', 'earth')
-    //     .attr('cx', 70)
-    //     .attr('cy', centerHeight / 2)
-    //     .attr('r', 40);
+    centerChart = d3.select('#svgCenter');
+    centerWidth = centerChart.node().getBoundingClientRect().width;
+    centerHeight = centerChart.node().getBoundingClientRect().height;
+    centerChart.append('rect')
+        .attr('x', 1)
+        .attr('y', 1)
+        .attr('width', centerWidth - 2)
+        .attr('height', centerHeight - 2);
+    centerChart.append('circle')
+        .attr('class', 'earth')
+        .attr('cx', 70)
+        .attr('cy', centerHeight / 2)
+        .attr('r', 40);
 
     createAverages();
 
-    // updateBar();
-    // updateScatter();
-    // updateLine();
-    // updateCenter();
-    // updateInfo();
+    updateBar();
+    updateScatter();
+    updateLine();
+    updateCenter();
+    updateInfo();
 
-    // let brushH = d3.brushX()
-    //     .extent([
-    //         [margin * 2, margin],
-    //         [lineWidth + margin * 2, lineHeight + margin + 1]
-    //     ])
-    //     .on('end', () => {
+    let brushH = d3.brushX()
+        .extent([
+            [margin * 2, margin],
+            [lineWidth + margin * 2, lineHeight + margin + 1]
+        ])
+        .on('end', () => {
 
-    //     });
-    // d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
+        });
+    d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
-    // let brush1 = d3.brushY()
-    //     .extent([
-    //         [13, 10],
-    //         [37, 290]
-    //     ])
-    //     .on('end', () => {
-    //         // update
-    //     });
-    // d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
-    // let brush2 = d3.brushY()
-    //     .extent([
-    //         [13, 8],
-    //         [37, 292]
-    //     ])
-    //     .on('end', () => {
-    //         // update
-    //     });
-    // d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
+    let brush1 = d3.brushY()
+        .extent([
+            [13, 10],
+            [37, 290]
+        ])
+        .on('end', () => {
+            // update
+        });
+    d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
+    let brush2 = d3.brushY()
+        .extent([
+            [13, 8],
+            [37, 292]
+        ])
+        .on('end', () => {
+            // update
+        });
+    d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
 
 }

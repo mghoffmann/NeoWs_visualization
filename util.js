@@ -179,7 +179,6 @@ function createAverages() {
     //  And then remove the top one
     sortedKeys = Object.keys(Approach.BY_DATE).sort((a,b)=>new Date(a) - new Date(b))
     sortedKeys.shift()
-    console.log(sortedKeys)
     // Count the Approaches on each day
     countsPerDay = sortedKeys.map(sk=>[sk, Approach.BY_DATE[sk].length])
     
@@ -223,15 +222,4 @@ function createAverages() {
     //     last = new Date(d.getTime());
     // }
 
-
-    // var averages = [], min = [], max = []
-
-    // for (var val of [true, false, false, false, false, false, true, false, false, false, false, false,true, false, false, false, false, false, true, false, false, false, false, false,true, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false, false, false,])
-    // {   
-    //     let data = 8;
-    //     ave += data;
-    //     if (val) {
-            
-    //     }
-    // }
 }
