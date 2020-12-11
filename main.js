@@ -58,7 +58,7 @@ function updateBar(neos, attribute) {
     // update axis
     barChart.select('.axis').call(d3.axisLeft().scale(heightScale));
     // update bar labels
-    let barLabels = [attribute == 'Diameter' ? 'Asteroid Diameter' : 'Asteroid Magnitude'];
+    let barLabels = [attribute == 'Diameter' ? 'Asteroid Diameter (km)' : 'Asteroid Relative Magnitude'];
     barChart.select('.labels').selectAll('text').data(barLabels).join('text')
         .attr('x', barWidth / 2 + margin)
         .attr('y', 12)
@@ -243,7 +243,7 @@ async function init() {
         .attr('y', margin)
         .attr('width', scatterWidth)
         .attr('height', scatterHeight);
-    let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
+    let scatterLabels = ['Asteroid Passing Velocity (kph) by Distance from Earth (km)'];
     scatterChart.append('g').attr('class', 'data');
     scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
         .attr('x', scatterWidth / 2 + margin)
