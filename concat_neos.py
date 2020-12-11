@@ -4,7 +4,7 @@ from os.path import splitext
 import json
 
 
-select = "1 year"
+select = "5 year"
 
 years = {
     "1 year":  { "start": 2019, "end": 2022 },
@@ -215,7 +215,8 @@ heads = newApproachesFile.readline()
 for line in newApproachesFile.readlines():
     line = line.split(",")[:-1]
     line = [i[1:-1] for i in line ]
-    print(line)
+    # This slows file writing down a lot
+    # print(line)
     if line[0] not in approachesDict:
         line[5] = float(line[5])
         approachesDict.update({ line[0]: line })
