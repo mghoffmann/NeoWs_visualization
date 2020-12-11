@@ -30,11 +30,16 @@ function doHighlighting(className, highlight) {
     }
 }
 
+// update bar chart
 function updateBar(neos, attribute) {
+    // unscaled bar heights
     let heights = neos.map(a => attribute == 'Diameter' ? a.estimated_diameter_max_km : a.absolute_magnitude_h);
 
+    // scale for bar widths
     let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
+    // scale for bar heights
     let heightScale = d3.scaleLinear().domain([d3.max(heights.map(a => parseInt(a))) * 1.04, 0]).range([margin, barHeight + margin]);
+    // update bars on chart
     barChart.select('.data').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
         .attr('x', d => margin / 2 + barScale(d))
@@ -50,7 +55,9 @@ function updateBar(neos, attribute) {
         })
         .append('title')
         .text(d => d);
+    // update axis
     barChart.select('.axis').call(d3.axisLeft().scale(heightScale));
+    // update bar labels
     let barLabels = [attribute == 'Diameter' ? 'Asteroid Diameter' : 'Asteroid Magnitude'];
     barChart.select('.labels').selectAll('text').data(barLabels).join('text')
         .attr('x', barWidth / 2 + margin)
@@ -58,15 +65,17 @@ function updateBar(neos, attribute) {
         .text(d => d);
 }
 
+// updates scatter chart
 function updateScatter(neos) {
+    // closest approaches
     let closest = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : a.reduce((a, b) => (a.id < b.id) ? a : b)).filter(a => a != null);
     let coords = closest.map(a => [a.miss_distance_km, a.relative_velocity_kph]);
 
-    console.log(coords);
-    console.log(coords.map(a => a[0]));
+    // scale for x pos
     let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => parseInt(a[0]))) * 1.04]).range([margin * 2, scatterWidth + margin * 2]);
+    // scale for y pos
     let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => parseInt(a[1]))) * 1.04, 0]).range([margin, scatterHeight + margin]);
-    let scatterChart = d3.select('#svgScatter');
+    // update circles on chart
     scatterChart.select('.data').selectAll('circle').data(coords).join('circle')
         .attr('class', (d, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
@@ -81,13 +90,13 @@ function updateScatter(neos) {
         })
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
+    // update axis
     scatterChart.select('axis').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.1s')));
-    scatterChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
-        .attr('class', 'axis')
-        .call(d3.axisLeft().scale(yScale).tickFormat(d3.format('.1s')));
 }
 
+// update line chart
 function updateLine() {
+    // get dates
     let sortedDates = Approach.ALL.map(a => a.date).sort((a, b) => a.getTime() - b.getTime())
     let minDate = sortedDates[0]
     let maxDate = sortedDates[sortedDates.length - 1]
@@ -98,6 +107,7 @@ function updateLine() {
 
     let data = []
 
+    // update line on chart
     let lineChart = d3.select('#svgLine');
     lineChart.append('path')
         .attr('d', d3.line()(data))
@@ -106,15 +116,19 @@ function updateLine() {
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
 function updateCenter(neos) {
+    // unscaled distances from earth
     let dists = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
 
+    // scale for x pos
     let xScale = d3.scaleLinear().domain([0, d3.max(dists.map(a => parseInt(a)))]).range([111, centerWidth - 50]);
+    // update orbit circles on chart
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
         .attr('cy', centerHeight / 2)
         .attr('r', d => 2000 + xScale(d))
         .style('stroke', 'black')
         .style('fill', 'none');
+    // update asteroid circles on chart
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
@@ -132,6 +146,7 @@ function updateCenter(neos) {
         .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
 }
 
+// update info section
 function updateInfo(neos) {
     //let infoSection = d3.select('#infoSection');
     //let neos = NEO.ALL.slice(0, 3);
@@ -162,7 +177,7 @@ function loadCSVs() {
 }
 
 async function init() {
-    // add boxes for charts
+    // adds basic elements to each chart
     margin = 20;
     barChart = d3.select('#svgBar');
     barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
@@ -237,18 +252,21 @@ async function init() {
 
     d3.select('.loading').remove();
     
+    // adds functionality to bar chart dropdown
     currNeos = NEO.ALL.slice(0, 200);
     let barSelect = document.getElementById('barSelect')
     barSelect.onchange = function(event) {
         updateBar(currNeos, barSelect.value);
     }
 
+    // initial update for all charts
     updateLine();
     updateCenter(currNeos);
     updateBar(currNeos, barSelect.value);
     updateScatter(currNeos);
     updateInfo(currNeos);
 
+    // brush for frequency chart
     let brushH = d3.brushX()
         .extent([
             [margin * 2, margin],
@@ -273,6 +291,7 @@ async function init() {
         });
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
+    // brush for attribute 1
     let box1 = d3.select("#svgBrush1");
     box1.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
@@ -302,6 +321,7 @@ async function init() {
         });
     box1.append("g").attr("class", "brush").call(brush1);
 
+    // brush for attribute 2
     let box2 = d3.select("#svgBrush2");
     box2.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
