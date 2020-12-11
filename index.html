@@ -47,14 +47,29 @@
 
     <main>
         <div>
-            <section class="svgSection">
-                <svg id="svgCenter" width="1010" height="680"></svg>
+            <section>
+                <section class="svgSection">
+                    <svg id="svgCenter" width="1010" height="320"></svg>
+                </section>
+
+                <section class="svgSection">
+                    <div>
+                        <svg id="svgLine" width="900" height="310"></svg>
+                        <svg id="svgBrush1" width="50" height="300">
+                            <rect x="10" y="5" width="30" height="290"></rect>
+                        </svg>
+                        <svg id="svgBrush2" width="50" height="300">
+                            <rect x="10" y="5" width="30" height="290"></rect>
+                        </svg>
+                    </div>
+                </section>
             </section>
 
             <section>
                 <section class="svgSection">
-                    <select>
+                    <select id="barSelect">
                         <option>Diameter</option>
+                        <option>Magnitude</option>
                     </select>
                     <svg id="svgBar" width="500" height="300"></svg>
                 </section>
@@ -62,22 +77,6 @@
                 <section class="svgSection">
                     <svg id="svgScatter" width="500" height="310"></svg>
                 </section>
-            </section>
-        </div>
-
-        <div>
-            <section class="svgSection">
-                <svg id="svgLine" width="1400" height="300"></svg>
-            </section>
-            <section class="svgSection">
-                <div>
-                    <svg id="svgBrush1" width="50" height="300">
-                        <rect x="10" y="5" width="30" height="290"></rect>
-                    </svg>
-                    <svg id="svgBrush2" width="50" height="300">
-                        <rect x="10" y="5" width="30" height="290"></rect>
-                    </svg>
-                </div>
             </section>
         </div>
 
