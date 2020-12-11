@@ -236,7 +236,9 @@ async function init() {
     
     currNeos = NEO.ALL;
     let barSelect = document.getElementById('barSelect')
-    barSelect.onchange = updateBar(currNeos, barSelect.value);
+    barSelect.onchange = function(event) {
+        updateBar(currNeos, barSelect.value);
+    }
 
     updateLine();
     updateCenter(currNeos);
