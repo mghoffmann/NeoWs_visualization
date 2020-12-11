@@ -35,7 +35,7 @@ function updateBar(neos, attribute) {
 
     let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
     let heightScale = d3.scaleLinear().domain([d3.max(heights.map(a => parseInt(a))) * 1.04, 0]).range([margin, barHeight + margin]);
-    barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
+    barChart.select('.data').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
         .attr('x', d => margin / 2 + barScale(d))
         .attr('y', margin)
@@ -50,11 +50,9 @@ function updateBar(neos, attribute) {
         })
         .append('title')
         .text(d => d);
-    barChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
-        .attr('class', 'axis')
-        .call(d3.axisLeft().scale(heightScale));
+    barChart.select('.axis').call(d3.axisLeft().scale(heightScale));
     let barLabels = [attribute == 'Diameter' ? 'Asteroid Diameter' : 'Asteroid Magnitude'];
-    barChart.append('g').selectAll('text').data(barLabels).join('text')
+    barChart.select('.labels').selectAll('text').data(barLabels).join('text')
         .attr('x', barWidth / 2 + margin)
         .attr('y', 12)
         .text(d => d);
@@ -69,7 +67,7 @@ function updateScatter(neos) {
     let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => parseInt(a[0]))) * 1.04]).range([margin * 2, scatterWidth + margin * 2]);
     let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => parseInt(a[1]))) * 1.04, 0]).range([margin, scatterHeight + margin]);
     let scatterChart = d3.select('#svgScatter');
-    scatterChart.append('g').selectAll('circle').data(coords).join('circle')
+    scatterChart.select('.data').selectAll('circle').data(coords).join('circle')
         .attr('class', (d, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
         .attr('cy', d => yScale(d[1]))
@@ -83,17 +81,10 @@ function updateScatter(neos) {
         })
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
-    scatterChart.append('g').attr('transform', 'translate(0, ' + (scatterHeight + margin) + ')')
-        .attr('class', 'axis')
-        .call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.1s')));
+    scatterChart.select('axis').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.1s')));
     scatterChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale).tickFormat(d3.format('.1s')));
-    let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
-    scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
-        .attr('x', scatterWidth / 2 + margin)
-        .attr('y', 12)
-        .text(d => d);
 }
 
 function updateLine() {
@@ -111,11 +102,6 @@ function updateLine() {
     lineChart.append('path')
         .attr('d', d3.line()(data))
         .attr('stroke', 'black');
-    let lineLabels = ['Asteroid Frequency Over Time'];
-    lineChart.append('g').selectAll('text').data(lineLabels).join('text')
-        .attr('x', lineWidth/2 + margin*2)
-        .attr('y', 12)
-        .text(d => d);
 }
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
@@ -186,6 +172,10 @@ async function init() {
         .attr('y', margin)
         .attr('width', barWidth)
         .attr('height', barHeight);
+    barChart.append('g').attr('class', 'data');
+    barChart.append('g').attr('class', 'labels');
+    barChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
+        .attr('class', 'axis');
 
     scatterChart = d3.select('#svgScatter');
     scatterWidth = scatterChart.node().getBoundingClientRect().width - margin * 3;
@@ -195,6 +185,14 @@ async function init() {
         .attr('y', margin)
         .attr('width', scatterWidth)
         .attr('height', scatterHeight);
+    let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth'];
+    scatterChart.append('g').attr('class', 'data');
+    scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
+        .attr('x', scatterWidth / 2 + margin)
+        .attr('y', 12)
+        .text(d => d);
+    scatterChart.append('g').attr('transform', 'translate(0, ' + (scatterHeight + margin) + ')')
+        .attr('class', 'axis');
 
     lineChart = d3.select('#svgLine');
     lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
@@ -204,6 +202,11 @@ async function init() {
         .attr('y', margin)
         .attr('width', lineWidth)
         .attr('height', lineHeight);
+    let lineLabels = ['Asteroid Frequency Over Time'];
+    lineChart.append('g').selectAll('text').data(lineLabels).join('text')
+        .attr('x', lineWidth/2 + margin*2)
+        .attr('y', 12)
+        .text(d => d);
 
     centerChart = d3.select('#svgCenter');
     centerWidth = centerChart.node().getBoundingClientRect().width;
@@ -234,7 +237,7 @@ async function init() {
 
     d3.select('.loading').remove();
     
-    currNeos = NEO.ALL.slice(0, 20);
+    currNeos = NEO.ALL.slice(0, 200);
     let barSelect = document.getElementById('barSelect')
     barSelect.onchange = function(event) {
         updateBar(currNeos, barSelect.value);
