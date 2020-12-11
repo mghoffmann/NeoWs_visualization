@@ -317,7 +317,7 @@ async function init() {
             let x1 = d3.event.selection[1];
             let currNeos = [];
             for (x of NEO.ALL) {
-                let diff = new Date() - approachDate();
+                let diff = new Date() - x.getApproaches()[0].date;
                 let day = Math.floor(diff / (1000 * 60 * 60 * 24));
                 if (day > x0 && day < x1) {
                     currNeos.push(x);
