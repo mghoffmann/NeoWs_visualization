@@ -34,7 +34,7 @@ function updateBar(neos, attribute) {
     let heights = neos.map(a => attribute == 'Diameter' ? a.estimated_diameter_max_km : a.absolute_magnitude_h);
 
     let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
-    let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
+    let heightScale = d3.scaleLinear().domain([d3.max(heights.map(a => parseInt(a))) * 1.04, 0]).range([margin, barHeight + margin]);
     barChart.append('g').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
         .attr('x', d => margin / 2 + barScale(d))
@@ -66,8 +66,8 @@ function updateScatter(neos) {
 
     console.log(coords);
     console.log(coords.map(a => a[0]));
-    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => a[0])) * 1.04]).range([margin * 2, scatterWidth + margin * 2]);
-    let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => a[1])) * 1.04, 0]).range([margin, scatterHeight + margin]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => parseInt(a[0]))) * 1.04]).range([margin * 2, scatterWidth + margin * 2]);
+    let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => parseInt(a[1]))) * 1.04, 0]).range([margin, scatterHeight + margin]);
     let scatterChart = d3.select('#svgScatter');
     scatterChart.append('g').selectAll('circle').data(coords).join('circle')
         .attr('class', (d, i) => 'ast' + i)
@@ -122,7 +122,7 @@ function updateLine() {
 function updateCenter(neos) {
     let dists = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
 
-    let xScale = d3.scaleLinear().domain([0, d3.max(dists)]).range([111, centerWidth - 50]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(dists.map(a => parseInt(a)))]).range([111, centerWidth - 50]);
     centerChart.append('g').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
         .attr('cy', centerHeight / 2)
@@ -234,7 +234,7 @@ async function init() {
 
     d3.select('.loading').remove();
     
-    currNeos = NEO.ALL;
+    currNeos = NEO.ALL.slice(0, 20);
     let barSelect = document.getElementById('barSelect')
     barSelect.onchange = function(event) {
         updateBar(currNeos, barSelect.value);
