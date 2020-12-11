@@ -122,63 +122,30 @@ MMM_REPLACEMENTS = [
     ['Dec', '12'],
 ]
 
+contains_approach = False
+
 for fname in files:
-    neosFile.write('\n')
+    if contains_approach:
+        neosFile.write('\n')
     with open(root + '/' + fname) as f:
         id = splitext(fname)[0]
         data = json.load(f)
 
-        writeNEOS(id)
-        writeNEOS(data['designation'])
-        if ('absolute_magnitude_h' in data):
-            writeNEOS(data['absolute_magnitude_h'])
-        else:
-            writeNEOS('0')
-        if ('estimated_diameter' in data):
-            writeNEOS(data['estimated_diameter']['kilometers']
-                      ['estimated_diameter_min'])
-            writeNEOS(data['estimated_diameter']['kilometers']
-                      ['estimated_diameter_max'])
-        else:
-            writeNEOS('0')
-            writeNEOS('0')
-
-        writeNEOS(data['is_potentially_hazardous_asteroid'])
-        writeNEOS(data['orbital_data']['orbit_id'])
-        writeNEOS(data['orbital_data']['orbit_determination_date'])
-        writeNEOS(data['orbital_data']['first_observation_date'])
-        writeNEOS(data['orbital_data']['last_observation_date'])
-        writeNEOS(data['orbital_data']['orbit_uncertainty'])
-        writeNEOS(data['orbital_data']['minimum_orbit_intersection'])
-        writeNEOS(data['orbital_data']['jupiter_tisserand_invariant'])
-        writeNEOS(data['orbital_data']['epoch_osculation'])
-        writeNEOS(data['orbital_data']['eccentricity'])
-        writeNEOS(data['orbital_data']['semi_major_axis'])
-        writeNEOS(data['orbital_data']['inclination'])
-        writeNEOS(data['orbital_data']['ascending_node_longitude'])
-        writeNEOS(data['orbital_data']['orbital_period'])
-        writeNEOS(data['orbital_data']['perihelion_distance'])
-        writeNEOS(data['orbital_data']['perihelion_argument'])
-        writeNEOS(data['orbital_data']['aphelion_distance'])
-        writeNEOS(data['orbital_data']['perihelion_time'])
-        writeNEOS(data['orbital_data']['mean_anomaly'])
-        writeNEOS(data['orbital_data']['mean_motion'])
-        writeNEOS(data['orbital_data']['equinox'])
-        writeNEOS(data['orbital_data']['orbit_class']['orbit_class_type'])
-        writeNEOS(data['orbital_data']['orbit_class']
-                  ['orbit_class_description'])
-        writeNEOS(data['orbital_data']['orbit_class']
-                  ['orbit_class_range'], True)
-
-
         approaches = data['close_approach_data']
 
-        for approach in approaches:         
+        contains_approach = False
+
+        for approach in approaches:
+             
             date = approach['close_approach_date_full']    
 
             year = int(date[:4])
             if not (start < year and year < end):
                 continue
+            elif approach['orbiting_body'] != "Earth":
+                continue
+            else:
+                contains_approach = True
 
             approachesFile.write('\n')
             writeAppr(id)
@@ -196,4 +163,70 @@ for fname in files:
             writeAppr(approach['orbiting_body'], True)
 
 
+        if contains_approach:
+            writeNEOS(id)
+            writeNEOS(data['designation'])
+            if ('absolute_magnitude_h' in data):
+                writeNEOS(data['absolute_magnitude_h'])
+            else:
+                writeNEOS('0')
+            if ('estimated_diameter' in data):
+                writeNEOS(data['estimated_diameter']['kilometers']
+                        ['estimated_diameter_min'])
+                writeNEOS(data['estimated_diameter']['kilometers']
+                        ['estimated_diameter_max'])
+            else:
+                writeNEOS('0')
+                writeNEOS('0')
+
+            writeNEOS(data['is_potentially_hazardous_asteroid'])
+            writeNEOS(data['orbital_data']['orbit_id'])
+            writeNEOS(data['orbital_data']['orbit_determination_date'])
+            writeNEOS(data['orbital_data']['first_observation_date'])
+            writeNEOS(data['orbital_data']['last_observation_date'])
+            writeNEOS(data['orbital_data']['orbit_uncertainty'])
+            writeNEOS(data['orbital_data']['minimum_orbit_intersection'])
+            writeNEOS(data['orbital_data']['jupiter_tisserand_invariant'])
+            writeNEOS(data['orbital_data']['epoch_osculation'])
+            writeNEOS(data['orbital_data']['eccentricity'])
+            writeNEOS(data['orbital_data']['semi_major_axis'])
+            writeNEOS(data['orbital_data']['inclination'])
+            writeNEOS(data['orbital_data']['ascending_node_longitude'])
+            writeNEOS(data['orbital_data']['orbital_period'])
+            writeNEOS(data['orbital_data']['perihelion_distance'])
+            writeNEOS(data['orbital_data']['perihelion_argument'])
+            writeNEOS(data['orbital_data']['aphelion_distance'])
+            writeNEOS(data['orbital_data']['perihelion_time'])
+            writeNEOS(data['orbital_data']['mean_anomaly'])
+            writeNEOS(data['orbital_data']['mean_motion'])
+            writeNEOS(data['orbital_data']['equinox'])
+            writeNEOS(data['orbital_data']['orbit_class']['orbit_class_type'])
+            writeNEOS(data['orbital_data']['orbit_class']
+                    ['orbit_class_description'])
+            writeNEOS(data['orbital_data']['orbit_class']
+                    ['orbit_class_range'], True)
+
+approachesFile.close()
 neosFile.close()
+
+newApproachesFile = open( root + approach_filename )
+approachesDict = {}
+heads = newApproachesFile.readline()
+for line in newApproachesFile.readlines():
+    line = line.split(",")[:-1]
+    line = [i[1:-1] for i in line ]
+    print(line)
+    if line[0] not in approachesDict:
+        line[5] = float(line[5])
+        approachesDict.update({ line[0]: line })
+    elif float(line[5]) < approachesDict[line[0]][5]:
+        line[5] = float(line[5])
+        approachesDict.update({ line[0]: line })
+
+tempFile = open( root + approach_filename , "w" )
+tempFile.write(heads)
+for key, val in approachesDict.items():
+    for i in val:
+        tempFile.write("\"" + str(i) + "\"" + ',')
+    tempFile.write('\n')
+    

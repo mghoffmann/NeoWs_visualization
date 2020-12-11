@@ -167,18 +167,28 @@ function loadCSVs() {
     // Constructing Approach and NEO instances interns them in static
     // members of their classes so no storage here is needed. See
     // Approach.js and NEO.js for how to access them.
-    d3.csv("data/neos/approaches-2019-2022.csv", function (data) {
+    d3.csv(`data/neos/approaches-${years.start}-${years.end}.csv`, function (data) {
         return new Approach(data);
     }).then(approaches => {
-        d3.csv("data/neos/neos-2019-2022.csv", function (data) {
+        d3.csv(`data/neos/neos-${years.start}-${years.end}.csv`, function (data) {
                 return new NEO(data);
             })
             .then(() => CSVS_LOADED = true)
     })
 }
 
-async function init() {
+const csvYears = {
+    "1 year":  { start: 2019, end: 2022 },
+    "2 year":  { start: 2018, end: 2023 },
+    "3 year":  { start: 2017, end: 2024 },
+    "5 year":  { start: 2015, end: 2026 },
+    "10 year": { start: 2010, end: 2031 },
+    "20 year": { start: 2000, end: 2040 },
+};
+const years = csvYears["5 year"];
 
+async function init() {
+    
     loadCSVs();
 
     while (!CSVS_LOADED) {
@@ -187,80 +197,83 @@ async function init() {
     }
 
 
-    // add boxes for charts
-    barChart = d3.select('#svgBar');
-    barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
-    barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
-    barChart.append('rect')
-        .attr('x', margin * 2)
-        .attr('y', margin)
-        .attr('width', barWidth)
-        .attr('height', barHeight);
+    // // add boxes for charts
+    // barChart = d3.select('#svgBar');
+    // barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
+    // barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
+    // barChart.append('rect')
+    //     .attr('x', margin * 2)
+    //     .attr('y', margin)
+    //     .attr('width', barWidth)
+    //     .attr('height', barHeight);
 
-    scatterChart = d3.select('#svgScatter');
-    scatterWidth = scatterChart.node().getBoundingClientRect().width - margin * 3;
-    scatterHeight = scatterChart.node().getBoundingClientRect().height - margin * 3;
-    scatterChart.append('rect')
-        .attr('x', margin * 2)
-        .attr('y', margin)
-        .attr('width', scatterWidth)
-        .attr('height', scatterHeight);
+    // scatterChart = d3.select('#svgScatter');
+    // scatterWidth = scatterChart.node().getBoundingClientRect().width - margin * 3;
+    // scatterHeight = scatterChart.node().getBoundingClientRect().height - margin * 3;
+    // scatterChart.append('rect')
+    //     .attr('x', margin * 2)
+    //     .attr('y', margin)
+    //     .attr('width', scatterWidth)
+    //     .attr('height', scatterHeight);
 
-    lineChart = d3.select('#svgLine');
-    lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
-    lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
-    lineChart.append('rect')
-        .attr('x', margin * 2)
-        .attr('y', margin)
-        .attr('width', lineWidth)
-        .attr('height', lineHeight);
+    // lineChart = d3.select('#svgLine');
+    // lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
+    // lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
+    // lineChart.append('rect')
+    //     .attr('x', margin * 2)
+    //     .attr('y', margin)
+    //     .attr('width', lineWidth)
+    //     .attr('height', lineHeight);
 
-    centerChart = d3.select('#svgCenter');
-    centerWidth = centerChart.node().getBoundingClientRect().width;
-    centerHeight = centerChart.node().getBoundingClientRect().height;
-    centerChart.append('rect')
-        .attr('x', 1)
-        .attr('y', 1)
-        .attr('width', centerWidth - 2)
-        .attr('height', centerHeight - 2);
-    centerChart.append('circle')
-        .attr('class', 'earth')
-        .attr('cx', 70)
-        .attr('cy', centerHeight / 2)
-        .attr('r', 40);
+    // centerChart = d3.select('#svgCenter');
+    // centerWidth = centerChart.node().getBoundingClientRect().width;
+    // centerHeight = centerChart.node().getBoundingClientRect().height;
+    // centerChart.append('rect')
+    //     .attr('x', 1)
+    //     .attr('y', 1)
+    //     .attr('width', centerWidth - 2)
+    //     .attr('height', centerHeight - 2);
+    // centerChart.append('circle')
+    //     .attr('class', 'earth')
+    //     .attr('cx', 70)
+    //     .attr('cy', centerHeight / 2)
+    //     .attr('r', 40);
 
-    updateBar();
-    updateScatter();
-    updateLine();
-    updateCenter();
-    updateInfo();
+    createAverages();
 
-    let brushH = d3.brushX()
-        .extent([
-            [margin * 2, margin],
-            [lineWidth + margin * 2, lineHeight + margin + 1]
-        ])
-        .on('end', () => {
+    // updateBar();
+    // updateScatter();
+    // updateLine();
+    // updateCenter();
+    // updateInfo();
 
-        });
-    d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
+    // let brushH = d3.brushX()
+    //     .extent([
+    //         [margin * 2, margin],
+    //         [lineWidth + margin * 2, lineHeight + margin + 1]
+    //     ])
+    //     .on('end', () => {
 
-    let brush1 = d3.brushY()
-        .extent([
-            [13, 10],
-            [37, 290]
-        ])
-        .on('end', () => {
-            // update
-        });
-    d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
-    let brush2 = d3.brushY()
-        .extent([
-            [13, 8],
-            [37, 292]
-        ])
-        .on('end', () => {
-            // update
-        });
-    d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
+    //     });
+    // d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
+
+    // let brush1 = d3.brushY()
+    //     .extent([
+    //         [13, 10],
+    //         [37, 290]
+    //     ])
+    //     .on('end', () => {
+    //         // update
+    //     });
+    // d3.select("#svgBrush1").append("g").attr("class", "brush").call(brush1);
+    // let brush2 = d3.brushY()
+    //     .extent([
+    //         [13, 8],
+    //         [37, 292]
+    //     ])
+    //     .on('end', () => {
+    //         // update
+    //     });
+    // d3.select("#svgBrush2").append("g").attr("class", "brush").call(brush2);
+
 }

@@ -171,3 +171,67 @@ function requestNEOs(startDate, endDate, onload) {
             console.error(error);
         })
 }
+
+const ApproachAverages = []
+function createAverages() {
+
+    // Get a sorted array of all the Dates
+    //  And then remove the top one
+    sortedKeys = Object.keys(Approach.BY_DATE).sort((a,b)=>new Date(a) - new Date(b))
+    sortedKeys.shift()
+    console.log(sortedKeys)
+    // Count the Approaches on each day
+    countsPerDay = sortedKeys.map(sk=>[sk, Approach.BY_DATE[sk].length])
+    
+    let ave_obj = {}
+    countsPerDay.forEach(row => {
+        let day = row[0].slice(5)
+
+        if (ave_obj[day] === undefined) {
+            ave_obj[day] = { amount: 1, sum: row[1] }
+        } else {
+            ave_obj[day].amount++;
+            ave_obj[day].sum += row[1];
+        }
+    })
+    
+    Object.entries(ave_obj)
+    .forEach(entry => 
+        ApproachAverages.push(( entry[1].sum / entry[1].amount ))
+    );
+    // console.log(ApproachAverages)
+
+
+    // var start = new Date(2000, 0, 1);
+    // var end   = new Date(2000, 0, 21);
+    
+    // let last = new Date(start.getTime())
+    // var d = new Date(last.getTime())
+    // d.setDate(d.getDate() + 10)
+    // for (d; d <= end; d.setDate(d.getDate() + 10)) {
+    //     // I'm planning on making the average calculation based on a boolean
+    //     //  so what I mean is the bool will only be true when I want 
+    //     //  to save that average and start over on the next value
+    //     //  Ex:  
+    //     //    Year:  d.getMonth() === 0
+    //     //    Lunar: getMoonPhase(d) === 0
+    //     //    Month: d.getDate() === 0
+    //     //    Week:  d.getDay() === 0
+
+    //     console.log("last: ", last)
+
+    //     last = new Date(d.getTime());
+    // }
+
+
+    // var averages = [], min = [], max = []
+
+    // for (var val of [true, false, false, false, false, false, true, false, false, false, false, false,true, false, false, false, false, false, true, false, false, false, false, false,true, false, false, false, false, false, true, false, false, false, false, false, true, false, false, false, false, false,])
+    // {   
+    //     let data = 8;
+    //     ave += data;
+    //     if (val) {
+            
+    //     }
+    // }
+}
