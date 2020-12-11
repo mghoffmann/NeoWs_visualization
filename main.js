@@ -103,16 +103,22 @@ function updateLine() {
     let minDate = sortedDates[0]
     let maxDate = sortedDates[sortedDates.length - 1]
 
-    console.log(sortedDates.length)
-    console.log(minDate)
-    console.log(maxDate)
+    let dateScale = d3.scaleLinear().domain([minDate, maxDate]).range([margin*2, lineWidth + margin]);
+    lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
+        .attr('class', 'axis')
+        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %Y')));
 
-    let data = []
+    let data = ApproachAverages;
+    console.log('x');
+    
+    let xScale = d3.scaleLinear().domain([0, 365]).range([margin*2, lineWidth + margin]);
+    let yScale = d3.scaleLinear().domain([d3.max(data) * 1.04, 0]).range([margin, lineHeight + margin]);
 
     // update line on chart
-    let lineChart = d3.select('#svgLine');
     lineChart.append('path')
-        .attr('d', d3.line()(data))
+        .attr('d', d3.line()
+            .x((_, i) => xScale(i))
+            .y(d => yScale(d)))
         .attr('stroke', 'black');
 }
 
@@ -284,11 +290,11 @@ async function init() {
     }
 
     // initial update for all charts
-    updateLine();
     updateCenter(currNeos);
     updateBar(currNeos, barSelect.value);
     updateScatter(currNeos);
     updateInfo(currNeos);
+    updateLine();
 
     // brush for frequency chart
     let brushH = d3.brushX()
