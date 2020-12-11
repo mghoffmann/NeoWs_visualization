@@ -179,17 +179,35 @@ function loadCSVs() {
 }
 
 const csvYears = {
-    "1 year":  { start: 2019, end: 2022 },
-    "2 year":  { start: 2018, end: 2023 },
-    "3 year":  { start: 2017, end: 2024 },
-    "5 year":  { start: 2015, end: 2026 },
-    "10 year": { start: 2010, end: 2031 },
-    "20 year": { start: 2000, end: 2040 },
+    "1 year": {
+        start: 2019,
+        end: 2022
+    },
+    "2 year": {
+        start: 2018,
+        end: 2023
+    },
+    "3 year": {
+        start: 2017,
+        end: 2024
+    },
+    "5 year": {
+        start: 2015,
+        end: 2026
+    },
+    "10 year": {
+        start: 2010,
+        end: 2031
+    },
+    "20 year": {
+        start: 2000,
+        end: 2040
+    },
 };
 const years = csvYears["5 year"];
 
 async function init() {
-    
+
     loadCSVs();
 
     while (!CSVS_LOADED) {
@@ -241,7 +259,7 @@ async function init() {
         .attr('height', lineHeight);
     let lineLabels = ['Asteroid Frequency Over Time'];
     lineChart.append('g').selectAll('text').data(lineLabels).join('text')
-        .attr('x', lineWidth/2 + margin*2)
+        .attr('x', lineWidth / 2 + margin * 2)
         .attr('y', 12)
         .text(d => d);
 
@@ -260,26 +278,20 @@ async function init() {
         .attr('r', 40);
     centerChart.append('text')
         .attr('class', 'loading')
-        .attr('x', centerWidth/2)
-        .attr('y', centerHeight/2)
+        .attr('x', centerWidth / 2)
+        .attr('y', centerHeight / 2)
         .attr('font-size', 20)
         .text('Loading...');
 
-    loadCSVs();
 
     createAverages();
 
-    while (!CSVS_LOADED) {
-        console.log("Waiting for CSV load.")
-        await sleep(1000);
-    }
-
     d3.select('.loading').remove();
-    
+
     // adds functionality to bar chart dropdown
     currNeos = NEO.ALL.slice(0, 200);
     let barSelect = document.getElementById('barSelect')
-    barSelect.onchange = function(event) {
+    barSelect.onchange = function (event) {
         updateBar(currNeos, barSelect.value);
     }
 
@@ -302,7 +314,7 @@ async function init() {
             let currNeos = [];
             for (x of NEO.ALL) {
                 let diff = new Date() - approachDate();
-                let day = Math.floor(diff / (1000*60*60*24));
+                let day = Math.floor(diff / (1000 * 60 * 60 * 24));
                 if (day > x0 && day < x1) {
                     currNeos.push(x);
                 }
