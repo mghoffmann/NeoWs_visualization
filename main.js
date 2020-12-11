@@ -176,6 +176,11 @@ function loadCSVs() {
             })
             .then(() => CSVS_LOADED = true)
     })
+
+    while (!CSVS_LOADED) {
+        console.log("Waiting for CSV load.")
+        await sleep(1000);
+    }
 }
 
 const csvYears = {
@@ -268,11 +273,6 @@ async function init() {
     loadCSVs();
 
     createAverages();
-
-    while (!CSVS_LOADED) {
-        console.log("Waiting for CSV load.")
-        await sleep(1000);
-    }
 
     d3.select('.loading').remove();
     
