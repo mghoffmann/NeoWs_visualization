@@ -287,15 +287,15 @@ async function init() {
         .attr('y', centerHeight / 2)
         .attr('font-size', 20)
         .text('Loading...');
-    centerChart.append('g').attr('class', 'data');
     centerChart.append('g').attr('class', 'orbits');
+    centerChart.append('g').attr('class', 'data');
 
     createAverages();
 
     d3.select('.loading').remove();
 
     // adds functionality to bar chart dropdown
-    currNeos = NEO.ALL.slice(0, 200);
+    currNeos = NEO.ALL;
     let barSelect = document.getElementById('barSelect')
     barSelect.onchange = function (event) {
         updateBar(currNeos, barSelect.value);
