@@ -129,14 +129,14 @@ function updateCenter(neos) {
     // scale for x pos
     let xScale = d3.scaleLinear().domain([0, d3.max(dists.map(a => parseInt(a)))]).range([111, centerWidth - 50]);
     // update orbit circles on chart
-    centerChart.append('g').selectAll('circle').data(dists).join('circle')
+    centerChart.select('.orbits').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
         .attr('cy', centerHeight / 2)
         .attr('r', d => 2000 + xScale(d))
         .style('stroke', 'black')
         .style('fill', 'none');
     // update asteroid circles on chart
-    centerChart.append('g').selectAll('circle').data(dists).join('circle')
+    centerChart.select('.data').selectAll('circle').data(dists).join('circle')
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
         .attr('cy', centerHeight / 2)
@@ -287,6 +287,8 @@ async function init() {
         .attr('y', centerHeight / 2)
         .attr('font-size', 20)
         .text('Loading...');
+    centerChart.append('g').attr('class', 'data');
+    centerChart.append('g').attr('class', 'orbits');
 
     createAverages();
 
