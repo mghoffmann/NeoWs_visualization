@@ -30,15 +30,28 @@ section {
     background-color: white;
 }
 
+.guide {
+    padding: 0 20px 20px 20px;
+}
+
+.guide p {
+    width: 990px;
+}
+
 .infoSection {
+    width: 520px;
     display: flex;
     flex-flow: row wrap;
 }
 
-.infoSection div {
-    display: flex;
-    flex-flow: column wrap;
-    flex-grow: 1;
+.infoSection h2 {
+    width: 400px;
+}
+
+.infoSection p {
+    width: 220px;
+    padding: 0 0 0 20px;
+    margin: 0;
 }
 
 svg {

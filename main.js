@@ -9,7 +9,7 @@ function doHighlighting(className, highlight) {
     }
     if (highlight) {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 3)
+            .attr('r', 4)
             .style('fill', 'cyan');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -19,7 +19,7 @@ function doHighlighting(className, highlight) {
             .style('fill', 'cyan');
     } else {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 2)
+            .attr('r', 3)
             .style('fill', 'gray');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -33,16 +33,18 @@ function doHighlighting(className, highlight) {
 // update bar chart
 function updateBar(neos, attribute) {
     // unscaled bar heights
-    let heights = neos.map(a => attribute == 'Diameter' ? a.estimated_diameter_max_km : a.absolute_magnitude_h);
-
+    let heights = neos.map(a => attribute == 'Diameter' ? parseFloat(a.estimated_diameter_max_km) : parseFloat(a.absolute_magnitude_h));
+    let ids = neos.map(a => a.id);
+    console.log(heights);
     // scale for bar widths
-    let barScale = d3.scaleBand().domain(heights).range([margin * 2, barWidth + margin]).paddingInner(.2);
+    let barScale = d3.scaleBand().domain(ids).range([margin * 2.5, barWidth + margin]).paddingInner(.2);
     // scale for bar heights
-    let heightScale = d3.scaleLinear().domain([d3.max(heights.map(a => parseInt(a))) * 1.04, 0]).range([margin, barHeight + margin]);
+    let heightScale = d3.scaleLinear().domain([d3.max(heights) * 1.04, 0]).range([margin, barHeight + margin]);
     // update bars on chart
+    barChart.selectAll('title').remove();
     barChart.select('.data').attr('transform', 'translate(0, 280) scale(1, -1)').selectAll('rect').data(heights).join('rect')
         .attr('class', (_, i) => 'ast' + i)
-        .attr('x', d => margin / 2 + barScale(d))
+        .attr('x', (_, i) => barScale(ids[i]))
         .attr('y', margin)
         .attr('width', barScale.bandwidth())
         .attr('height', d => barHeight + margin - heightScale(d))
@@ -54,7 +56,7 @@ function updateBar(neos, attribute) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .append('title')
-        .text(d => d3.format('.3s')(d));
+        .text(d => d3.format('.3')(d));
     // update axis
     barChart.select('.axisY').call(d3.axisLeft().scale(heightScale));
     // update bar labels
@@ -73,11 +75,12 @@ function updateScatter(neos) {
     // scale for y pos
     let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => parseInt(a[1]))) * 1.04, 0]).range([margin, scatterHeight + margin]);
     // update circles on chart
+    scatterChart.selectAll('title').remove();
     scatterChart.select('.data').selectAll('circle').data(coords).join('circle')
-        .attr('class', (d, i) => 'ast' + i)
+        .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d[0]))
         .attr('cy', d => yScale(d[1]))
-        .attr('r', 2)
+        .attr('r', 3)
         .style('stroke', 'black')
         .on('mouseover', function () {
             doHighlighting(d3.select(this).attr('class'), true)
@@ -130,6 +133,7 @@ function updateCenter(neos) {
     // scale for x pos
     let xScale = d3.scaleLinear().domain([0, d3.max(dists.map(a => parseInt(a)))]).range([111, centerWidth - 50]);
     // update orbit circles on chart
+    centerChart.selectAll('title').remove();
     centerChart.select('.orbits').selectAll('circle').data(dists).join('circle')
         .attr('cx', -2000)
         .attr('cy', centerHeight / 2)
@@ -150,17 +154,20 @@ function updateCenter(neos) {
         .on('mouseout', function () {
             doHighlighting(d3.select(this).attr('class'), false)
         })
+        .on('click', function(_, i) {
+            updateInfo(neos[i]);
+        })
         .append('title')
         .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
 }
 
 // update info section
-function updateInfo(neos) {
-    //let infoSection = d3.select('#infoSection');
-    //let neos = NEO.ALL.slice(0, 3);
-    //console.log(neos);
-    //infoSection.selectAll('div').data(neos).join('div')
-    //    .html(function(d, i) { return '<h2>Asteroid ' + (i + 1) + '</h2><h4>Magnitude: ' + d.absolute_magnitude_h + '</h4><h4>Diameter: ' + d.estimated_diameter_max + '</h4>'; });
+function updateInfo(neo) {
+    infoSection.select('.name').text('Asteroid ' + neo.name);
+    infoSection.select('.id').text('ID: ' + neo.id);
+    infoSection.select('.diameter1').text('Min Diameter: ' + d3.format('.2e')(neo.estimated_diameter_min_km).replace('+', '') + ' km');
+    infoSection.select('.diameter2').text('Max Diameter: ' + d3.format('.2e')(neo.estimated_diameter_max_km).replace('+', '') + ' km');
+    infoSection.select('.magnitude').text('Magnitude: ' + d3.format('.3s')(neo.absolute_magnitude_h) + ' h');
 }
 
 function sleep(ms) {
@@ -276,6 +283,13 @@ async function init() {
     centerChart.append('g').attr('class', 'orbits');
     centerChart.append('g').attr('class', 'data');
 
+    infoSection = d3.select('.infoSection');
+    infoSection.append('h2').attr('class', 'name');
+    let fields = ['id', 'magnitude', 'diameter1', 'diameter2'];
+    for (x of fields) {
+        infoSection.append('p').attr('class', x);
+    }
+
     loadCSVs();
     while (!CSVS_LOADED) {
         console.log("Waiting for CSV load.")
@@ -289,7 +303,8 @@ async function init() {
     // adds functionality to bar chart dropdown
     currNeos = NEO.ALL;
     let barSelect = document.getElementById('barSelect')
-    barSelect.onchange = function (event) {
+    barSelect.onchange = function () {
+        console.log(barSelect.value);
         updateBar(currNeos, barSelect.value);
     }
 
@@ -297,7 +312,7 @@ async function init() {
     updateCenter(currNeos);
     updateBar(currNeos, barSelect.value);
     updateScatter(currNeos);
-    updateInfo(currNeos);
+    updateInfo(currNeos[0]);
     updateLine();
 
     // brush for frequency chart
@@ -309,7 +324,7 @@ async function init() {
         .on('end', () => {
             let x0 = 365 * d3.event.selection[0] / lineWidth;
             let x1 = 365 * d3.event.selection[1] / lineWidth;
-            let currNeos = [];
+            currNeos = [];
             for (x of NEO.ALL) {
                 let day = x.getApproaches()[0].date;
                 let diff = day - new Date(day.getFullYear(), 0, 0);
@@ -320,9 +335,8 @@ async function init() {
             }
 
             updateCenter(currNeos);
-            updateBar(currNeos);
+            updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
-            updateInfo(currNeos);
         });
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
@@ -353,9 +367,8 @@ async function init() {
 
             currNeos = asteroids;
             updateCenter(currNeos);
-            updateBar(currNeos);
+            updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
-            updateInfo(currNeos);
         });
     box1.append("g").attr("class", "brush").call(brush1);
 
@@ -386,9 +399,8 @@ async function init() {
 
             currNeos = asteroids;
             updateCenter(currNeos);
-            updateBar(currNeos);
+            updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
-            updateInfo(currNeos);
         });
     box2.append("g").attr("class", "brush").call(brush2);
 }
