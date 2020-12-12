@@ -35,7 +35,6 @@ function updateBar(neos, attribute) {
     // unscaled bar heights
     let heights = neos.map(a => attribute == 'Diameter' ? parseFloat(a.estimated_diameter_max_km) : parseFloat(a.absolute_magnitude_h));
     let ids = neos.map(a => a.id);
-    console.log(heights);
     // scale for bar widths
     let barScale = d3.scaleBand().domain(ids).range([margin * 2.5, barWidth + margin]).paddingInner(.2);
     // scale for bar heights
@@ -71,7 +70,7 @@ function updateScatter(neos) {
     let coords = closest.map(a => [a.miss_distance_km, a.relative_velocity_kph]);
 
     // scale for x pos
-    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => parseInt(a[0]))) * 1.04]).range([margin * 2, scatterWidth + margin * 2]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(coords.map(a => parseInt(a[0]))) * 1.01]).range([margin * 2, scatterWidth + margin * 2]);
     // scale for y pos
     let yScale = d3.scaleLinear().domain([d3.max(coords.map(a => parseInt(a[1]))) * 1.04, 0]).range([margin, scatterHeight + margin]);
     // update circles on chart
@@ -304,7 +303,6 @@ async function init() {
     currNeos = NEO.ALL;
     let barSelect = document.getElementById('barSelect')
     barSelect.onchange = function () {
-        console.log(barSelect.value);
         updateBar(currNeos, barSelect.value);
     }
 
@@ -314,6 +312,11 @@ async function init() {
     updateScatter(currNeos);
     updateInfo(currNeos[0]);
     updateLine();
+    
+    // brush for attribute 1
+    let box1 = d3.select("#svgBrush1");
+    // brush for attribute 2
+    let box2 = d3.select("#svgBrush2");
 
     // brush for frequency chart
     let brushH = d3.brushX()
@@ -322,6 +325,8 @@ async function init() {
             [lineWidth + margin * 2, lineHeight + margin + 1]
         ])
         .on('end', () => {
+            box1.selectAll('.selection, .handle').attr('style', 'display: none;');
+            box2.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = 365 * d3.event.selection[0] / lineWidth;
             let x1 = 365 * d3.event.selection[1] / lineWidth;
             currNeos = [];
@@ -340,8 +345,6 @@ async function init() {
         });
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
 
-    // brush for attribute 1
-    let box1 = d3.select("#svgBrush1");
     box1.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
         .attr('y', 30)
@@ -353,27 +356,25 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
+            box2.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
 
-            let yScale = d3.scaleLinear().domain([290, 10]).range([0, d3.max(currNeos.map(a => a.estimated_diameter_max_km))]);
+            let yScale = d3.scaleLinear().domain([0, d3.max(currNeos.map(a => parseFloat(a.estimated_diameter_max_km)))]).range([290, 10]);
             let asteroids = [];
             for (x of currNeos) {
-                let temp = yScale(x.estimated_diameter_max_km);
+                let temp = yScale(parseFloat(x.estimated_diameter_max_km));
                 if (temp > x0 && temp < x1) {
                     asteroids.push(x);
                 }
             }
 
-            currNeos = asteroids;
-            updateCenter(currNeos);
-            updateBar(currNeos, barSelect.value);
-            updateScatter(currNeos);
+            updateCenter(asteroids);
+            updateBar(asteroids, barSelect.value);
+            updateScatter(asteroids);
         });
     box1.append("g").attr("class", "brush").call(brush1);
 
-    // brush for attribute 2
-    let box2 = d3.select("#svgBrush2");
     box2.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
         .attr('y', 30)
@@ -385,22 +386,22 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
+            box1.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
             
-            let yScale = d3.scaleLinear().domain([290, 10]).range([0, d3.max(currNeos.map(a => a.relative_velocity_kph))]);
+            let yScale = d3.scaleLinear().domain([0, d3.max(currNeos.map(a => parseFloat(a.getApproaches()[0].relative_velocity_kph)))]).range([290, 10]);
             let asteroids = [];
             for (x of currNeos) {
-                let temp = yScale(x.relative_velocity_kph);
+                let temp = yScale(parseFloat(x.getApproaches()[0].relative_velocity_kph));
                 if (temp > x0 && temp < x1) {
                     asteroids.push(x);
                 }
             }
 
-            currNeos = asteroids;
-            updateCenter(currNeos);
-            updateBar(currNeos, barSelect.value);
-            updateScatter(currNeos);
+            updateCenter(asteroids);
+            updateBar(asteroids, barSelect.value);
+            updateScatter(asteroids);
         });
     box2.append("g").attr("class", "brush").call(brush2);
 }
