@@ -113,12 +113,12 @@ function updateLine() {
     let dateScale = d3.scaleLinear().domain(dateRange).range([margin*2, lineWidth + margin*2]);
     lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b')));
+        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %d')));
     lineChart.append('g').attr('transform', 'translate(' + margin*2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
     // update labels
-    let lineLabels = ['Asteroid Frequency Over Time', 'Date', 'NEOs per Day'];
+    let lineLabels = ['Annual Asteroid Frequency', 'Day of the Year', 'Number of NEOs'];
     setLabels(lineChart, lineLabels, lineWidth, lineHeight);
 }
 
@@ -210,7 +210,7 @@ const csvYears = {
         end: 2040
     },
 };
-const years = csvYears["5 year"];
+const years = csvYears["1 year"];
 
 function chartSetup(chart, width, height) {
     chart.append('rect')
@@ -307,8 +307,8 @@ async function init() {
             [lineWidth + margin * 2, lineHeight + margin + 1]
         ])
         .on('end', () => {
-            let x0 = d3.event.selection[0];
-            let x1 = d3.event.selection[1];
+            let x0 = 365 * d3.event.selection[0] / lineWidth;
+            let x1 = 365 * d3.event.selection[1] / lineWidth;
             let currNeos = [];
             for (x of NEO.ALL) {
                 let day = x.getApproaches()[0].date;
