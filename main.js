@@ -296,7 +296,7 @@ async function init() {
         await sleep(1000);
     }
 
-    createAverages();
+    //createAverages();
 
     d3.select('.loading').text('No Asteroids Found');
 

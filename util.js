@@ -172,38 +172,44 @@ function requestNEOs(startDate, endDate, onload) {
         })
 }
 
-const ApproachAverages = []
+const ApproachAverages = [
+    12.5, 8, 8, 8, 8.5, 10.5, 10, 11, 7.5, 11.5, 8, 13, 8, 8.5, 12, 11, 10, 8, 9.5, 8.5, 13, 9.5, 6.5, 12.5, 11.5, 11.5, 11.5, 10.5, 10, 14.5, 7.5, 9.5, 12.5, 11.5, 9.5, 11, 9.5, 5.5, 10.5, 13, 9, 12, 7.5, 7, 12.5, 10.5, 6, 11.5, 11.5, 11.5, 6.5, 9.5, 13.5, 11, 6.5, 9.5, 9, 9.5, 11, 18, 6, 6.5, 10, 9.5, 9, 6, 6, 5.5, 8.5, 5.5, 7.5, 11.5, 5, 7, 8, 5, 8, 6, 8, 13.5, 6, 10, 8.5, 7, 12, 6, 9.5, 6.5, 9, 10, 5.5, 7.5, 5.5, 6.5, 8.5, 9.5, 10, 9, 7, 9.5, 12.5, 12, 8, 9.5, 11, 5.5, 9.5, 5.5, 13, 9, 12, 14.5, 8, 11.5, 8.5, 9, 11, 8, 10, 7.5, 10.5, 9, 11, 14, 9, 6.5, 6.5, 6, 5, 5.5, 6, 5.5, 10, 11, 5, 11.5, 6, 6.5, 5.5, 9.5, 5, 8, 8.5, 8, 7.5, 5.5, 8.5, 6.5, 11.5, 4.5, 8.5, 10, 8.5, 10.5, 5.5, 6.5, 9, 4.5, 6, 7.5, 8.5, 4, 5, 8, 6.5, 5.5, 10.5, 5.5, 5.5, 8.5, 5, 8.5, 6, 5.5, 8, 8.5, 4.5, 9, 7, 5, 8, 6.5, 6, 6, 6.5, 8, 8, 5, 6.5, 5.5, 8.5, 6, 6.5, 7, 9, 5.5, 9.5, 5, 6.5, 8.5, 9.5, 8, 8, 8.5, 8.5, 8, 11, 6.5, 9.5, 7.5, 9, 8, 10, 8, 8, 9, 12.5, 6.5, 8, 6.5, 9.5, 6.5, 10, 4, 13, 7, 6.5, 5, 8, 10, 9, 11, 13, 11, 9.5, 7, 10, 9.5, 8.5, 8, 6, 7.5, 7.5, 8, 9.5, 7, 8, 13, 7.5, 11.5, 10, 13, 12.5, 12.5, 11, 12, 13, 13.5, 11.5, 10.5, 15.5, 10.5, 17.5, 11.5, 12.5, 10, 13, 12, 9, 11.5, 10.5, 10, 10.5, 9.5, 9.5, 10.5, 5.5, 11.5, 9, 13.5, 8, 11.5, 10.5, 10, 8.5, 11, 11, 14.5, 9, 10, 17, 11, 17, 12.5, 8, 11, 8.5, 15, 11, 10.5, 8.5, 12.5, 10.5, 9, 9.5, 10, 9.5, 8, 11.5, 9, 8.5, 13, 9, 9.5, 12, 7.5, 5.5, 11, 11.5, 11, 10, 11, 10.5, 7.5, 11.5, 6, 8, 8.5, 10, 12, 4, 7.5, 5.5, 9.5, 9.5, 7.5, 13, 8.5, 6.5, 4, 9, 7, 9, 3, 2.5, 8, 4.5, 4, 5.5, 7, 7.5, 4.5, 7, 6.5, 6, 4.5, 5, 3.5, 7, 6.5, 6.5, 4.5, 7.5, 5.5, 4.5, 2
+]
+
 function createAverages() {
 
     // Get a sorted array of all the Dates
     //  And then remove the top one
-    sortedKeys = Object.keys(Approach.BY_DATE).sort((a,b)=>new Date(a) - new Date(b))
+    sortedKeys = Object.keys(Approach.BY_DATE).sort((a, b) => new Date(a) - new Date(b))
     sortedKeys.shift()
     // Count the Approaches on each day
-    countsPerDay = sortedKeys.map(sk=>[sk, Approach.BY_DATE[sk].length])
-    
+    countsPerDay = sortedKeys.map(sk => [sk, Approach.BY_DATE[sk].length])
+
     let ave_obj = {}
     countsPerDay.forEach(row => {
         let day = row[0].slice(5)
 
         if (ave_obj[day] === undefined) {
-            ave_obj[day] = { amount: 1, sum: row[1] }
+            ave_obj[day] = {
+                amount: 1,
+                sum: row[1]
+            }
         } else {
             ave_obj[day].amount++;
             ave_obj[day].sum += row[1];
         }
     })
-    
+
     Object.entries(ave_obj)
-    .forEach(entry => 
-        ApproachAverages.push(( entry[1].sum / entry[1].amount ))
-    );
+        .forEach(entry =>
+            ApproachAverages.push((entry[1].sum / entry[1].amount))
+        );
     // console.log(ApproachAverages)
 
 
     // var start = new Date(2000, 0, 1);
     // var end   = new Date(2000, 0, 21);
-    
+
     // let last = new Date(start.getTime())
     // var d = new Date(last.getTime())
     // d.setDate(d.getDate() + 10)
