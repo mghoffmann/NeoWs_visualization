@@ -328,8 +328,8 @@ async function init() {
         .on('end', () => {
             box1.selectAll('.selection, .handle').attr('style', 'display: none;');
             box2.selectAll('.selection, .handle').attr('style', 'display: none;');
-            let x0 = 365 * d3.event.selection[0] / lineWidth;
-            let x1 = 365 * d3.event.selection[1] / lineWidth;
+            let x0 = (365 * d3.event.selection[0] / lineWidth) - margin;
+            let x1 = (365 * d3.event.selection[1] / lineWidth) - margin;
             currNeos = [];
             for (x of NEO.ALL) {
                 let day = x.getApproaches()[0].date;
