@@ -54,7 +54,7 @@ function updateBar(neos, attribute) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .append('title')
-        .text(d => d);
+        .text(d => d3.format('.3s')(d));
     // update axis
     barChart.select('.axisY').call(d3.axisLeft().scale(heightScale));
     // update bar labels
@@ -86,7 +86,7 @@ function updateScatter(neos) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .append('title')
-        .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
+        .text(d => 'dist: ' + d3.format('.3s')(d[0]) + ' vel: ' + d3.format('.3s')(d[1]));
     // update x axis
     scatterChart.select('.axisX').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.2s')));
     // update y axis
