@@ -109,11 +109,11 @@ function updateLine() {
         .attr('stroke', 'black');
     
     // update axes
-    let dateRange = [new Date('2019').getTime(), new Date('2022').getTime()];
+    let dateRange = [new Date('2019').getTime(), new Date('2020').getTime()];
     let dateScale = d3.scaleLinear().domain(dateRange).range([margin*2, lineWidth + margin*2]);
     lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
         .attr('class', 'axis')
-        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %Y')));
+        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b')));
     lineChart.append('g').attr('transform', 'translate(' + margin*2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
@@ -237,8 +237,6 @@ function setLabels(chart, labels, width, height) {
 }
 
 async function init() {
-    loadCSVs();
-
     // adds basic elements to each chart
     margin = 20;
     barChart = d3.select('#svgBar');
@@ -278,6 +276,7 @@ async function init() {
     centerChart.append('g').attr('class', 'orbits');
     centerChart.append('g').attr('class', 'data');
 
+    loadCSVs();
     while (!CSVS_LOADED) {
         console.log("Waiting for CSV load.")
         await sleep(1000);
@@ -312,8 +311,9 @@ async function init() {
             let x1 = d3.event.selection[1];
             let currNeos = [];
             for (x of NEO.ALL) {
-                let diff = new Date() - x.getApproaches()[0].date;
-                let day = Math.floor(diff / (1000 * 60 * 60 * 24));
+                let day = x.getApproaches()[0].date;
+                let diff = day - new Date(day.getFullYear(), 0, 0);
+                day = Math.floor(diff / (1000 * 60 * 60 * 24));
                 if (day > x0 && day < x1) {
                     currNeos.push(x);
                 }
