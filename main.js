@@ -56,13 +56,10 @@ function updateBar(neos, attribute) {
         .append('title')
         .text(d => d);
     // update axis
-    barChart.select('.axis').call(d3.axisLeft().scale(heightScale));
+    barChart.select('.axisY').call(d3.axisLeft().scale(heightScale));
     // update bar labels
-    let barLabels = [attribute == 'Diameter' ? 'Asteroid Diameter (km)' : 'Asteroid Relative Magnitude'];
-    barChart.select('.labels').selectAll('text').data(barLabels).join('text')
-        .attr('x', barWidth / 2 + margin)
-        .attr('y', 12)
-        .text(d => d);
+    let barLabels = attribute == 'Diameter' ? ['Asteroid Diameter', 'Asteroid', 'Diameter (km)'] : ['Asteroid Magnitude', 'Asteroid', 'Relative Magnitude'];
+    setLabels(barChart, barLabels, barWidth, barHeight);
 }
 
 // updates scatter chart
@@ -91,37 +88,38 @@ function updateScatter(neos) {
         .append('title')
         .text(d => 'dist: ' + d[0] + ' vel: ' + d[1]);
     // update x axis
-    scatterChart.select('.axis1').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.2s')));
+    scatterChart.select('.axisX').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.2s')));
     // update y axis
-    scatterChart.select('.axis2').call(d3.axisLeft().scale(yScale).tickFormat(d3.format('.2s')));
+    scatterChart.select('.axisY').call(d3.axisLeft().scale(yScale).tickFormat(d3.format('.2s')));
+    // update labels
+    let scatterLabels = ['Asteroid Passing Velocity by Distance from Earth', 'Distance (km)', 'Velocity (kph)'];
+    setLabels(scatterChart, scatterLabels, scatterWidth, scatterHeight);
 }
 
 // update line chart
 function updateLine() {
-    // get dates
-    let sortedDates = Approach.ALL.map(a => a.date).sort((a, b) => a.getTime() - b.getTime())
-    let minDate = sortedDates[0]
-    let maxDate = sortedDates[sortedDates.length - 1]
-
     let data = ApproachAverages;
-    console.log('x');
-    
     let xScale = d3.scaleLinear().domain([0, 365]).range([margin*2, lineWidth + margin*2]);
     let yScale = d3.scaleLinear().domain([d3.max(data) * 1.04, 0]).range([margin, lineHeight + margin]);
     data = data.map((d, i) => [xScale(i), yScale(d)])
+
+    // update line on chart
+    lineChart.append('path')
+        .attr('d', d3.line()(data))
+        .attr('stroke', 'black');
     
-    let dateScale = d3.scaleLinear().domain([minDate, maxDate]).range([margin*2, lineWidth + margin*2]);
+    // update axes
+    let dateRange = [new Date('2019').getTime(), new Date('2022').getTime()];
+    let dateScale = d3.scaleLinear().domain(dateRange).range([margin*2, lineWidth + margin*2]);
     lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
         .attr('class', 'axis')
         .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %Y')));
     lineChart.append('g').attr('transform', 'translate(' + margin*2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
-
-    // update line on chart
-    lineChart.append('path')
-        .attr('d', d3.line()(data))
-        .attr('stroke', 'black');
+    // update labels
+    let lineLabels = ['Asteroid Frequency Over Time', 'Date', 'NEOs per Day'];
+    setLabels(lineChart, lineLabels, lineWidth, lineHeight);
 }
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
@@ -214,62 +212,49 @@ const csvYears = {
 };
 const years = csvYears["5 year"];
 
+function chartSetup(chart, width, height) {
+    chart.append('rect')
+        .attr('x', margin * 2)
+        .attr('y', margin)
+        .attr('width', width)
+        .attr('height', height);
+    chart.append('g').attr('class', 'data');
+    chart.append('g').attr('class', 'labels');
+    chart.append('g').attr('transform', 'translate(0, ' + (height + margin) + ')')
+        .attr('class', 'axis axisX');
+    chart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
+        .attr('class', 'axis axisY');
+}
+
+function setLabels(chart, labels, width, height) {
+    labelX = [width/2 + margin*2, width/2 + margin*2, -height/2 - margin];
+    labelY = [12, height + margin*2 + 12, 12];
+    chart.select('.labels').selectAll('text').data(labels).join('text')
+        .attr('transform', (_, i) => 'rotate(' + [0, 0, -90][i] + ')')
+        .attr('x', (_, i) => labelX[i])
+        .attr('y', (_, i) => labelY[i])
+        .text(d => d);
+}
+
 async function init() {
-
     loadCSVs();
-
-    while (!CSVS_LOADED) {
-        console.log("Waiting for CSV load.")
-        await sleep(1000);
-    }
 
     // adds basic elements to each chart
     margin = 20;
     barChart = d3.select('#svgBar');
     barWidth = barChart.node().getBoundingClientRect().width - margin * 3;
     barHeight = barChart.node().getBoundingClientRect().height - margin * 3;
-    barChart.append('rect')
-        .attr('x', margin * 2)
-        .attr('y', margin)
-        .attr('width', barWidth)
-        .attr('height', barHeight);
-    barChart.append('g').attr('class', 'data');
-    barChart.append('g').attr('class', 'labels');
-    barChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
-        .attr('class', 'axis');
+    chartSetup(barChart, barWidth, barHeight);
 
     scatterChart = d3.select('#svgScatter');
     scatterWidth = scatterChart.node().getBoundingClientRect().width - margin * 3;
     scatterHeight = scatterChart.node().getBoundingClientRect().height - margin * 3;
-    scatterChart.append('rect')
-        .attr('x', margin * 2)
-        .attr('y', margin)
-        .attr('width', scatterWidth)
-        .attr('height', scatterHeight);
-    let scatterLabels = ['Asteroid Passing Velocity (kph) by Distance from Earth (km)'];
-    scatterChart.append('g').attr('class', 'data');
-    scatterChart.append('g').selectAll('text').data(scatterLabels).join('text')
-        .attr('x', scatterWidth / 2 + margin)
-        .attr('y', 12)
-        .text(d => d);
-    scatterChart.append('g').attr('transform', 'translate(0, ' + (scatterHeight + margin) + ')')
-        .attr('class', 'axis axis1');
-    scatterChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
-        .attr('class', 'axis axis2');
+    chartSetup(scatterChart, scatterWidth, scatterHeight);
 
     lineChart = d3.select('#svgLine');
     lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
     lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
-    lineChart.append('rect')
-        .attr('x', margin * 2)
-        .attr('y', margin)
-        .attr('width', lineWidth)
-        .attr('height', lineHeight);
-    let lineLabels = ['Asteroid Frequency Over Time'];
-    lineChart.append('g').selectAll('text').data(lineLabels).join('text')
-        .attr('x', lineWidth / 2 + margin * 2)
-        .attr('y', 12)
-        .text(d => d);
+    chartSetup(lineChart, lineWidth, lineHeight);
 
     centerChart = d3.select('#svgCenter');
     centerWidth = centerChart.node().getBoundingClientRect().width;
@@ -292,6 +277,11 @@ async function init() {
         .text('Loading...');
     centerChart.append('g').attr('class', 'orbits');
     centerChart.append('g').attr('class', 'data');
+
+    while (!CSVS_LOADED) {
+        console.log("Waiting for CSV load.")
+        await sleep(1000);
+    }
 
     createAverages();
 
