@@ -103,17 +103,20 @@ function updateLine() {
     let minDate = sortedDates[0]
     let maxDate = sortedDates[sortedDates.length - 1]
 
-    let dateScale = d3.scaleLinear().domain([minDate, maxDate]).range([margin*2, lineWidth + margin*2]);
-    lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
-        .attr('class', 'axis')
-        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %Y')));
-
     let data = ApproachAverages;
     console.log('x');
     
     let xScale = d3.scaleLinear().domain([0, 365]).range([margin*2, lineWidth + margin*2]);
     let yScale = d3.scaleLinear().domain([d3.max(data) * 1.04, 0]).range([margin, lineHeight + margin]);
     data = data.map((d, i) => [xScale(i), yScale(d)])
+    
+    let dateScale = d3.scaleLinear().domain([minDate, maxDate]).range([margin*2, lineWidth + margin*2]);
+    lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
+        .attr('class', 'axis')
+        .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %Y')));
+    lineChart.append('g').attr('transform', 'translate(' + margin*2 + ', 0)')
+        .attr('class', 'axis')
+        .call(d3.axisLeft().scale(yScale));
 
     // update line on chart
     lineChart.append('path')
