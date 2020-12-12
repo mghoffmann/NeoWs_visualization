@@ -33,7 +33,7 @@ function doHighlighting(className, highlight) {
 // update bar chart
 function updateBar(neos, attribute) {
     // unscaled bar heights
-    let heights = neos.map(a => attribute == 'Diameter' ? parseFloat(a.estimated_diameter_max_km) : parseFloat(a.absolute_magnitude_h));
+    let heights = neos.map(a => attribute == 'Diameter' ? (parseFloat(a.estimated_diameter_min_km) + parseFloat(a.estimated_diameter_max_km)) / 2 : parseFloat(a.absolute_magnitude_h));
     let ids = neos.map(a => a.id);
     // scale for bar widths
     let barScale = d3.scaleBand().domain(ids).range([margin * 2.5, barWidth + margin]).paddingInner(.2);
@@ -59,7 +59,7 @@ function updateBar(neos, attribute) {
     // update axis
     barChart.select('.axisY').call(d3.axisLeft().scale(heightScale));
     // update bar labels
-    let barLabels = attribute == 'Diameter' ? ['Asteroid Diameter', 'Asteroid', 'Diameter (km)'] : ['Asteroid Magnitude', 'Asteroid', 'Relative Magnitude'];
+    let barLabels = attribute == 'Diameter' ? ['Average Asteroid Diameter', 'Asteroid', 'Diameter (km)'] : ['Asteroid Magnitude', 'Asteroid', 'Relative Magnitude'];
     setLabels(barChart, barLabels, barWidth, barHeight);
 }
 
@@ -128,6 +128,7 @@ function updateLine() {
 function updateCenter(neos) {
     // unscaled distances from earth
     let dists = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
+    d3.select('.loading').attr('style', dists.length == 0 ? 'display: auto;' : 'display: none;');
 
     // scale for x pos
     let xScale = d3.scaleLinear().domain([0, d3.max(dists.map(a => parseInt(a)))]).range([111, centerWidth - 50]);
@@ -297,7 +298,7 @@ async function init() {
 
     createAverages();
 
-    d3.select('.loading').remove();
+    d3.select('.loading').text('No Asteroids Found');
 
     // adds functionality to bar chart dropdown
     currNeos = NEO.ALL;
