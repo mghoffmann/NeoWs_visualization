@@ -177,10 +177,18 @@ const InfoPanelMapping = [
 
 // update info section with info on the given NEO
 // and class the index'th mark on all the charts as selected
+infoNEO = null;
 function updateInfo(neo, index) {
     if (neo == null) {
-        infoSection.node().innerHTML = "Cick an item in the charts to see details."
+        infoSection.node().innerHTML = "<h2>Cick an item in the charts to see details.</h2>"
+        infoNEO = null;
         return;
+    }
+    // Recreate all the elements if they were nullified by the last update
+    else if (infoNEO == null) {
+        for (mapping of InfoPanelMapping) {
+            infoSection.append(x[0] == 'name' ? 'h2' : 'p').attr('class', mapping[0]);
+        }
     }
     
     for (mapping of InfoPanelMapping) {
@@ -200,6 +208,7 @@ function updateInfo(neo, index) {
         .style('stroke', 'darkred')
         .style('stroke-width', '3')
         .classed('info-selected', true)
+    infoNEO = neo;
 }
 
 function sleep(ms) {
@@ -321,9 +330,6 @@ async function init() {
     centerChart.append('g').attr('class', 'data');
 
     infoSection = d3.select('.infoSection');
-    for (x of InfoPanelMapping) {
-        infoSection.append(x[0] == 'name' ? 'h2' : 'p').attr('class', x[0]);
-    }
 
     loadCSVs();
     while (!CSVS_LOADED) {
@@ -346,7 +352,7 @@ async function init() {
     updateCenter(currNeos);
     updateBar(currNeos, barSelect.value);
     updateScatter(currNeos);
-    updateInfo(currNeos[0], 0);
+    updateInfo(null);
     updateLine();
 
     // brush for attribute 1
@@ -378,6 +384,7 @@ async function init() {
             updateCenter(currNeos);
             updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
+            updateInfo(null, null);
         });
 
 

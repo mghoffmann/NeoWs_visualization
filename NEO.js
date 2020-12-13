@@ -80,6 +80,7 @@ class NEO {
             "orbit_class_range");
 
         this.estimated_diameter_median_km = (this.estimated_diameter_min_km + this.estimated_diameter_max_km) / 2.0;
+        this.discovery_weekday = getDayOfWeek(new Date(this.first_observation_date));
 
         NEO.INTERN[csvRow.id] = this;
         NEO.ALL.push(this)

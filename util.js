@@ -7,8 +7,17 @@ function isNumeric(str) {
         !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
 }
 
+// Returns whether the string is 'true' or 'false' or some differently-cased variation of one of those.
 function isBoolean(str) {
     return ("" + str).toLowerCase() == "false" || ("" + str).toLowerCase() == "true";
+}
+
+// Copied from Stackoverflow user Samuel Liew♦:
+// https://stackoverflow.com/a/17964373/539997
+// Accepts a Date object or date string that is recognized by the Date.parse() method
+function getDayOfWeek(date) {
+    const dayOfWeek = new Date(date).getDay();
+    return isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
 }
 
 function mapProperties(source, target, ...propertyNames) {
@@ -145,14 +154,14 @@ function zeroFill(number, width = 2) {
 function getMinMax() {
     let maxSeparation = 60;
     let minSeparation = 20;
-    let max = d3.randomUniform( (margin*2) + minSeparation, lineWidth )();  // random between 60 and lineWidth
-    let min = d3.randomUniform( (margin*2), max - minSeparation)();  // random between 40 and the max - 20
+    let max = d3.randomUniform((margin * 2) + minSeparation, lineWidth)(); // random between 60 and lineWidth
+    let min = d3.randomUniform((margin * 2), max - minSeparation)(); // random between 40 and the max - 20
 
     if (max - min > maxSeparation) {
         min = max - maxSeparation
     }
 
-    return [ min, max ];
+    return [min, max];
 }
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
