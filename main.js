@@ -33,7 +33,7 @@ function doHighlighting(className, highlight, r=3) {
 // update bar chart
 function updateBar(neos, attribute) {
     // unscaled bar heights
-    let heights = neos.map(a => attribute == 'Diameter' ? (parseFloat(a.estimated_diameter_min_km) + parseFloat(a.estimated_diameter_max_km)) / 2 : parseFloat(a.absolute_magnitude_h));
+    let heights = neos.map(a => attribute == 'Diameter' ? a.estimated_diameter_median_km : a.absolute_magnitude_h);
     let ids = neos.map(a => a.id);
     // scale for bar widths
     let barScale = d3.scaleBand().domain(ids).range([margin * 2.5, barWidth + margin]).paddingInner(.2);
@@ -55,15 +55,27 @@ function updateBar(neos, attribute) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .on('click', function (_, i) {
-            updateInfo(neos[i]);
+            updateInfo(neos[i], i);
         })
         .append('title')
         .text(d => d3.format('.3')(d));
     // update axis
     barChart.select('.axisY').call(d3.axisLeft().scale(heightScale));
     // update bar labels
-    let barLabels = attribute == 'Diameter' ? ['Average Asteroid Diameter', 'Asteroid', 'Diameter (km)'] : ['Asteroid Magnitude', 'Asteroid', 'Relative Magnitude'];
+    let barLabels = getBarLabels(attribute)
+
     setLabels(barChart, barLabels, barWidth, barHeight);
+}
+
+function getBarLabels(attribute) {
+    switch (attribute) {
+        case 'Diameter':
+            return ['Asteroid Diameter (median of estimates)', 'Asteroid', 'Diameter (km)']
+        case 'Magnitude':
+            return ['Asteroid Absolute Magnitude', 'Asteroid', 'Absolute Magnitude']
+        default:
+            break;
+    }
 }
 
 // updates scatter chart
@@ -91,7 +103,7 @@ function updateScatter(neos) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .on('click', function (_, i) {
-            updateInfo(neos[i]);
+            updateInfo(neos[i], i);
         })
         .append('title')
         .text(d => 'dist: ' + d3.format('.3s')(d[0]) + ' vel: ' + d3.format('.3s')(d[1]));
@@ -126,7 +138,7 @@ function updateLine() {
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
     // update labels
-    let lineLabels = ['Annual Asteroid Frequency', 'Day of the Year', 'NEOs per day'];
+    let lineLabels = ['Asteroid Frequency per Month', 'Day of the Year', 'NEOs per day'];
     setLabels(lineChart, lineLabels, lineWidth, lineHeight);
 }
 
@@ -169,19 +181,66 @@ function updateCenter(neos) {
             doHighlighting(d3.select(this).attr('class'), false, d3.select(this).attr("r"))
         })
         .on('click', function (_, i) {
-            updateInfo(neos[i]);
+            updateInfo(neos[i], i);
         })
         .append('title')
         .text(d => 'dist: ' + d3.format('.2e')(d.miss).replace('+', ''));
 }
 
-// update info section
-function updateInfo(neo) {
-    infoSection.select('.name').text('Asteroid ' + neo.name);
-    infoSection.select('.id').text('ID: ' + neo.id);
-    infoSection.select('.diameter1').text('Min Diameter: ' + d3.format('.2e')(neo.estimated_diameter_min_km).replace('+', '') + ' km');
-    infoSection.select('.diameter2').text('Max Diameter: ' + d3.format('.2e')(neo.estimated_diameter_max_km).replace('+', '') + ' km');
-    infoSection.select('.magnitude').text('Magnitude: ' + d3.format('.3s')(neo.absolute_magnitude_h) + ' h');
+// An array of arrays that defines the info panel.
+// 0: A name to class the element that contains the field
+// 1: A function that takes a value and converts it to a string for the user
+// 2: The name of a field in NEO. Leave this out or give null if it's the same as the class name.
+const InfoPanelMapping = [
+    ['name', v => `Name: ${v}`],
+    ['id', v => `NeoWS ID: <a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=${v}" target="blank" title="View this object in JPL's small-body database">${v}</a>`],
+    ['diameter', v => `Estimated Diameter: ${d3.format('.2e')(v).replace('+', '')} km`, 'estimated_diameter_median_km'],
+    ['first_observation', v => `First observation: ${getPrettyDateString(new Date(v))}`, 'first_observation_date'],
+    ['last_observation', v => `Last observation: ${getPrettyDateString(new Date(v))}`, 'last_observation_date'],
+    ['magnitude', v => `<a href="https://en.wikipedia.org/wiki/Absolute_magnitude">Absolute Magnitude</a>: ${d3.format('.3s')(v)} h`, 'absolute_magnitude_h'],
+    ['is_hazardous', v => `Potentially Hazardous: ${v? 'Yes': 'No' }`, 'is_potentially_hazardous'],
+    ['closest_approach', v => `Closest approach: ${getPrettyDateString(v)}`, 'close_approach_date'],
+    ['miss_distance', v => `Closest distance: ${d3.format('.2e')(v).replace('+', '')} km`, 'miss_distance_km'],
+    ['orbital_period', v => `Sidereal orbital period: ${Math.floor(v)} day${Math.floor(v) == 1 ? '' : 's'}`],
+]
+
+// update info section with info on the given NEO
+// and class the index'th mark on all the charts as selected
+infoNEO = null;
+
+function updateInfo(neo, index) {
+    if (neo == null) {
+        infoSection.node().innerHTML = "<h2>Cick an item in the charts to see details.</h2>"
+        infoNEO = null;
+        return;
+    }
+    // Recreate all the elements if they were nullified by the last update
+    // or if this is the first update
+    else if (infoNEO == null) {
+        infoSection.node().innerHTML = "";
+        for (mapping of InfoPanelMapping) {
+            infoSection.append(mapping[0] == 'name' ? 'h2' : 'p').attr('class', mapping[0]);
+        }
+    }
+
+    for (mapping of InfoPanelMapping) {
+        let panelClass = mapping[0]
+        let formatter = mapping[1]
+        let propertyName = mapping[2] == null ? mapping[0] : mapping[2];
+
+        infoSection.select(`.${panelClass}`).node().innerHTML = formatter(neo[propertyName]);
+    }
+
+    d3.selectAll('.info-selected')
+        .style('stroke', 'black')
+        .style('stroke-width', '1')
+        .classed('info-selected', false)
+
+    d3.selectAll(`.ast${index}`)
+        .style('stroke', 'darkred')
+        .style('stroke-width', '3')
+        .classed('info-selected', true)
+    infoNEO = neo;
 }
 
 function sleep(ms) {
@@ -306,11 +365,6 @@ async function init() {
     centerChart.append('g').attr('class', 'data');
 
     infoSection = d3.select('.infoSection');
-    infoSection.append('h2').attr('class', 'name');
-    let fields = ['id', 'magnitude', 'diameter1', 'diameter2'];
-    for (x of fields) {
-        infoSection.append('p').attr('class', x);
-    }
 
     loadCSVs();
     while (!CSVS_LOADED) {
@@ -323,7 +377,7 @@ async function init() {
     d3.select('.loading').text('No Asteroids Found');
 
     // adds functionality to bar chart dropdown
-    currNeos = NEO.ALL;
+    currNeos = NEO.ALL.sort(n => n.miss_distance_km);
     let barSelect = document.getElementById('barSelect')
     barSelect.onchange = function () {
         updateBar(currNeos, barSelect.value);
@@ -333,7 +387,7 @@ async function init() {
     updateCenter(currNeos);
     updateBar(currNeos, barSelect.value);
     updateScatter(currNeos);
-    updateInfo(currNeos[0]);
+    updateInfo(null);
     updateLine();
 
     // brush for attribute 1
@@ -362,22 +416,26 @@ async function init() {
                 }
             }
 
+            currNeos = currNeos.sort(a => a.miss_distance_km);
+
             updateCenter(currNeos);
             updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
+            updateInfo(null, null);
         });
 
 
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH)
-    // This makes the Random default Brush
-    //  getMinMax() returns and array [ min, max ]
-    .call(brushH.move, getMinMax() ); 
+        // This makes the Random default Brush
+        //  getMinMax() returns and array [ min, max ]
+        .call(brushH.move, getMinMax());
 
     box1.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
         .attr('y', 30)
         .attr('font-size', 18)
         .text('Diameter');
+
     let brush1 = d3.brushY()
         .extent([
             [13, 8],

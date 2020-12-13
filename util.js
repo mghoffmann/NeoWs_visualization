@@ -1,7 +1,36 @@
+// Copied from Stackoverflow user Dan:
+// https://stackoverflow.com/a/175787/539997
+// Returns whether a string could be parsed as a float.
+function isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!  
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
+// Returns whether the string is 'true' or 'false' or some differently-cased variation of one of those.
+function isBoolean(str) {
+    return ("" + str).toLowerCase() == "false" || ("" + str).toLowerCase() == "true";
+}
+
+// Copied from Stackoverflow user Samuel Liew♦:
+// https://stackoverflow.com/a/17964373/539997
+// Accepts a Date object or date string that is recognized by the Date.parse() method
+function getDayOfWeek(date) {
+    const dayOfWeek = new Date(date).getDay();
+    return isNaN(dayOfWeek) ? null : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][dayOfWeek];
+}
+
 function mapProperties(source, target, ...propertyNames) {
 
     propertyNames.forEach(property => {
-        target[property] = source[property]
+        let value = source[property]
+        if (isNumeric(value))
+            // Coerce numeric strings to numbers
+            target[property] = +value;
+        else if (isBoolean(value))
+            target[property] = eval(("" + value).toLowerCase());
+        else
+            target[property] = value
     });
 
     return target;
@@ -42,6 +71,8 @@ function getISODateString(date, includeDay = true) {
 
     return r;
 }
+
+const getPrettyDateString = d3.timeFormat('%a %b %e %Y')
 
 // Copied from Stackoverflow user Borgar:
 // https://stackoverflow.com/a/1353711/539997
@@ -123,14 +154,14 @@ function zeroFill(number, width = 2) {
 function getMinMax() {
     let maxSeparation = 40;
     let minSeparation = 20;
-    let max = d3.randomUniform( (margin*2) + minSeparation, lineWidth )();  // random between 60 and lineWidth
-    let min = d3.randomUniform( (margin*2), max - minSeparation)();  // random between 40 and the max - 20
+    let max = d3.randomUniform((margin * 2) + minSeparation, lineWidth)(); // random between 60 and lineWidth
+    let min = d3.randomUniform((margin * 2), max - minSeparation)(); // random between 40 and the max - 20
 
     if (max - min > maxSeparation) {
         min = max - maxSeparation
     }
 
-    return [ min, max ];
+    return [min, max];
 }
 const MILLISECONDS_PER_DAY = 1000 * 60 * 60 * 24;
 
