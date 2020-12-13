@@ -14,19 +14,12 @@
 
     <script src="https://d3js.org/d3.v5.js"></script>
 
-    <!-- Manages async requests across the application -->
-    <script src="FetchManager.js"></script>
-    <!-- Defines a class used to flesh out requests for NEO data asynchronously. -->
-    <script src="DataBuilder.js"></script>
     <!-- Some helper functions required by other script files -->
     <script src="util.js"></script>
     <!-- Defines the Approach class. Each NEO has a collection of approaches. -->
     <script src="approach.js"></script>
     <!-- Defines the NEO class. -->
     <script src="NEO.js"></script>
-
-    <!-- Functionality of MoonPhases -->
-    <script src="MoonPhases.js"></script>
 
     <link rel="stylesheet" href="style.css">
 </head>
@@ -42,6 +35,11 @@
     </header>
 
     <main>
+        <div>
+            <iframe width="it" height="315" src="https://www.youtube.com/embed/0ZhDLJIRBRo" frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen></iframe>
+        </div>
         <div>
             <section class="svgSection guide">
                 <h1>
@@ -66,17 +64,11 @@
                     distance to Earth's surface.
                     Vertical spacing is only used to separate markers, and radius is scaled by about 0.17 kilometers per
                     pixel, with a minimum radius of 3 pixels for visibility. Marker radius does NOT represent diameter
-                    proportional to Earth's because that would markers
-                    the markers too small to see. The largest NEO in the dataset has a median estimated diameter of
-                    5.937 KM and the smallest NEO has an estimated diameter of 0.017 KM.
+                    proportional to Earth's because that would make the markers too small to see.
+                    The largest NEO in the dataset has a median estimated diameter of 5.937 KM and the smallest NEO has an estimated diameter of 0.017 KM.
                 </p>
             </section>
-            <section class="infoSection">                
-            </section>
-            <section class="video">
-                <iframe width="560" height="315" src="https://www.youtube.com/embed/0ZhDLJIRBRo" frameborder="0"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen></iframe>
+            <section class="infoSection">
             </section>
         </div>
         <div>
