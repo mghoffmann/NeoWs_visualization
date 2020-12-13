@@ -435,12 +435,14 @@ async function init() {
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
 
-            let yScale = d3.scaleLinear().domain([0, d3.max(currNeos.map(a => parseFloat(a.estimated_diameter_max_km)))]).range([290, 10]);
+            let yScale = d3.scaleLinear()
+                .domain([d3.min(currNeos.map(a => a.estimated_diameter_max_km)), d3.max(currNeos.map(a => a.estimated_diameter_max_km))])
+                .range([290, 10]);
             let asteroids = [];
-            for (x of currNeos) {
-                let temp = yScale(parseFloat(x.estimated_diameter_max_km));
+            for (n of currNeos) {
+                let temp = yScale(n.estimated_diameter_max_km);
                 if (temp > x0 && temp < x1) {
-                    asteroids.push(x);
+                    asteroids.push(n);
                 }
             }
 
