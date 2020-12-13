@@ -1,7 +1,7 @@
 // Handles highlighting for objects of the class name in each of the displays
 //  className: The name of the class all of the markers share.
 //  highlighted: Whether to highlight the markers or return them to normal.
-function doHighlighting(className, highlight) {
+function doHighlighting(className, highlight, r=3) {
     for (x of className.split(' ')) {
         if (x.includes('ast')) {
             className = x;
@@ -9,7 +9,7 @@ function doHighlighting(className, highlight) {
     }
     if (highlight) {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 4)
+            .attr('r', r+1)
             .style('fill', 'cyan');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -19,7 +19,7 @@ function doHighlighting(className, highlight) {
             .style('fill', 'cyan');
     } else {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', 3)
+            .attr('r', r)
             .style('fill', 'gray');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -132,39 +132,47 @@ function updateLine() {
 
 // Takes an array of NEO instances and adds rings to the earth chart for them.
 function updateCenter(neos) {
+
     // unscaled distances from earth
-    let dists = neos.map(n => n.getApproaches()).map(a => a == undefined ? null : d3.min(a.map(a => a.miss_distance_km))).filter(a => a != null);
-    d3.select('.loading').attr('style', dists.length == 0 ? 'display: auto;' : 'display: none;');
+    let data = neos.map(n => ({ approaches: n.getApproaches(), diameter: n.estimated_diameter_min_km }) )
+        .map(e =>  e == undefined ? null : d3.min(e.approaches.map(a => ({ miss: a.miss_distance_km, diameter: e.diameter }))))
+        .filter(a => a.miss != null || a.diameter != null);
+
+    d3.select('.loading').attr('style', data.length == 0 ? 'display: auto;' : 'display: none;');
 
     // scale for x pos
-    let xScale = d3.scaleLinear().domain([0, d3.max(dists.map(a => parseInt(a)))]).range([111, centerWidth - 50]);
+    let xScale = d3.scaleLinear().domain([0, d3.max(data.map(a => parseInt(a.miss)))]).range([100, centerWidth - 5]);
+    let MaxDiameter = d3.max(data.map(a => parseInt(a.diameter)))
+    // scale for radius
+    let rScale = d3.scaleLinear().domain([d3.min(data.map(a => parseInt(a.diameter))), MaxDiameter]).range([3, 20]);
+
     // update orbit circles on chart
     centerChart.selectAll('title').remove();
-    centerChart.select('.orbits').selectAll('circle').data(dists).join('circle')
+    centerChart.select('.orbits').selectAll('circle').data(data).join('circle')
         .attr('cx', -2000)
         .attr('cy', centerHeight / 2)
-        .attr('r', d => 2000 + xScale(d))
+        .attr('r', d => 2000 + xScale(d.miss))
         .style('stroke', 'black')
         .style('fill', 'none');
     // update asteroid circles on chart
-    centerChart.select('.data').selectAll('circle').data(dists).join('circle')
+    centerChart.select('.data').selectAll('circle').data(data).join('circle')
         .attr('class', (_, i) => 'ast' + i)
-        .attr('cx', d => xScale(d))
+        .attr('cx', d => xScale(d.miss))
         .attr('cy', d => ( centerHeight ) * ( Math.random()) ) // Makes the Ateroids pop up in random places
-        .attr('r', 3)                      // possibly the place to change the Ateroids Width
+        .attr('r', d => rScale(d.diameter) || 3 )
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
-            doHighlighting(d3.select(this).attr('class'), true)
+            doHighlighting(d3.select(this).attr('class'), true, d3.select(this).attr("r"))
         })
         .on('mouseout', function () {
-            doHighlighting(d3.select(this).attr('class'), false)
+            doHighlighting(d3.select(this).attr('class'), false, d3.select(this).attr("r"))
         })
         .on('click', function (_, i) {
             updateInfo(neos[i]);
         })
         .append('title')
-        .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
+        .text(d => 'dist: ' + d3.format('.2e')(d.miss).replace('+', ''));
 }
 
 // update info section
@@ -267,6 +275,8 @@ async function init() {
     lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
     chartSetup(lineChart, lineWidth, lineHeight);
 
+    let earthOffset = -2920;
+    let earthRadius = 3000; //  12,742
     centerChart = d3.select('#svgCenter');
     centerWidth = centerChart.node().getBoundingClientRect().width;
     centerHeight = centerChart.node().getBoundingClientRect().height;
@@ -277,12 +287,13 @@ async function init() {
         .attr('height', centerHeight - 2);
     centerChart.append('circle')
         .attr('class', 'earth')
-        .attr('cx', 70)
+        .attr('cx', earthOffset)
         .attr('cy', centerHeight / 2)
-        .attr('r', 40)
+        .attr('r', earthRadius)
     centerChart.append('text')
-        .attr('x', 70)
+        .attr('x', 40)
         .attr('y', centerHeight / 2 + 7.5)
+        .style("font-size", "20px")
         .attr('fill', 'blue')
         .text("Earth")
     centerChart.append('text')
