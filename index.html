@@ -48,13 +48,18 @@
                     How to use this site:
                 </h1>
                 <p>
-                    Select a time range on the frequency chart (bottom left) to show asteroids that came their nearest to Earth at
+                    Select a time range on the frequency chart (bottom left) to show asteroids that came their nearest
+                    to Earth at
                     that time of year. The vertical bars next to that are used to filter by diameter and velocity.
                     Clicking an asteroid on the orbit chart (top left) will show you details in the info
-                    panel (right of this text), and hovering over a data node on any chart will highlight that asteroid on all of the charts at once.
-
-                    The horizontal positioning of items in the orbit chart is proportional to each NEO's actual approach distance to Earth's surface.
-                    Vertical spacing is only used to separate markers, and radius is scaled by about 0.17 kilometers per pixel, with a minimum radius of 3 pixels for visibility.
+                    panel (right of this text), and hovering over a data node on any chart will highlight that asteroid
+                    on all of the charts at once.
+                </p>
+                <p>The horizontal positioning of items in the orbit chart is proportional to each NEO's actual approach
+                    distance to Earth's surface.
+                    Vertical spacing is only used to separate markers, and radius is scaled by about 0.17 kilometers per
+                    pixel, with a minimum radius of 3 pixels for visibility. Marker radius does NOT represent diameter proportional to Earth's because that would markers
+                    the markers too small to see. The largest NEO in the dataset has a median estimated diameter of 5.937 KM and the smallest NEO has an estimated diameter of 0.017 KM.
                 </p>
             </section>
             <section class="infoSection">
@@ -68,14 +73,14 @@
 
                 <section class="svgSection">
                     <div>
-                        <svg id="svgLine" width="900" height="310"></svg>
-                        <div style="border: solid black 1px; display: flex; flex-direction: column">
+                        <svg id="svgLine" width="800" height="310"></svg>
+                        <div id="diameterSection">
                             <div id="diameterLabel">Diameter<br>(KM)</div>
                             <svg id="diameterBox" width="50" height="300">
                                 <rect x="10" y="5" width="30" height="290"></rect>
                             </svg>
                         </div>
-                        <div style="border: solid black 1px; display: flex; flex-direction: column; padding-left: 5px">
+                        <div id="velocitySection">
                             <div id="velocityLabel">Velocity<br>(KPS)</div>
                             <svg id="velocityBox" width="50" height="300">
                                 <rect x="10" y="5" width="30" height="290"></rect>

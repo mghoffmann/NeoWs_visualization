@@ -43,19 +43,20 @@ section {
     height: 300px;
     max-height: 300px;
     min-height: 300px;
-    overflow: scroll;
+    overflow: auto;
     display: flex;
     flex-flow: row wrap;
 }
 
 .infoSection h2 {
     width: 400px;
+    border: none;
 }
 
-.infoSection p {
-    width: 220px;
-    padding: 0 0 0 20px;
-    margin: 0.5px;
+.infoSection > * {
+    width: 45%;
+    padding: 5px;
+    margin: 3px;
     border: solid black 1px;
 }
 
@@ -95,4 +96,22 @@ svg {
 
 :not(.tick) > text {
     text-anchor: middle;
+}
+
+#diameterSection {
+    border: solid black 1px;
+    display: flex;
+    flex-direction: column; 
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-right: 10px;
+}
+
+#velocitySection {
+    border: solid black 1px;
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }

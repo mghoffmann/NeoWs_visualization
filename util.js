@@ -72,7 +72,7 @@ function getISODateString(date, includeDay = true) {
     return r;
 }
 
-const getPrettyDateString = d3.timeFormat('%a %b %e %Y')
+const getPrettyDateString = d3.timeFormat('%b %e %Y')
 
 // Copied from Stackoverflow user Borgar:
 // https://stackoverflow.com/a/1353711/539997
