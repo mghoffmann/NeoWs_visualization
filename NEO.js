@@ -54,7 +54,7 @@ class NEO {
             "absolute_magnitude_h",
             "estimated_diameter_min_km",
             "estimated_diameter_max_km",
-            "is_potentially_hazardous_asteroid",
+            "is_potentially_hazardous",
             "orbit_id",
             "orbit_determination_date",
             "first_observation_date",
@@ -78,6 +78,8 @@ class NEO {
             "orbit_class_type",
             "orbit_class_description",
             "orbit_class_range");
+
+        this.estimated_diameter_median_km = (this.estimated_diameter_min_km + this.estimated_diameter_max_km) / 2.0;
 
         NEO.INTERN[csvRow.id] = this;
         NEO.ALL.push(this)
