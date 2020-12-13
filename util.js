@@ -1,7 +1,27 @@
+// Copied from Stackoverflow user Dan:
+// https://stackoverflow.com/a/175787/539997
+// Returns whether a string could be parsed as a float.
+function isNumeric(str) {
+    if (typeof str != "string") return false // we only process strings!  
+    return !isNaN(str) && // use type coercion to parse the _entirety_ of the string (`parseFloat` alone does not do this)...
+        !isNaN(parseFloat(str)) // ...and ensure strings of whitespace fail
+}
+
+function isBoolean(str) {
+    return ("" + str).toLowerCase() == "false" || ("" + str).toLowerCase() == "true";
+}
+
 function mapProperties(source, target, ...propertyNames) {
 
     propertyNames.forEach(property => {
-        target[property] = source[property]
+        let value = source[property]
+        if (isNumeric(value))
+            // Coerce numeric strings to numbers
+            target[property] = +value;
+        else if (isBoolean(value))
+            target[property] = eval(("" + value).toLowerCase());
+        else
+            target[property] = value
     });
 
     return target;
@@ -42,6 +62,8 @@ function getISODateString(date, includeDay = true) {
 
     return r;
 }
+
+const getPrettyDateString = d3.timeFormat('%a %b %e %Y')
 
 // Copied from Stackoverflow user Borgar:
 // https://stackoverflow.com/a/1353711/539997
