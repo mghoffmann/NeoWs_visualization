@@ -1,7 +1,7 @@
 // Handles highlighting for objects of the class name in each of the displays
 //  className: The name of the class all of the markers share.
 //  highlighted: Whether to highlight the markers or return them to normal.
-function doHighlighting(className, highlight, r=3) {
+function doHighlighting(className, highlight) {
     for (x of className.split(' ')) {
         if (x.includes('ast')) {
             className = x;
@@ -9,7 +9,6 @@ function doHighlighting(className, highlight, r=3) {
     }
     if (highlight) {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', r+1)
             .style('fill', 'cyan');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -19,7 +18,6 @@ function doHighlighting(className, highlight, r=3) {
             .style('fill', 'cyan');
     } else {
         d3.select('#svgCenter').selectAll('circle.' + className)
-            .attr('r', r)
             .style('fill', 'gray');
 
         d3.select('#svgScatter').selectAll('circle.' + className)
@@ -146,8 +144,14 @@ function updateLine() {
 function updateCenter(neos) {
 
     // unscaled distances from earth
-    let data = neos.map(n => ({ approaches: n.getApproaches(), diameter: n.estimated_diameter_min_km }) )
-        .map(e =>  e == undefined ? null : d3.min(e.approaches.map(a => ({ miss: a.miss_distance_km, diameter: e.diameter }))))
+    let data = neos.map(n => ({
+            approaches: n.getApproaches(),
+            diameter: n.estimated_diameter_min_km
+        }))
+        .map(e => e == undefined ? null : d3.min(e.approaches.map(a => ({
+            miss: a.miss_distance_km,
+            diameter: e.diameter
+        }))))
         .filter(a => a.miss != null || a.diameter != null);
 
     d3.select('.loading').attr('style', data.length == 0 ? 'display: auto;' : 'display: none;');
@@ -167,18 +171,27 @@ function updateCenter(neos) {
         .style('stroke', 'black')
         .style('fill', 'none');
     // update asteroid circles on chart
+    let currentY = 0;
+    let nextY = (radius) => {
+        let oldY = currentY;
+        currentY += radius * 2.15;
+        if (currentY >= centerChart.node().getBoundingClientRect().height) {
+            currentY = 0;
+        }
+        return oldY;
+    }
     centerChart.select('.data').selectAll('circle').data(data).join('circle')
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d.miss))
-        .attr('cy', d => ( centerHeight ) * ( Math.random()) ) // Makes the Ateroids pop up in random places
-        .attr('r', d => rScale(d.diameter) || 3 )
+        .attr('cy', d => nextY(rScale(d.diameter) || 3)) // Move this asteroid down by double the previous one's radius
+        .attr('r', d => rScale(d.diameter) || 3)
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
-            doHighlighting(d3.select(this).attr('class'), true, d3.select(this).attr("r"))
+            doHighlighting(d3.select(this).attr('class'), true)
         })
         .on('mouseout', function () {
-            doHighlighting(d3.select(this).attr('class'), false, d3.select(this).attr("r"))
+            doHighlighting(d3.select(this).attr('class'), false)
         })
         .on('click', function (_, i) {
             updateInfo(neos[i], i);
@@ -391,9 +404,9 @@ async function init() {
     updateLine();
 
     // brush for attribute 1
-    let box1 = d3.select("#svgBrush1");
+    let diameterBox = d3.select("#diameterBox");
     // brush for attribute 2
-    let box2 = d3.select("#svgBrush2");
+    let velocityBox = d3.select("#velocityBox");
 
     // brush for frequency chart
     let brushH = d3.brushX()
@@ -402,8 +415,8 @@ async function init() {
             [lineWidth + margin * 2, lineHeight + margin + 1]
         ])
         .on('end', () => {
-            box1.selectAll('.selection, .handle').attr('style', 'display: none;');
-            box2.selectAll('.selection, .handle').attr('style', 'display: none;');
+            diameterBox.selectAll('.selection, .handle').attr('style', 'display: none;');
+            velocityBox.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = (365 * d3.event.selection[0] / lineWidth) - margin;
             let x1 = (365 * d3.event.selection[1] / lineWidth) - margin;
             currNeos = [];
@@ -423,14 +436,14 @@ async function init() {
             updateScatter(currNeos);
             updateInfo(null, null);
         });
-
+    
 
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH)
         // This makes the Random default Brush
         //  getMinMax() returns and array [ min, max ]
         .call(brushH.move, getMinMax());
 
-    box1.append('text').attr('transform', 'rotate(-90)')
+    diameterBox.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
         .attr('y', 30)
         .attr('font-size', 18)
@@ -442,7 +455,7 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
-            box2.selectAll('.selection, .handle').attr('style', 'display: none;');
+            velocityBox.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
 
@@ -461,9 +474,9 @@ async function init() {
             updateBar(asteroids, barSelect.value);
             updateScatter(asteroids);
         });
-    box1.append("g").attr("class", "brush").call(brush1);
+    diameterBox.append("g").attr("class", "brush").call(brush1);
 
-    box2.append('text').attr('transform', 'rotate(-90)')
+    velocityBox.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
         .attr('y', 30)
         .attr('font-size', 18)
@@ -474,7 +487,7 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
-            box1.selectAll('.selection, .handle').attr('style', 'display: none;');
+            diameterBox.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
 
@@ -491,5 +504,5 @@ async function init() {
             updateBar(asteroids, barSelect.value);
             updateScatter(asteroids);
         });
-    box2.append("g").attr("class", "brush").call(brush2);
+    velocityBox.append("g").attr("class", "brush").call(brush2);
 }

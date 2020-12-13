@@ -40,6 +40,10 @@ section {
 
 .infoSection {
     width: 520px;
+    height: 300px;
+    max-height: 300px;
+    min-height: 300px;
+    overflow: scroll;
     display: flex;
     flex-flow: row wrap;
 }
