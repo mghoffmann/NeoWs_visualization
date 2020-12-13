@@ -107,7 +107,7 @@ function updateScatter(neos) {
             updateInfo(neos[i], i);
         })
         .append('title')
-        .text(d => 'dist: ' + d3.format('.3s')(d[0]) + ' vel: ' + d3.format('.3s')(d[1]));
+        .text(d => 'dist: ' + d3.format('.3s')(d[0]) + ' KM, vel: ' + d3.format('.3s')(d[1]) + " KPH");
     // update x axis
     scatterChart.select('.axisX').call(d3.axisBottom().scale(xScale).tickFormat(d3.format('.2s')));
     // update y axis
@@ -167,9 +167,9 @@ function updateCenter(neos) {
     // update orbit circles on chart
     centerChart.selectAll('title').remove();
     centerChart.select('.orbits').selectAll('circle').data(data).join('circle')
-        .attr('cx', -2000)
+        .attr('cx', -2980)
         .attr('cy', centerHeight / 2)
-        .attr('r', d => 2000 + xScale(d.miss))
+        .attr('r', d => -2000 + xScale(d.miss))
         .style('stroke', 'black')
         .style('fill', 'none');
     // update asteroid circles on chart
@@ -199,7 +199,7 @@ function updateCenter(neos) {
             updateInfo(neos[i], i);
         })
         .append('title')
-        .text(d => 'dist: ' + d3.format('.2e')(d.miss).replace('+', ''));
+        .text(d => 'dist: ' + d3.format('.2e')(d.miss).replace('+', '') + " KM");
 }
 
 // An array of arrays that defines the info panel.
@@ -216,7 +216,7 @@ const InfoPanelMapping = [
     ['is_hazardous', v => `Potentially Hazardous: ${v? 'Yes': 'No' }`, 'is_potentially_hazardous'],
     ['closest_approach', v => `Closest approach: ${getPrettyDateString(v)}`, 'close_approach_date'],
     ['miss_distance', v => `Closest distance: ${d3.format('.2e')(v).replace('+', '')} km`, 'miss_distance_km'],
-    ['orbital_period', v => `Sidereal orbital period: ${Math.floor(v)} day${Math.floor(v) == 1 ? '' : 's'}`],
+    ['orbital_period', v => `Orbital period: ${Math.floor(v)} day${Math.floor(v) == 1 ? '' : 's'}`],
 ]
 
 // update info section with info on the given NEO
@@ -331,6 +331,12 @@ function setLabels(chart, labels, width, height) {
         .text(d => d);
 }
 
+// These are set when the vertical brushes are used.
+let minVelocityFilter = null;
+let maxVelocityFilter = null;
+let minDiameterFilter = null;
+let maxDiameterFilter = null;
+
 function updateBrushes(neos) {
     let diameters = neos.map(n => n.estimated_diameter_min_km)
     let minDiameter = d3.min(diameters)
@@ -356,6 +362,8 @@ function updateBrushes(neos) {
         .attr('transform', 'translate(35,7.5)')
         .attr('class', 'axis')
         .call(d3.axisLeft(dScale))
+        .selectAll('g.tick')
+        .style('pointer-events', 'none')
 
 
     let vScale = d3.scaleLinear()
@@ -367,6 +375,42 @@ function updateBrushes(neos) {
         .attr('transform', 'translate(35,7.5)')
         .attr('class', 'axis')
         .call(d3.axisLeft(vScale))
+        .selectAll('g.tick')
+        .style('pointer-events', 'none')
+}
+
+function filterForBrushing(currNeos) {
+    let asteroids = []
+
+    let dScale = d3.scaleLinear()
+        .domain([d3.min(currNeos.map(a => a.estimated_diameter_median_km)), d3.max(currNeos.map(a => a.estimated_diameter_median_km))])
+        .range([290, 10]);
+    let vScale = d3.scaleLinear()
+        .domain([0, d3.max(currNeos.map(a => a.closest_velocity_kph))])
+        .range([290, 10]);
+
+    for (n of currNeos) {
+        let tempV = vScale(n.closest_velocity_kph);
+        let tempD = dScale(n.estimated_diameter_median_km);
+        if (minDiameterFilter && minVelocityFilter) {
+            if (tempD >= minDiameterFilter && tempD <= maxDiameterFilter &&
+                tempV >= minVelocityFilter && tempV <= maxVelocityFilter) {
+                asteroids.push(n);
+            }
+        } else if (minDiameterFilter) {
+            if (tempD >= minDiameterFilter && tempD <= maxDiameterFilter) {
+                asteroids.push(n);
+            }
+        } else if (minVelocityFilter) {
+            if (tempV >= minVelocityFilter && tempV <= maxVelocityFilter) {
+                asteroids.push(n);
+            }
+        } else {
+            throw "This function should not be called without setting min and max diameter and velocity filter variables."
+        }
+    }
+
+    return asteroids;
 }
 
 async function init() {
@@ -486,20 +530,13 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
-            velocityBox.selectAll('.selection, .handle').attr('style', 'display: none;');
-            let x0 = d3.event.selection[0];
-            let x1 = d3.event.selection[1];
+            if (d3.event.selection.length < 2)
+                return
 
-            let yScale = d3.scaleLinear()
-                .domain([d3.min(currNeos.map(a => a.estimated_diameter_max_km)), d3.max(currNeos.map(a => a.estimated_diameter_max_km))])
-                .range([290, 10]);
-            let asteroids = [];
-            for (n of currNeos) {
-                let temp = yScale(n.estimated_diameter_max_km);
-                if (temp > x0 && temp < x1) {
-                    asteroids.push(n);
-                }
-            }
+            minDiameterFilter = d3.event.selection[0];
+            maxDiameterFilter = d3.event.selection[1];
+
+            let asteroids = filterForBrushing(currNeos);
 
             updateCenter(asteroids);
             updateBar(asteroids, barSelect.value);
@@ -513,19 +550,14 @@ async function init() {
             [37, 292]
         ])
         .on('end', () => {
-            diameterBox.selectAll('.selection, .handle').attr('style', 'display: none;');
-            let x0 = d3.event.selection[0];
-            let x1 = d3.event.selection[1];
+            if (d3.event.selection.length < 2)
+                return
 
-            let yScale = d3.scaleLinear().domain([0, d3.max(currNeos.map(a => parseFloat(a.getApproaches()[0].relative_velocity_kph)))]).range([290, 10]);
-            let asteroids = [];
-            for (x of currNeos) {
-                let temp = yScale(parseFloat(x.getApproaches()[0].relative_velocity_kph));
-                if (temp > x0 && temp < x1) {
-                    asteroids.push(x);
-                }
-            }
+            minVelocityFilter = d3.event.selection[0];
+            maxVelocityFilter = d3.event.selection[1];
 
+            let asteroids = filterForBrushing(currNeos);
+            
             updateCenter(asteroids);
             updateBar(asteroids, barSelect.value);
             updateScatter(asteroids);
