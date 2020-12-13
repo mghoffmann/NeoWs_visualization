@@ -34,7 +34,7 @@ const EARTH_RADIUS_KM = 6367.5
 // update bar chart
 function updateBar(neos, attribute) {
     // unscaled bar heights
-    let heights = neos.map(a => attribute == 'Diameter' ? a.estimated_diameter_median_km : a.absolute_magnitude_h);
+    let heights = neos.map(getBarHeights(attribute));
     let ids = neos.map(a => a.id);
     // scale for bar widths
     let barScale = d3.scaleBand().domain(ids).range([margin * 2.5, barWidth + margin]).paddingInner(.2);
@@ -66,6 +66,17 @@ function updateBar(neos, attribute) {
     let barLabels = getBarLabels(attribute)
 
     setLabels(barChart, barLabels, barWidth, barHeight);
+}
+
+function getBarHeights(attribute) {
+    switch (attribute) {
+        case 'Diameter':
+            return a => a.estimated_diameter_median_km
+        case 'Magnitude':
+            return a => a.absolute_magnitude_h
+        default:
+            break;
+    }
 }
 
 function getBarLabels(attribute) {
@@ -156,7 +167,9 @@ function updateCenter(neos) {
     d3.select('.loading').attr('style', data.length == 0 ? 'display: auto;' : 'display: none;');
 
     // scale for x pos
-    let xScale = d3.scaleLinear().domain([0, d3.max(data.map(a => parseInt(a.miss)))]).range([100, centerWidth - 5]);
+    let xScale = d3.scaleLinear()
+        .domain([0, d3.max(data.map(a => a.miss))])
+        .range([80, centerWidth - 5]);
     let MaxDiameter = d3.max(NEO.ALL.map(a => a.estimated_diameter_median_km))
     // scale for radius
     let rScale =
@@ -169,7 +182,7 @@ function updateCenter(neos) {
     centerChart.select('.orbits').selectAll('circle').data(data).join('circle')
         .attr('cx', -2980)
         .attr('cy', centerHeight / 2)
-        .attr('r', d => -2000 + xScale(d.miss))
+        .attr('r', d => 2980 + xScale(d.miss))
         .style('stroke', 'black')
         .style('fill', 'none');
     // update asteroid circles on chart
@@ -557,7 +570,7 @@ async function init() {
             maxVelocityFilter = d3.event.selection[1];
 
             let asteroids = filterForBrushing(currNeos);
-            
+
             updateCenter(asteroids);
             updateBar(asteroids, barSelect.value);
             updateScatter(asteroids);
