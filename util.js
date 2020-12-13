@@ -151,6 +151,7 @@ function zeroFill(number, width = 2) {
     return number + ""; // always return a string
 }
 
+// Gets a min and max separation for the initial brush position
 function getMinMax() {
     let maxSeparation = 40;
     let minSeparation = 20;
