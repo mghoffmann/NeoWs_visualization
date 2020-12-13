@@ -42,6 +42,7 @@ section {
     width: 520px;
     display: flex;
     flex-flow: row wrap;
+    overflow-x: scroll;
 }
 
 .infoSection h2 {
@@ -51,7 +52,8 @@ section {
 .infoSection p {
     width: 220px;
     padding: 0 0 0 20px;
-    margin: 0;
+    margin: 0.5px;
+    border: solid black 1px;
 }
 
 svg {
