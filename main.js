@@ -150,8 +150,8 @@ function updateCenter(neos) {
     centerChart.select('.data').selectAll('circle').data(dists).join('circle')
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
-        .attr('cy', d => ( centerHeight ) * ( Math.random()) ) // Makes the Ateroids pop up in random places
-        .attr('r', 3)                      // possibly the place to change the Ateroids Width
+        .attr('cy', d => (centerHeight) * (Math.random())) // Makes the Ateroids pop up in random places
+        .attr('r', 3) // possibly the place to change the Ateroids Width
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
@@ -170,14 +170,20 @@ function updateCenter(neos) {
 const InfoPanelMapping = [
     ['name', v => `Name: ${v}`],
     ['id', v => `NeoWS ID: <a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=${v}" target="blank" title="View this object in JPL's small-body database">${v}</a>`],
-    ['diameter', v => `Estimated Diameter: ${d3.format('.2e')(v).replace('+', '')} km`, 'estimated_diameter_median_km'],
+    ['diameter', v => `Estimated Diameter: ${d3.format('.2e')(v).replace('+', '')} km`, 'estimated_diameter_median_km'],    
+    ['first_observation', v => `First observation: ${getPrettyDateString(new Date(v))}`, 'first_observation_date'],
+    ['last_observation', v => `Last observation: ${getPrettyDateString(new Date(v))}`, 'last_observation_date'],
     ['magnitude', v => `<a href="https://en.wikipedia.org/wiki/Absolute_magnitude">Absolute Magnitude</a>: ${d3.format('.3s')(v)} h`, 'absolute_magnitude_h'],
-    ['discovery', v => `First observation: ${getPrettyDateString(new Date(v))}`, 'first_observation_date'],
+    ['is_hazardous', v => `Potentially Hazardous: ${v? 'Yes': 'No' }`, 'is_potentially_hazardous'],
+    ['closest_approach', v=>`Closest approach: ${getPrettyDateString(v)}`, 'close_approach_date'],
+    ['miss_distance', v => `Closest distance: ${d3.format('.2e')(v).replace('+', '')} km`, 'miss_distance_km'],
+    ['orbital_period', v => `Sidereal orbital period: ${Math.floor(v)} day${Math.floor(v) == 1 ? '' : 's'}`, 'orbital_period'],
 ]
 
 // update info section with info on the given NEO
 // and class the index'th mark on all the charts as selected
 infoNEO = null;
+
 function updateInfo(neo, index) {
     if (neo == null) {
         infoSection.node().innerHTML = "<h2>Cick an item in the charts to see details.</h2>"
@@ -185,12 +191,14 @@ function updateInfo(neo, index) {
         return;
     }
     // Recreate all the elements if they were nullified by the last update
+    // or if this is the first update
     else if (infoNEO == null) {
+        infoSection.node().innerHTML = "";
         for (mapping of InfoPanelMapping) {
-            infoSection.append(x[0] == 'name' ? 'h2' : 'p').attr('class', mapping[0]);
+            infoSection.append(mapping[0] == 'name' ? 'h2' : 'p').attr('class', mapping[0]);
         }
     }
-    
+
     for (mapping of InfoPanelMapping) {
         let panelClass = mapping[0]
         let formatter = mapping[1]
@@ -389,15 +397,16 @@ async function init() {
 
 
     d3.select('#svgLine').append("g").attr("class", "brush").call(brushH)
-    // This makes the Random default Brush
-    //  getMinMax() returns and array [ min, max ]
-    .call(brushH.move, getMinMax() ); 
+        // This makes the Random default Brush
+        //  getMinMax() returns and array [ min, max ]
+        .call(brushH.move, getMinMax());
 
     box1.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
         .attr('y', 30)
         .attr('font-size', 18)
         .text('Diameter');
+
     let brush1 = d3.brushY()
         .extent([
             [13, 8],
