@@ -55,7 +55,7 @@ function updateBar(neos, attribute) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .on('click', function (_, i) {
-            updateInfo(neos[i]);
+            updateInfo(neos[i], i);
         })
         .append('title')
         .text(d => d3.format('.3')(d));
@@ -91,7 +91,7 @@ function updateScatter(neos) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .on('click', function (_, i) {
-            updateInfo(neos[i]);
+            updateInfo(neos[i], i);
         })
         .append('title')
         .text(d => 'dist: ' + d3.format('.3s')(d[0]) + ' vel: ' + d3.format('.3s')(d[1]));
@@ -126,7 +126,7 @@ function updateLine() {
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
     // update labels
-    let lineLabels = ['Annual Asteroid Frequency', 'Day of the Year', 'NEOs per day'];
+    let lineLabels = ['Asteroid Frequency per Month', 'Day of the Year', 'NEOs per day'];
     setLabels(lineChart, lineLabels, lineWidth, lineHeight);
 }
 
@@ -161,19 +161,45 @@ function updateCenter(neos) {
             doHighlighting(d3.select(this).attr('class'), false)
         })
         .on('click', function (_, i) {
-            updateInfo(neos[i]);
+            updateInfo(neos[i], i);
         })
         .append('title')
         .text(d => 'dist: ' + d3.format('.2e')(d).replace('+', ''));
 }
 
-// update info section
-function updateInfo(neo) {
-    infoSection.select('.name').text('Asteroid ' + neo.name);
-    infoSection.select('.id').text('ID: ' + neo.id);
-    infoSection.select('.diameter1').text('Min Diameter: ' + d3.format('.2e')(neo.estimated_diameter_min_km).replace('+', '') + ' km');
-    infoSection.select('.diameter2').text('Max Diameter: ' + d3.format('.2e')(neo.estimated_diameter_max_km).replace('+', '') + ' km');
-    infoSection.select('.magnitude').text('Magnitude: ' + d3.format('.3s')(neo.absolute_magnitude_h) + ' h');
+const InfoPanelMapping = [
+    ['name', v => `Name: ${v}`],
+    ['id', v => `NeoWS ID: <a href="https://ssd.jpl.nasa.gov/sbdb.cgi?sstr=${v}" target="blank" title="View this object in JPL's small-body database">${v}</a>`],
+    ['diameter', v => `Estimated Diameter: ${d3.format('.2e')(v).replace('+', '')} km`, 'estimated_diameter_median_km'],
+    ['magnitude', v => `<a href="https://en.wikipedia.org/wiki/Absolute_magnitude">Absolute Magnitude</a>: ${d3.format('.3s')(v)} h`, 'absolute_magnitude_h'],
+    ['discovery', v => `First observation: ${getPrettyDateString(new Date(v))}`, 'first_observation_date'],
+]
+
+// update info section with info on the given NEO
+// and class the index'th mark on all the charts as selected
+function updateInfo(neo, index) {
+    if (neo == null) {
+        infoSection.node().innerHTML = "Cick an item in the charts to see details."
+        return;
+    }
+    
+    for (mapping of InfoPanelMapping) {
+        let panelClass = mapping[0]
+        let formatter = mapping[1]
+        let propertyName = mapping[2] == null ? mapping[0] : mapping[2];
+
+        infoSection.select(`.${panelClass}`).node().innerHTML = formatter(neo[propertyName]);
+    }
+
+    d3.selectAll('.info-selected')
+        .style('stroke', 'black')
+        .style('stroke-width', '1')
+        .classed('info-selected', false)
+
+    d3.selectAll(`.ast${index}`)
+        .style('stroke', 'darkred')
+        .style('stroke-width', '3')
+        .classed('info-selected', true)
 }
 
 function sleep(ms) {
@@ -295,10 +321,8 @@ async function init() {
     centerChart.append('g').attr('class', 'data');
 
     infoSection = d3.select('.infoSection');
-    infoSection.append('h2').attr('class', 'name');
-    let fields = ['id', 'magnitude', 'diameter1', 'diameter2'];
-    for (x of fields) {
-        infoSection.append('p').attr('class', x);
+    for (x of InfoPanelMapping) {
+        infoSection.append(x[0] == 'name' ? 'h2' : 'p').attr('class', x[0]);
     }
 
     loadCSVs();
@@ -322,7 +346,7 @@ async function init() {
     updateCenter(currNeos);
     updateBar(currNeos, barSelect.value);
     updateScatter(currNeos);
-    updateInfo(currNeos[0]);
+    updateInfo(currNeos[0], 0);
     updateLine();
 
     // brush for attribute 1
