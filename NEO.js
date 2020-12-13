@@ -81,8 +81,11 @@ class NEO {
 
         this.estimated_diameter_median_km = (this.estimated_diameter_min_km + this.estimated_diameter_max_km) / 2.0;
         this.discovery_weekday = getDayOfWeek(new Date(this.first_observation_date));
-        this.miss_distance_km = this.getApproaches()[0].miss_distance_km
-        this.close_approach_date = this.getApproaches()[0].date
+        
+        let closestApproach = this.getApproaches()[0]
+        this.miss_distance_km = closestApproach.miss_distance_km
+        this.close_approach_date = closestApproach.date
+        this.closest_velocity_kph = closestApproach.relative_velocity_kph;
 
         NEO.INTERN[csvRow.id] = this;
         NEO.ALL.push(this)

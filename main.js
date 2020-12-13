@@ -28,6 +28,9 @@ function doHighlighting(className, highlight) {
     }
 }
 
+// Fun fact: Earth is an ellipse and not a sphere. This is an average.
+const EARTH_RADIUS_KM = 6367.5
+
 // update bar chart
 function updateBar(neos, attribute) {
     // unscaled bar heights
@@ -145,22 +148,21 @@ function updateCenter(neos) {
 
     // unscaled distances from earth
     let data = neos.map(n => ({
-            approaches: n.getApproaches(),
-            diameter: n.estimated_diameter_min_km
+            miss: n.miss_distance_km,
+            diameter: n.estimated_diameter_median_km
         }))
-        .map(e => e == undefined ? null : d3.min(e.approaches.map(a => ({
-            miss: a.miss_distance_km,
-            diameter: e.diameter
-        }))))
         .filter(a => a.miss != null || a.diameter != null);
 
     d3.select('.loading').attr('style', data.length == 0 ? 'display: auto;' : 'display: none;');
 
     // scale for x pos
     let xScale = d3.scaleLinear().domain([0, d3.max(data.map(a => parseInt(a.miss)))]).range([100, centerWidth - 5]);
-    let MaxDiameter = d3.max(data.map(a => parseInt(a.diameter)))
+    let MaxDiameter = d3.max(NEO.ALL.map(a => a.estimated_diameter_median_km))
     // scale for radius
-    let rScale = d3.scaleLinear().domain([d3.min(data.map(a => parseInt(a.diameter))), MaxDiameter]).range([3, 20]);
+    let rScale =
+        d3.scaleLinear()
+        .domain([d3.min(NEO.ALL.map(a => a.estimated_diameter_median_km)), MaxDiameter])
+        .range([3, 20]);
 
     // update orbit circles on chart
     centerChart.selectAll('title').remove();
@@ -329,6 +331,44 @@ function setLabels(chart, labels, width, height) {
         .text(d => d);
 }
 
+function updateBrushes(neos) {
+    let diameters = neos.map(n => n.estimated_diameter_min_km)
+    let minDiameter = d3.min(diameters)
+    let maxDiameter = d3.max(diameters)
+
+    let velocities = neos.map(n => n.closest_velocity_kph / (60 * 60))
+    let minVelocity = d3.min(velocities)
+    let maxVelocity = d3.max(velocities)
+
+    let diameterBox = d3.select("#diameterBox").select('.brush')
+    let dBoxBounds = diameterBox.node().getBoundingClientRect()
+
+    let velocityBox = d3.select("#velocityBox").select('.brush')
+    let vBoxBounds = velocityBox.node().getBoundingClientRect()
+
+
+    let dScale = d3.scaleLinear()
+        .domain([maxDiameter, minDiameter])
+        .range([0, dBoxBounds.height]);
+
+    d3.select("#diameterBox").selectAll('.axis').remove()
+    d3.select("#diameterBox").append('g')
+        .attr('transform', 'translate(35,7.5)')
+        .attr('class', 'axis')
+        .call(d3.axisLeft(dScale))
+
+
+    let vScale = d3.scaleLinear()
+        .domain([maxVelocity, minVelocity])
+        .range([0, vBoxBounds.height]);
+
+    d3.select("#velocityBox").selectAll('.axis').remove()
+    d3.select("#velocityBox").append('g')
+        .attr('transform', 'translate(35,7.5)')
+        .attr('class', 'axis')
+        .call(d3.axisLeft(vScale))
+}
+
 async function init() {
     // adds basic elements to each chart
     margin = 20;
@@ -346,6 +386,8 @@ async function init() {
     lineWidth = lineChart.node().getBoundingClientRect().width - margin * 3;
     lineHeight = lineChart.node().getBoundingClientRect().height - margin * 3;
     chartSetup(lineChart, lineWidth, lineHeight);
+
+
 
     let earthOffset = -2920;
     let earthRadius = 3000; //  12,742
@@ -409,7 +451,7 @@ async function init() {
     let velocityBox = d3.select("#velocityBox");
 
     // brush for frequency chart
-    let brushH = d3.brushX()
+    let frequencyBrush = d3.brushX()
         .extent([
             [margin * 2, margin],
             [lineWidth + margin * 2, lineHeight + margin + 1]
@@ -423,7 +465,7 @@ async function init() {
             for (x of NEO.ALL) {
                 let day = x.getApproaches()[0].date;
                 let diff = day - new Date(day.getFullYear(), 0, 0);
-                day = Math.floor(diff / (1000 * 60 * 60 * 24));
+                day = Math.floor(diff / MILLISECONDS_PER_DAY);
                 if (day > x0 && day < x1) {
                     currNeos.push(x);
                 }
@@ -435,21 +477,10 @@ async function init() {
             updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
             updateInfo(null, null);
+            updateBrushes(currNeos);
         });
-    
 
-    d3.select('#svgLine').append("g").attr("class", "brush").call(brushH)
-        // This makes the Random default Brush
-        //  getMinMax() returns and array [ min, max ]
-        .call(brushH.move, getMinMax());
-
-    diameterBox.append('text').attr('transform', 'rotate(-90)')
-        .attr('x', -150)
-        .attr('y', 30)
-        .attr('font-size', 18)
-        .text('Diameter');
-
-    let brush1 = d3.brushY()
+    let diameterBrush = d3.brushY()
         .extent([
             [13, 8],
             [37, 292]
@@ -474,14 +505,9 @@ async function init() {
             updateBar(asteroids, barSelect.value);
             updateScatter(asteroids);
         });
-    diameterBox.append("g").attr("class", "brush").call(brush1);
+    diameterBox.append("g").attr("class", "brush").call(diameterBrush);
 
-    velocityBox.append('text').attr('transform', 'rotate(-90)')
-        .attr('x', -150)
-        .attr('y', 30)
-        .attr('font-size', 18)
-        .text('Velocity');
-    let brush2 = d3.brushY()
+    let velocityBrush = d3.brushY()
         .extent([
             [13, 8],
             [37, 292]
@@ -504,5 +530,11 @@ async function init() {
             updateBar(asteroids, barSelect.value);
             updateScatter(asteroids);
         });
-    velocityBox.append("g").attr("class", "brush").call(brush2);
+    velocityBox.append("g").attr("class", "brush").call(velocityBrush);
+
+
+    d3.select('#svgLine').append("g").attr("class", "brush").call(frequencyBrush)
+        // This makes the Random default Brush
+        //  getMinMax() returns an array [ min, max ]
+        .call(frequencyBrush.move, getMinMax());
 }
