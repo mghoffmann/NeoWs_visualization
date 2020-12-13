@@ -144,8 +144,8 @@ function updateCenter(neos) {
     centerChart.select('.data').selectAll('circle').data(dists).join('circle')
         .attr('class', (_, i) => 'ast' + i)
         .attr('cx', d => xScale(d))
-        .attr('cy', centerHeight / 2)
-        .attr('r', 3)
+        .attr('cy', d => ( centerHeight ) * ( Math.random()) ) // Makes the Ateroids pop up in random places
+        .attr('r', 3)                      // possibly the place to change the Ateroids Width
         .style('stroke', 'black')
         .style('fill', 'gray')
         .on('mouseover', function () {
@@ -344,7 +344,12 @@ async function init() {
             updateBar(currNeos, barSelect.value);
             updateScatter(currNeos);
         });
-    d3.select('#svgLine').append("g").attr("class", "brush").call(brushH);
+
+
+    d3.select('#svgLine').append("g").attr("class", "brush").call(brushH)
+    // This makes the Random default Brush
+    //  getMinMax() returns and array [ min, max ]
+    .call(brushH.move, getMinMax() ); 
 
     box1.append('text').attr('transform', 'rotate(-90)')
         .attr('x', -150)
