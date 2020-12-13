@@ -54,6 +54,9 @@ function updateBar(neos, attribute) {
         .on('mouseout', function () {
             doHighlighting(d3.select(this).attr('class'), false)
         })
+        .on('click', function (_, i) {
+            updateInfo(neos[i]);
+        })
         .append('title')
         .text(d => d3.format('.3')(d));
     // update axis
@@ -87,6 +90,9 @@ function updateScatter(neos) {
         .on('mouseout', function () {
             doHighlighting(d3.select(this).attr('class'), false)
         })
+        .on('click', function (_, i) {
+            updateInfo(neos[i]);
+        })
         .append('title')
         .text(d => 'dist: ' + d3.format('.3s')(d[0]) + ' vel: ' + d3.format('.3s')(d[1]));
     // update x axis
@@ -101,7 +107,7 @@ function updateScatter(neos) {
 // update line chart
 function updateLine() {
     let data = ApproachAverages;
-    let xScale = d3.scaleLinear().domain([0, 365]).range([margin*2, lineWidth + margin*2]);
+    let xScale = d3.scaleLinear().domain([0, 365]).range([margin * 2, lineWidth + margin * 2]);
     let yScale = d3.scaleLinear().domain([d3.max(data) * 1.04, 0]).range([margin, lineHeight + margin]);
     data = data.map((d, i) => [xScale(i), yScale(d)])
 
@@ -109,18 +115,18 @@ function updateLine() {
     lineChart.append('path')
         .attr('d', d3.line()(data))
         .attr('stroke', 'black');
-    
+
     // update axes
     let dateRange = [new Date('2019').getTime(), new Date('2020').getTime()];
-    let dateScale = d3.scaleLinear().domain(dateRange).range([margin*2, lineWidth + margin*2]);
+    let dateScale = d3.scaleLinear().domain(dateRange).range([margin * 2, lineWidth + margin * 2]);
     lineChart.append('g').attr('transform', 'translate(0, ' + (lineHeight + margin) + ')')
         .attr('class', 'axis')
         .call(d3.axisBottom().scale(dateScale).tickFormat(d3.timeFormat('%b %d')));
-    lineChart.append('g').attr('transform', 'translate(' + margin*2 + ', 0)')
+    lineChart.append('g').attr('transform', 'translate(' + margin * 2 + ', 0)')
         .attr('class', 'axis')
         .call(d3.axisLeft().scale(yScale));
     // update labels
-    let lineLabels = ['Annual Asteroid Frequency', 'Day of the Year', 'Number of NEOs'];
+    let lineLabels = ['Annual Asteroid Frequency', 'Day of the Year', 'NEOs per day'];
     setLabels(lineChart, lineLabels, lineWidth, lineHeight);
 }
 
@@ -154,7 +160,7 @@ function updateCenter(neos) {
         .on('mouseout', function () {
             doHighlighting(d3.select(this).attr('class'), false)
         })
-        .on('click', function(_, i) {
+        .on('click', function (_, i) {
             updateInfo(neos[i]);
         })
         .append('title')
@@ -234,8 +240,8 @@ function chartSetup(chart, width, height) {
 }
 
 function setLabels(chart, labels, width, height) {
-    labelX = [width/2 + margin*2, width/2 + margin*2, -height/2 - margin];
-    labelY = [12, height + margin*2 + 12, 12];
+    labelX = [width / 2 + margin * 2, width / 2 + margin * 2, -height / 2 - margin];
+    labelY = [12, height + margin * 2 + 12, 12];
     chart.select('.labels').selectAll('text').data(labels).join('text')
         .attr('transform', (_, i) => 'rotate(' + [0, 0, -90][i] + ')')
         .attr('x', (_, i) => labelX[i])
@@ -273,7 +279,12 @@ async function init() {
         .attr('class', 'earth')
         .attr('cx', 70)
         .attr('cy', centerHeight / 2)
-        .attr('r', 40);
+        .attr('r', 40)
+    centerChart.append('text')
+        .attr('x', 70)
+        .attr('y', centerHeight / 2 + 7.5)
+        .attr('fill', 'blue')
+        .text("Earth")
     centerChart.append('text')
         .attr('class', 'loading')
         .attr('x', centerWidth / 2)
@@ -313,7 +324,7 @@ async function init() {
     updateScatter(currNeos);
     updateInfo(currNeos[0]);
     updateLine();
-    
+
     // brush for attribute 1
     let box1 = d3.select("#svgBrush1");
     // brush for attribute 2
@@ -395,7 +406,7 @@ async function init() {
             box1.selectAll('.selection, .handle').attr('style', 'display: none;');
             let x0 = d3.event.selection[0];
             let x1 = d3.event.selection[1];
-            
+
             let yScale = d3.scaleLinear().domain([0, d3.max(currNeos.map(a => parseFloat(a.getApproaches()[0].relative_velocity_kph)))]).range([290, 10]);
             let asteroids = [];
             for (x of currNeos) {
